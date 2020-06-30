@@ -1,0 +1,240 @@
+@baseFontSize: 200;
+
+.px2rem(@name, @px) {
+  @name: @px / @baseFontSize * 2rem;
+}
+
+.flex(@a, @b, @c) {
+  flex: @a @b @c/@baseFontSize*2rem;
+}
+
+.b-radius(@px) {
+  border-radius: @px / @baseFontSize * 2rem;
+}
+
+
+.h(@px) {
+  height: @px / @baseFontSize * 2rem;
+}
+
+.minh(@px) {
+  min-height: @px / @baseFontSize * 2rem;
+}
+
+.maxh(@px) {
+  max-height: @px / @baseFontSize * 2rem;
+}
+
+.w(@px) {
+  width: @px / @baseFontSize * 2rem;
+}
+
+.mt(@px) {
+  margin-top: @px / @baseFontSize * 2rem;
+}
+
+.mb(@px) {
+  margin-bottom: @px / @baseFontSize * 2rem;
+}
+
+.ml(@px) {
+  margin-left: @px / @baseFontSize * 2rem;
+}
+
+.mr(@px) {
+  margin-right: @px / @baseFontSize * 2rem;
+}
+
+.pt(@px) {
+  padding-top: @px / @baseFontSize * 2rem;
+}
+
+.pb(@px) {
+  padding-bottom: @px / @baseFontSize * 2rem;
+}
+
+.pl(@px) {
+  padding-left: @px / @baseFontSize * 2rem;
+}
+
+.pr(@px) {
+  padding-right: @px / @baseFontSize * 2rem;
+}
+
+.padding(@tbpx, @lrpx) {
+  padding: @tbpx / @baseFontSize * 2rem @lrpx / @baseFontSize * 2rem;
+}
+
+.padding(@top, @left, @bottom, @right) {
+  .pt(@top);
+  .pl(@left);
+  .pb(@bottom);
+  .pr(@right);
+}
+
+.padding-rl(@rightpx, @leftpx) {
+  padding: 0rem @rightpx/@baseFontSize*2rem 0rem @leftpx/@baseFontSize*2rem;
+}
+
+.margin(@tbpx, @lrpx) {
+  margin: @tbpx / @baseFontSize * 2rem @lrpx / @baseFontSize * 2rem;
+}
+
+.margin(@top, @left, @bottom, @right) {
+  .mt(@top);
+  .ml(@left);
+  .mb(@bottom);
+  .mr(@right);
+}
+.border-1px(@color) {
+  position: relative;
+
+  &:after {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid @color;
+    content: ' ';
+
+    @media (-webkit-min-device-pixel-ratio: 2),
+    (min-device-pixel-ratio: 2) {
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+    }
+
+    @media (-webkit-min-device-pixel-ratio: 1.5),
+    (min-device-pixel-ratio: 1.5) {
+      -webkit-transform: scaleY(0.7);
+      transform: scaleY(0.7);
+    }
+  }
+}
+
+.border-right-1px(@px, @color) {
+  position: relative;
+
+  &:after {
+    display: block;
+    position: absolute;
+    right: 1/@baseFontSize*2rem;
+    ;
+    bottom: 0;
+    width: @px/@baseFontSize*2rem;
+    top: 0;
+    background-color: @color;
+    content: ' ';
+  }
+}
+
+.border-left-1px(@px, @color) {
+  position: relative;
+
+  &:after {
+    display: block;
+    position: absolute;
+    left: 1/@baseFontSize*2rem;
+    ;
+    bottom: 0;
+    width: @px/@baseFontSize*2rem;
+    top: 0;
+    background-color: @color;
+    content: ' ';
+  }
+}
+
+.border-before-1px(@color) {
+  position: relative;
+
+  &:before {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-top: 1/@baseFontSize*2rem solid @color;
+    content: ' '
+  }
+}
+
+.border-npx(@color, @height) {
+  position: relative;
+
+  &:after {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: @height/@baseFontSize*2rem solid @color;
+    content: ' '
+  }
+}
+
+.border-none() {
+  &:after {
+    display: none;
+  }
+}
+
+.border-solid (@bw, @color) {
+  border: @bw/@baseFontSize*2rem solid @color;
+}
+
+.lh(@px) {
+  line-height: @px / @baseFontSize * 2rem;
+}
+
+.fs(@px) {
+  font-size: @px / @baseFontSize * 2rem;
+}
+
+.font(@weight, @fs, @family) {
+  font: @weight (@fs / @baseFontSize * 2rem)/1  @family;
+}
+
+.ellipsis2() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  /*! autoprefixer: off */
+  -webkit-box-orient: vertical;
+  /* autoprefixer: on */
+  -webkit-line-clamp: 2;
+}
+
+.top(@px) {
+  top: @px / @baseFontSize * 2rem;
+}
+
+.left(@px) {
+  left: @px / @baseFontSize * 2rem;
+}
+
+.bottom(@px) {
+  bottom: @px / @baseFontSize * 2rem;
+}
+
+.right(@px) {
+  right: @px / @baseFontSize * 2rem;
+}
+
+.vertical(@px) {
+  vertical-align: @px / @baseFontSize * 2rem;
+}
+
+.ellipsis() {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.mh(@px) {
+  min-height: @px / @baseFontSize * 2rem;
+}
+
+.wordspacing(@px) {
+  word-spacing: @px / @baseFontSize * 2rem;
+}
