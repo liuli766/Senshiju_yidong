@@ -1,4 +1,5 @@
 <template>
+<!-- 首页 -->
   <div class="home">
     <div id="nav" class="flex_ar">
       <router-link to="/">
@@ -154,7 +155,7 @@
       <img src="../assets/img/banner2.png" alt />
     </div>
     <!-- 定制案列展示 -->
-    <div class="show">
+    <div class="show text_cen">
       <h3>定制案例展示</h3>
       <span>Custom-made case show</span>
       <div class="dpic flex_be">
@@ -170,13 +171,14 @@
       <h4>匠心如一，百年坚守</h4>
       <p>Ingenuity as one, hundred years of perseverance</p>
     </footer>
+    <tabbar/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
-
+import tabbar from '@/components/tabBar.vue'
 export default {
   name: "Home",
   data() {
@@ -200,6 +202,7 @@ export default {
   },
   components: {
     // HelloWorld
+    tabbar
   },
   methods: {
     handtel() {}
@@ -241,6 +244,8 @@ export default {
     .lh(29);
     .ml(46);
     .mr(47);
+    text-align: justify;
+    text-indent: 0.3rem;
   }
 }
 .tel {
@@ -311,6 +316,9 @@ export default {
 }
 .type_box {
   .type {
+    div{
+      text-align: center;
+    }
     .mt(23);
     img {
       .w(271);
@@ -361,6 +369,7 @@ export default {
   }
 }
 footer {
+  .mb(108);
   background: #151d13;
   h4 {
     .fs(46);

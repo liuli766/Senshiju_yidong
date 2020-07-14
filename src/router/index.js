@@ -41,6 +41,10 @@ VueRouter.prototype.push = function push (location) {
   {
     path: '/productDetail',
     component: () => import(/* webpackChunkName: "about" */ '../views/productDetail.vue')
+  },
+  {
+    path: '/orderpay',
+    component: () => import(/* webpackChunkName: "about" */ '../views/orderpay.vue')
   }
 ]
 

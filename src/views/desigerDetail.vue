@@ -1,4 +1,5 @@
 <template>
+<!-- 设计详情 -->
   <div class="desigerDetail">
     <!-- 头部 -->
     <div class="headimg flex">

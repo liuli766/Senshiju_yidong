@@ -6,9 +6,12 @@ Vue.config.productionTip = false
 import "./assets/commcss/reset.css"
 import "./assets/rem.js"
 import 'vant/lib/index.css'; 
-import { Rate, Icon,Swipe, SwipeItem  } from 'vant';
+import { Rate, Icon,Swipe, SwipeItem,Popup,Checkbox, CheckboxGroup,GoodsAction, GoodsActionIcon, GoodsActionButton,Toast,Stepper,NavBar,Card} from 'vant';
 Vue.use(Rate);
-Vue.use(Icon).use(Swipe).use(SwipeItem);
+Vue.use(Icon).use(Swipe).use(SwipeItem).use(Popup ).use(Checkbox).use(CheckboxGroup).use(Toast).use(Stepper).use(NavBar).use(Card);
+Vue.use(GoodsAction);
+Vue.use(GoodsActionButton);
+Vue.use(GoodsActionIcon);
 new Vue({
   router,
   store,
