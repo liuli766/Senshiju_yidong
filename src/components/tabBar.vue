@@ -11,6 +11,12 @@
 
 <script>
 export default {
+    props:{
+        tabid:{
+            type:[String,Number],
+            default:''
+        }
+    },
     data(){
         return{
             tabbar:[
@@ -31,12 +37,12 @@ export default {
                     url:'/mine'
                 }
             ],
-            tabid:0
+            // tabid:0
         }
     },
     methods: {
         tabChoes(i,item){
-            this.tabid=i
+            // this.tabid=i
             this.$router.push({ path: item.url })
         }
     },

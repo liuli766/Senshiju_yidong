@@ -171,7 +171,7 @@
       <h4>匠心如一，百年坚守</h4>
       <p>Ingenuity as one, hundred years of perseverance</p>
     </footer>
-    <tabbar/>
+    <tabbar :tabid=0 />
   </div>
 </template>
 

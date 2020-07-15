@@ -70,24 +70,29 @@
       <h5>我们的口碑您来决定</h5>
       <p>为您与客户真实的聊天记录</p>
       <div class="flex_be">
-          <img src="../assets/img/1.png" alt="">
-          <img src="../assets/img/1.png" alt="">
-          <img src="../assets/img/1.png" alt="">
+        <img src="../assets/img/1.png" alt />
+        <img src="../assets/img/1.png" alt />
+        <img src="../assets/img/1.png" alt />
       </div>
       <div class="more">
-          <a :href="'tel:' + phone">查看更多客户反馈请咨询客服</a>
+        <a :href="'tel:' + phone">查看更多客户反馈请咨询客服</a>
       </div>
     </div>
+    <tabbar :tabid="2" />
   </div>
 </template>
 
 <script>
+import tabbar from "@/components/tabBar.vue";
 export default {
-    data() {
-        return {
-             phone: 18883614674
-        }
-    },
+  components: {
+    tabbar
+  },
+  data() {
+    return {
+      phone: 18883614674
+    };
+  },
   methods: {
     handdtail() {
       this.$router.push({
@@ -216,7 +221,7 @@ export default {
   }
 }
 .show {
-    .pb(30);
+  .pb(30);
   img {
     .w(360);
     .h(250);
@@ -237,13 +242,13 @@ export default {
     .lh(40);
   }
 }
-.mouth{
-    .pb(30);
-    img{
-        .w(226);
-        .h(468);
-    }
-    .more {
+.mouth {
+  .pb(30);
+  img {
+    .w(226);
+    .h(468);
+  }
+  .more {
     .w(340);
     .h(40);
     border: 1px solid rgba(0, 0, 0, 1);

@@ -41,8 +41,31 @@
           price="598.00"
           origin-price="10.00"
           desc="A116新农村一层四合院别墅设计图纸乡村 自建一层中式风格房子"
-          thumb="/assets/logo.jpeg"
+          :thumb="img"
         />
+      </div>
+      <!--  -->
+      <div class="number">
+        <div class="flex_be fs26">
+          <span>商品金额</span>
+          <span>¥598.00</span>
+        </div>
+        <div class="flex_be fs26">
+          <span>优惠方式</span>
+          <span>无</span>
+        </div>
+        <div class="flex_be fs26">
+          <span>运费</span>
+          <span>¥0.00</span>
+        </div>
+        <div class="flex_be fs26">
+          <span>订单总价</span>
+          <span>¥598.00</span>
+        </div>
+        <div class="flex_be bordert">
+          <span>实际付款</span>
+          <span>¥598.00</span>
+        </div>
       </div>
     </main>
   </div>
@@ -51,7 +74,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      img:require('../assets/logo.png')
+    };
   },
   methods: {
     onClickLeft() {}
@@ -68,12 +93,14 @@ export default {
   color: #fff;
   .pr(30);
   .pl(30);
+  .fs(32);
 }
 main {
   background: #f3f3f3;
   .pt(11);
   .pr(20);
   .pl(20);
+  .pb(207);
   p {
     background: #fff;
     .h(91);
@@ -98,6 +125,7 @@ main {
     .express {
       .w(52);
       .h(26);
+      .lh(26);
       background: #fb3c29;
       display: block;
       color: #fff;
@@ -117,6 +145,25 @@ main {
       .pr(15);
       .fs(26);
       border-bottom: 1px solid #f3f3f3;
+    }
+  }
+  .number{
+    .mt(19);
+    background: #fff;
+    color: #2A2A2A;
+    .pt(41);
+    .pr(10);
+    .pl(10);
+    .fs26{
+      .fs(26);
+      .mb(24);
+    }
+    .bordert{
+      .pt(30);
+      .pb(28);
+      border-top: 1px solid #F3F3F3;
+      .fs(26);
+      color: #2A2A2A;
     }
   }
 }
