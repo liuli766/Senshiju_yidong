@@ -137,7 +137,7 @@ export default {
         }
       }
       .toperfect {
-        .w(122);
+        .w(126);
         .h(49);
         .b-radius(25);
         .padding(13, 24);

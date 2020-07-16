@@ -53,6 +53,14 @@ VueRouter.prototype.push = function push (location) {
   {
     path: '/mine',
     component: () => import(/* webpackChunkName: "about" */ '../views/mine.vue')
+  },
+  {
+    path: '/newshippingAddr',
+    component: () => import(/* webpackChunkName: "about" */ '../views/newshippingAddr.vue')
+  },
+  {
+    path: '/register',
+    component: () => import(/* webpackChunkName: "about" */ '../views/register.vue')
   }
 ]
 
