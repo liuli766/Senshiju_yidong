@@ -1,25 +1,40 @@
 <template>
   <!-- 注册页面 -->
   <div class="register">
-    <h6>绑定手机号</h6>
-    <p>未注册过的手机号码将自动注册为村墅人家用户</p>
-    <van-form @submit="onSubmit">
-      <van-field
-        v-model="tel"
-        name="pattern"
-        placeholder="用户名"
-        :rules="[{ pattern, message: '请输入正确内容' }]"
-      />
-      <van-field
-        v-model="tel"
-        name="pattern"
-        placeholder="用户名"
-        :rules="[{ pattern, message: '请输入正确内容' }]"
-      />
-      <div style="margin: 16px;">
-        <van-button round block type="info" native-type="submit">提交</van-button>
+    <div class="main">
+      <h6>绑定手机号</h6>
+      <p>未注册过的手机号码将自动注册为村墅人家用户</p>
+      <van-form @submit="onSubmit">
+        <div class="tel">
+          <van-field
+            v-model="tel"
+            name="pattern"
+            clearable
+            placeholder="请输入手机号"
+            :rules="[{ pattern, message: '请输入正确内容' }]"
+          />
+        </div>
+
+        <div class="code flex_be">
+          <van-field
+            v-model="code"
+            name="pattern"
+            clearable
+            placeholder="请输入验证码"
+            :rules="[{ pattern:pattern1, message: '请输入正确内容' }]"
+          />
+          <span>获取验证码</span>
+        </div>
+
+        <div>
+          <van-button block class="button" native-type="submit">登录</van-button>
+        </div>
+      </van-form>
+      <p class="agreement text_cen">注册/登录即表示同意</p>
+      <div class="text_cen">
+        <van-icon name="cross" />
       </div>
-    </van-form>
+    </div>
   </div>
 </template>
 
@@ -28,7 +43,9 @@ export default {
   data() {
     return {
       tel: "",
-      pattern: /\d{6}/
+      code: "",
+      pattern: /\d{6}/,
+      pattern1: /\d{4}/
     };
   },
   methods: {
@@ -43,6 +60,14 @@ export default {
 @import "../styles/index.less";
 @import "../styles/variable.less";
 .register {
+  background-color: #eee;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  .main{
+    background:#fff;
+    .margin(217,20,0,20);
+  }
   h6 {
     color: #202020;
     text-align: center;
@@ -50,11 +75,46 @@ export default {
     font-weight: bold;
     .lh(77);
   }
-  p{
-      color: #424242;
-      .fs(24);
-      .lh(58);
-      .ml(44);
+  p {
+    color: #424242;
+    font-family: SimHei;
+    .fs(24);
+    .lh(58);
+    .ml(44);
+  }
+  .code {
+    border-bottom: 1px solid #eee;
+    .margin(0, 18);
+    span {
+      display: flex;
+      width: 35%;
+      color: #979797;
+      .fs(32);
+    }
+  }
+  .van-cell::after {
+    border-bottom: 0;
+  }
+  .van-icon{
+    .mb(30);
+  }
+  .tel {
+    .margin(0, 18);
+    border-bottom: 1px solid #eee;
+  }
+  .button {
+    background: #fe9e15;
+    color: #fff;
+    .fs(36);
+    .b-radius(10);
+    margin: auto;
+    .mt(60);
+    .w(699);
+  }
+  .agreement {
+    line-height: 1;
+    .mt(47);
+    .mb(82);
   }
 }
 </style>

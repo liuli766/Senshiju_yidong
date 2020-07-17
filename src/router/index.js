@@ -61,6 +61,26 @@ VueRouter.prototype.push = function push (location) {
   {
     path: '/register',
     component: () => import(/* webpackChunkName: "about" */ '../views/register.vue')
+  },
+  {
+    path: '/login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
+  },
+  {
+    path: '/personInfo',
+    component: () => import(/* webpackChunkName: "about" */ '../views/personInfo.vue')
+  },
+  {
+    path: '/surePay',
+    component: () => import(/* webpackChunkName: "about" */ '../views/surePay.vue')
+  },
+  {
+    path: '/collectionList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/collectionList.vue')
+  },
+  {
+    path: '/drawingOrder',
+    component: () => import(/* webpackChunkName: "about" */ '../views/drawingOrder.vue')
   }
 ]
 
