@@ -47,6 +47,14 @@ VueRouter.prototype.push = function push (location) {
     component: () => import(/* webpackChunkName: "about" */ '../views/orderpay.vue')
   },
   {
+    path: '/stayGoods',
+    component: () => import(/* webpackChunkName: "about" */ '../views/stayGoods.vue')
+  },
+  {
+    path: '/logisticsInfo',
+    component: () => import(/* webpackChunkName: "about" */ '../views/logisticsInfo.vue')
+  },
+  {
     path: '/product',
     component: () => import(/* webpackChunkName: "about" */ '../views/product.vue')
   },

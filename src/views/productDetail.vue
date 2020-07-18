@@ -1,6 +1,6 @@
 <template>
   <!-- 商品详情页 -->
-  <div>
+  <div class="productdetail">
     <van-swipe @change="onChange">
       <van-swipe-item>
         <img src="../assets/img/1.png" alt />
@@ -19,7 +19,10 @@
       </template>
     </van-swipe>
     <!-- 价格 -->
-    <div class="price">¥599.00</div>
+    <div class="price">
+      <span>¥599.00</span>
+      <span></span>
+    </div>
     <!-- 简介 -->
     <p class="title">B537二层四合院别墅设计图纸中式新农村自建房样图效果图全套</p>
     <!-- 发货 -->
@@ -31,9 +34,20 @@
       </div>
       <div>月销：10</div>
     </div>
+    <!-- 浏览量 -->
+    <div class="views flex_be">
+      <div>
+        <img src="../assets/img/1.png" alt />
+        <img src="../assets/img/1.png" alt />
+      </div>
+      <div>2778人在逛</div>
+    </div>
     <!-- 服务 -->
     <div class="serves flex_be" @click="showPopup">
-      <span>服务</span>
+      <div>
+        <span>服务</span>
+        <span>付款后48小时内发货</span>
+      </div>
       <van-icon name="arrow" />
     </div>
     <van-popup v-model="show" position="bottom" :style="{ height: '68%' }">
@@ -60,36 +74,43 @@
     </van-popup>
     <!-- 宝贝评价 -->
     <div>
-      <div class="rate flex_be">
+      <!-- <div class="rate flex_be">
         <span>宝贝评价</span>
         <div class="flex_cen">
           <span class="all">查看全部</span>
           <van-icon name="arrow" size="0.3rem" color="#F3AF1C" />
         </div>
-      </div>
+      </div>-->
       <!--  -->
-      <div class="cont">
+      <!-- <div class="cont">
         <div>
           <img src alt />
           fas
         </div>
         <p>是室内设计师时间内大厦是你的看是打开的难道是看打多久啊</p>
-      </div>
+      </div>-->
+    </div>
+    <!-- 图纸介绍 -->
+    <div class="introduce">
+        <span>图纸介绍</span>
+        <p>设计很好,设计很好设计号很好设计很好设计很好设计很好设计设计很好,设计很好设计号很好设计很好设计很好设计很好设计设计很好,设计很好设计号很好设计很好设计很好设计很好设计</p>
     </div>
     <!-- 商品详情底部 -->
-    <van-goods-action>
-      <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" />
-      <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" />
-      <van-goods-action-icon
-        :icon="icon"
-        :text="text"
-        color="#676767"
-        class="size"
-        @click="onClickIcon"
-      />
-      <van-goods-action-button type="warning" text="加入购物车" class="size" />
-      <van-goods-action-button text="直接购买" class="size danger" />
-    </van-goods-action>
+    <div class="fixed">
+      <van-goods-action>
+        <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" />
+        <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" />
+        <van-goods-action-icon
+          :icon="icon"
+          :text="text"
+          color="#676767"
+          class="size"
+          @click="onClickIcon"
+        />
+        <van-goods-action-button type="warning" text="加入购物车" class="size" />
+        <van-goods-action-button text="直接购买" class="size danger" />
+      </van-goods-action>
+    </div>
   </div>
 </template>
 
@@ -126,7 +147,10 @@ export default {
 
 <style lang="less" scoped>
 @import "../styles/index.less";
-
+.productdetail {
+  overflow: scroll;
+  .mb(100);
+}
 .custom-indicator {
   background: rgba(0, 0, 0, 0.5);
   .b-radius(17);
@@ -176,6 +200,11 @@ export default {
 .serves {
   .mt(9);
   span {
+    color: #707070;
+    .fs(27);
+  }
+  span:nth-of-type(2) {
+    color: #1d1d1d;
     .ml(20);
   }
 }
@@ -240,7 +269,35 @@ export default {
   background: #ef7a1c;
   color: #fff;
 }
-.cont{
-  .padding(20,20);
+.cont {
+  .padding(20, 20);
+}
+.fixed{
+  position: fixed;
+  bottom: 0;
+}
+.introduce{
+  .padding(29,19,16,0);
+  span{
+    color: #707070;
+    .fs(25);
+  }
+  p{
+    color: #101010;
+    .fs(24);
+    .lh(37);
+    .mt(29);
+  }
+}
+.views {
+  .padding(11, 32, 11, 16);
+  img {
+    .w(43);
+    .h(43);
+    border-radius: 50%;
+  }
+  img + img {
+    .ml(-26);
+  }
 }
 </style>

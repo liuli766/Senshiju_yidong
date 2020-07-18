@@ -7,7 +7,10 @@ import "./assets/commcss/reset.css"
 import "./assets/rem.js"
 import 'vant/lib/index.css'; 
 import Vant from 'vant';
+import { Toast } from 'vant';
+Vue.prototype.$toast=Toast
 Vue.use(Vant);
+Vue.prototype.$toast=Toast
 new Vue({
   router,
   store,

@@ -1,9 +1,9 @@
 <template>
-  <!-- 订单待付款 -->
-  <div>
+  <!-- 商家待发货 -->
+  <div class="staygoods">
     <van-nav-bar left-text="订单详情" left-arrow @click-left="onClickLeft" />
     <div class="flex_be stay">
-      <span>订单待付款</span>
+      <span>商家待发货</span>
       <van-icon name="arrow" />
     </div>
     <main>
@@ -80,10 +80,6 @@
           <span>2020-07-16 13:49:52</span>
         </div>
       </div>
-      <div class="flex_be bottom">
-        <span>取消订单</span>
-        <button>立即支付</button>
-      </div>
     </main>
   </div>
 </template>
@@ -101,11 +97,10 @@ export default {
       aorder: "d2sg4hfha7hph555fd5558"
     };
   },
-
   methods: {
     onClickLeft() {
       history.go(-1);
-      this.$store.commit('gonav',0)
+      this.$store.commit('gonav',1)
     },
     copy(e, text) {
       var clipboard = new Clipboard(e.target, { text: () => text });
@@ -226,25 +221,6 @@ main {
         .mr(38);
       }
     }
-  }
-}
-.bottom {
-  .fs(24);
-  position: fixed;
-  width: 100%;
-  background: #fff;
-  bottom: 0;
-  left: 0;
-  .h(92);
-  .padding(0, 27);
-  box-sizing: border-box;
-  button {
-    outline: none;
-    border: 1px solid #ea2d19;
-    color: #ea2d19;
-    background: #fff;
-    .padding(15, 30);
-    .b-radius(27);
   }
 }
 </style>

@@ -1,42 +1,99 @@
 <template>
   <!--付款，发货，收货 -->
   <div class="orderlist">
-    <main>
-      <div class="tagname flex_be">
-        <span>2020-07-16 13:49:52</span>
-        <span>待收货</span>
-      </div>
-      <div class="flex">
-        <img src="../assets/logo.png" alt />
-        <div class="right">
-          <p>A116新农村一层四合院别墅设计图纸</p>
-          <div class="text_r">
-            <van-icon name="cross" />1
-          </div>
-          <div>¥598.00</div>
+    <main v-if="orderlist.length!==0">
+      <div @click="godetail(navid)" v-for="(item,k) in orderlist" :key='k'>
+        <div class="tagname flex_be">
+          <span>2020-07-16 13:49:52</span>
+          <span v-if="navactivechoseid===0">待付款</span>
+          <span v-else-if="navactivechoseid===1">待发货</span>
+          <span v-else-if="navactivechoseid===2">待收货</span>
         </div>
+        <div class="flex">
+          <img :src="item.img" alt />
+          <div class="right">
+            <p>{{item.p}}</p>
+            <div class="text_r">
+              <van-icon name="cross" />{{item.num}}
+            </div>
+            <div>{{item.price}}</div>
+          </div>
+        </div>
+        <div class="text_r price_pay" v-if="navactivechoseid===0">共1件 待付款:¥598.00</div>
+        <div class="text_r price_pay" v-else-if="navactivechoseid===1">共1件 待发货:¥598.00</div>
+        <div class="text_r price_pay" v-else-if="navactivechoseid===2">共1件 待收货:¥598.00</div>
       </div>
-      <div class="text_r price_pay">共1件 待付款:¥598.00</div>
-      <div class="bor_red">
-        <span class="text_cen">查看物流</span>
+
+      <div class="bor_red" v-if="navactivechoseid===0">
+        <span class="text_cen">取消订单</span>
+        <span class="text_cen" @click="gopay">立即支付</span>
+      </div>
+      <div class="bor_red" v-else-if="navactivechoseid===1"></div>
+      <div class="bor_red" v-else-if="navactivechoseid===2">
+        <span class="text_cen" @click="goLogistics">查看物流</span>
       </div>
     </main>
+    <main v-else class="nodata">暂无数据</main>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  computed: mapState({
+    navactivechoseid: state => state.navactivechoseid
+  }),
+  props: {
+    orderlist: {
+      type: Array,
+      default: () => []
+    },
+    navid: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {};
+  },
+  created() {
+    console.log(this.orderlist);
+  },
+  methods: {
+    godetail(navid) {
+      //跳转详情
+      if (navid === 0) {
+        this.$router.push({
+          path: "/orderpay"
+        });
+      } else if (navid === 1) {
+        this.$router.push({
+          path: "/stayGoods"
+        });
+      } else if (navid === 2) {
+        this.$router.push({
+          path: "/productDetail"
+        });
+      }
+    },
+    goLogistics() { //跳转物流
+      this.$router.push({
+        path: "/logisticsInfo"
+      });
+    },
+    gopay(){ //跳转支付
+      this.$router.push({
+        path: "/logisticsInfo"
+      });
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>
 @import "../styles/index.less";
 @import "../styles/variable.less";
-.orderlist {
-  background-color: #eee;
-  height: 100%;
-  position: fixed;
-  width: 100%;
-}
+
 main {
   background: #fff;
   .b-radius(10);
@@ -69,10 +126,25 @@ main {
     .mt(60);
     border-bottom: 1px solid #f3f3f3;
   }
-  .bor_red {   
+  .bor_red {
     text-align: right;
     .mt(24);
-    span {
+    span:nth-of-type(1) {
+      .lh(54);
+      .w(150);
+      border: 1px solid #797979;
+      display: inline-block;
+      .b-radius(27);
+    }
+    span:nth-of-type(2) {
+      .lh(54);
+      .w(150);
+      border: 1px solid #fd3723;
+      display: inline-block;
+      .b-radius(27);
+      .ml(20);
+    }
+    span:nth-last-of-type(1) {
       .lh(54);
       .w(150);
       border: 1px solid #fd3723;
@@ -80,5 +152,10 @@ main {
       .b-radius(27);
     }
   }
+}
+.nodata {
+  color: #afafaf;
+  .fs(30);
+  background: #eee;
 }
 </style>
