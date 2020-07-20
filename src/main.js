@@ -5,6 +5,7 @@ import store from './store'
 Vue.config.productionTip = false
 import "./assets/commcss/reset.css"
 import "./assets/rem.js"
+import "./assets/commcss/animate.min.css"
 import 'vant/lib/index.css'; 
 import Vant from 'vant';
 import { Toast } from 'vant';

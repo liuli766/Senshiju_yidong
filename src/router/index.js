@@ -89,6 +89,10 @@ VueRouter.prototype.push = function push (location) {
   {
     path: '/drawingOrder',
     component: () => import(/* webpackChunkName: "about" */ '../views/drawingOrder.vue')
+  },
+  {
+    path: '/userxy',
+    component: () => import(/* webpackChunkName: "about" */ '../views/userxy.vue')
   }
 ]
 
