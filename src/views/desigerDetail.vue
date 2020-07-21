@@ -6,15 +6,15 @@
       <img src="../assets/img/1.png" alt />
       <div class="headr flex_col">
         <div class="flex">
-          <div class="flex">
-            <div class="name small_font">{{this.$route.query.name}}</div>
+          <div class="flex_cen">
+            <div class="name">汤丞昱</div>
             <div class="small_font">设计总监</div>
           </div>
-          <div class="flex small_font">
-            <!-- <van-icon name="star-o" size="0.2rem" />评价星级: -->
-            <!-- <van-rate v-model="value" size="0.2rem" /> -->
+          <div class="flex_cen small_font">
+            <van-icon name="star-o" size="0.2rem" style="margin-right:0.05rem" /><span>评价星级:</span>
+            <van-rate v-model="value" size="0.2rem" />
           </div>
-          <div class="small_font">从业年限：10年以上</div>
+          <div class="small_font flex_cen">从业年限：10年以上</div>
         </div>
         <div class="shool">毕业院校：武汉理工大学</div>
       </div>
@@ -58,6 +58,7 @@ export default {
 .small_font {
   .fs(8);
   //   transform: scale(0.7);
+  .ml(9);
 }
 .headimg {
   .ml(27);
@@ -80,7 +81,6 @@ export default {
   .name {
     .fs(28);
     color: #323232;
-    .mr(11);
   }
 }
 .text {

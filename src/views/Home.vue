@@ -2,7 +2,7 @@
 <!-- 首页 -->
   <div class="home">
     <div id="nav" class="flex_ar">
-      <router-link to="/">
+      <router-link to="/product">
         <div>
           <img src="../assets/logo.png" alt />
           <span>建房图库</span>
@@ -20,12 +20,6 @@
           <span>私人定制</span>
         </div>
       </router-link>
-      <router-link to="/buildLog">
-        <div>
-          <img src alt />
-          <span>建房日志</span>
-        </div>
-      </router-link>
       <router-link to="/buildEncyc">
         <div>
           <img src alt />
@@ -36,6 +30,12 @@
         <div>
           <img src alt />
           <span>商务合作</span>
+        </div>
+      </router-link>
+      <router-link to="/person">
+        <div>
+          <img src alt />
+          <span>个人中心</span>
         </div>
       </router-link>
     </div>
@@ -145,7 +145,7 @@
       <div class="flex_be type">
         <div>
           <h6>现代别墅</h6>
-          <p>modern VILLA</p>
+          <p>  MODERN VILLA</p>
           <p>
             <span>简而不凡</span>，时尚又大气，摩登新选择
           </p>
@@ -336,9 +336,9 @@ export default {
       .mb(36);
     }
     p:nth-of-type(2) {
-      .fs(29);
+      .fs(22);
       span {
-        .fs(34);
+        .fs(29);
       }
       .pr(28);
       .pl(28);

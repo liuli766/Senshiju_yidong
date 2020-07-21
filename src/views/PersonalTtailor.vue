@@ -5,7 +5,7 @@
     <!-- 简介 -->
     <div class="intro flex">
       <img src="../assets/img/banner3.png" alt />
-      <div>
+      <div >
         <p>更懂您的别墅生活</p>
         <p>村墅人家</p>
         <p>让您体验“真正的别墅生活”</p>
@@ -108,6 +108,7 @@ export default {
 @import "../styles/variable.less";
 .personalttailor {
   background: #fafafa;
+  overflow: hidden;
 }
 .img {
   width: 100%;
@@ -121,16 +122,21 @@ export default {
     .h(216);
     .mr(26);
   }
+  >div{
+    .mt(20);
+  }
   .line {
     .w(60);
     height: 1px;
     background: #000;
+    .margin(9,0);
+    // .ml(100);
   }
   p {
     .fs(12);
     color: #4b4b4b;
     // transform: scale(0.7);
-    .lh(22);
+    .w(600);
   }
 }
 .text {
@@ -143,6 +149,9 @@ export default {
   font-weight: 400;
   .fs(22);
   .lh(36);
+  box-sizing: border-box;
+  width: 100%;
+  text-align: justify;
   span {
     color: #e13535;
   }

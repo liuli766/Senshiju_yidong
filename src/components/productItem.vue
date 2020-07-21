@@ -1,7 +1,7 @@
 <template>
   <!-- 产品列表 -->
   <div class="productitem flex flex_b">
-    <div v-for="(item,k) in productitem" :key="k" class="productitemlist">
+    <div v-for="(item,k) in productitem" :key="k" class="productitemlist" @click="goprodutDetail">
       <img :src="item.img" alt />
       <div class="padd">
         <p>{{item.p}}</p>
@@ -30,7 +30,14 @@ export default {
     return {
       //   itemlist: this.productItemList
     };
-  }
+  },
+  methods: {
+    goprodutDetail(){
+      this.$router.push({
+        path:'/productDetail'
+      })
+    }
+  },
 };
 </script>
 

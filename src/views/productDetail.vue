@@ -70,7 +70,7 @@
           </van-checkbox>
         </van-checkbox-group>
       </div>
-      <div class="btn text_cen">完成</div>
+      <div class="btn text_cen" @click="closepanl">完成</div>
     </van-popup>
     <!-- 宝贝评价 -->
     <div>
@@ -92,8 +92,8 @@
     </div>
     <!-- 图纸介绍 -->
     <div class="introduce">
-        <span>图纸介绍</span>
-        <p>设计很好,设计很好设计号很好设计很好设计很好设计很好设计设计很好,设计很好设计号很好设计很好设计很好设计很好设计设计很好,设计很好设计号很好设计很好设计很好设计很好设计</p>
+      <span>图纸介绍</span>
+      <p>设计很好,设计很好设计号很好设计很好设计很好设计很好设计设计很好,设计很好设计号很好设计很好设计很好设计很好设计设计很好,设计很好设计号很好设计很好设计很好设计很好设计很好设计号很好设计很好设计很好设计很好设计设计很好</p>
     </div>
     <!-- 商品详情底部 -->
     <div class="fixed">
@@ -107,7 +107,7 @@
           class="size"
           @click="onClickIcon"
         />
-        <van-goods-action-button type="warning" text="加入购物车" class="size" />
+        <van-goods-action-button type="warning" text="加入购物车" class="size"  @click="gocard"/>
         <van-goods-action-button text="直接购买" class="size danger" />
       </van-goods-action>
     </div>
@@ -128,14 +128,26 @@ export default {
   },
   methods: {
     onChange(index) {
+      //轮播
       this.current = index;
     },
     showPopup() {
+      //展示服务组件
       this.show = true;
       console.log(this.result);
     },
+    closepanl() {
+      //关闭服务组件
+      this.show = false;
+    },
     handchange(names) {
+      //选中选框
       console.log(names);
+    },
+    gocard(){ //加入购物车
+      this.$router.push({
+        path:'/cart'
+      })
     },
     onClickIcon() {
       (this.text = "已收藏"), (this.icon = "like");
@@ -272,17 +284,17 @@ export default {
 .cont {
   .padding(20, 20);
 }
-.fixed{
+.fixed {
   position: fixed;
   bottom: 0;
 }
-.introduce{
-  .padding(29,19,16,0);
-  span{
+.introduce {
+  .padding(29, 19, 16, 0);
+  span {
     color: #707070;
     .fs(25);
   }
-  p{
+  p {
     color: #101010;
     .fs(24);
     .lh(37);
