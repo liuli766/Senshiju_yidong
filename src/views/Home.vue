@@ -1,53 +1,54 @@
 <template>
-<!-- 首页 -->
+  <!-- 首页 -->
   <div class="home">
     <div id="nav" class="flex_ar">
       <router-link to="/product">
         <div>
-          <img src="../assets/logo.png" alt />
+          <img src="../assets/img/nav/jftk.png" alt />
           <span>建房图库</span>
         </div>
       </router-link>
       <router-link to="/buildLibrary">
         <div>
-          <img src alt />
+          <img src="../assets/img/nav/sjtd.png" alt />
           <span>设计团队</span>
         </div>
       </router-link>
       <router-link to="/PersonalTtailor">
         <div>
-          <img src alt />
+          <img src="../assets/img/nav/srdz.png" alt />
           <span>私人定制</span>
         </div>
       </router-link>
       <router-link to="/buildEncyc">
         <div>
-          <img src alt />
+          <img src="../assets/img/nav/jfbk.png" alt />
           <span>建房百科</span>
         </div>
       </router-link>
       <router-link to="/Business">
         <div>
-          <img src alt />
+          <img src="../assets/img/nav/swhz.png" alt />
           <span>商务合作</span>
         </div>
       </router-link>
       <router-link to="/person">
         <div>
-          <img src alt />
+          <img src="../assets/img/nav/grzx.png" alt />
           <span>个人中心</span>
         </div>
       </router-link>
     </div>
+    <!-- banner -->
     <div class="logo text_cen">
       <img src="../assets/img/logo.png" alt />
       <h4>专注新农村自建房别墅设计</h4>
       <p>四川别墅之家建筑科技有限公司,专注于新农村自建房设计、乡村别墅设计、别墅室内装修设计、园林景观设计，以及施工和建材一站式服务，公司采取传统的公司经营和现代互联网相结合的方式，以创新的设计理念，服务于中国新农村和城镇建设。公司拥有专业的设计团队，结合客户的需求为出发点为您打造一个理想的家园</p>
     </div>
     <!--展示图片  -->
-    <div>
-      <div></div>
-      <div></div>
+    <div class="flex showpic">
+      <img src="../assets/img/b1.png" alt />
+      <img src="../assets/img/b2.png" alt />
     </div>
     <!-- 服务电话 -->
     <div class="tel" @tap="handtel">
@@ -104,7 +105,7 @@
     <!-- 别墅类型 -->
     <div class="type_box">
       <div class="flex_be type">
-        <img src="../assets/logo.png" alt />
+        <img src="../assets/img/c1.png" alt />
         <div>
           <h6>中式别墅</h6>
           <p>CHINESE VILLA</p>
@@ -145,7 +146,7 @@
       <div class="flex_be type">
         <div>
           <h6>现代别墅</h6>
-          <p>  MODERN VILLA</p>
+          <p>MODERN VILLA</p>
           <p>
             <span>简而不凡</span>，时尚又大气，摩登新选择
           </p>
@@ -171,21 +172,21 @@
       <h4>匠心如一，百年坚守</h4>
       <p>Ingenuity as one, hundred years of perseverance</p>
     </footer>
-    <tabbar :tabid=0 />
+    <tabbar :tabid="0" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-import tabbar from '@/components/tabBar.vue'
+// import { mapState } from "vuex";
+import request from "@/request.js";
+import tabbar from "@/components/tabBar.vue";
 export default {
   name: "Home",
   data() {
     return {
       piclist: [
         require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png")
+        require("../assets/img/banner7.png"),
       ],
       xpiclist: [
         require("../assets/img/banner7.png"),
@@ -195,18 +196,26 @@ export default {
         require("../assets/img/banner7.png"),
         require("../assets/img/banner7.png"),
         require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png")
+        require("../assets/img/banner7.png"),
       ],
-      phone: 17683242994
+      phone: 17683242994,
     };
   },
   components: {
-    // HelloWorld
-    tabbar
+    tabbar,
+  },
+  created() {
+    request
+      .getHomeData()
+      .then((res) => {
+        console.log(res, "首页");
+      })
+      .catch(() => {})
+      .finally(() => {});
   },
   methods: {
-    handtel() {}
-  }
+    handtel() {},
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -222,11 +231,13 @@ export default {
     img {
       .w(85);
       .h(85);
+      .mb(4);
     }
   }
 }
 .logo {
   background: #121911;
+  background: url("../assets/img/homebg.png");
   color: @base-header-color;
   .pb(40);
   img {
@@ -240,12 +251,20 @@ export default {
     .mb(29);
   }
   p {
-    .fs(21);
-    .lh(29);
+    .fs(14);
+    .lh(28);
     .ml(46);
     .mr(47);
     text-align: justify;
     text-indent: 0.3rem;
+    color: #e2e3e2;
+    letter-spacing: 0.03rem;
+  }
+}
+.showpic {
+  img {
+    .w(375);
+    .h(250);
   }
 }
 .tel {
@@ -316,8 +335,12 @@ export default {
 }
 .type_box {
   .type {
-    div{
+    position: relative;
+    div {
       text-align: center;
+      position: absolute;
+      bottom: 0;
+      left: 105px;
     }
     .mt(23);
     img {
