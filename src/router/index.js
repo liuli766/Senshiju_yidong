@@ -94,9 +94,13 @@ VueRouter.prototype.push = function push (location) {
     path: '/cart',
     component: () => import(/* webpackChunkName: "about" */ '../views/cart.vue')
   },
-  { //
+  { 
     path: '/userxy',
     component: () => import(/* webpackChunkName: "about" */ '../views/userxy.vue')
+  },
+  { // 建房百科详情页
+    path: '/buildencycDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/buildencycDetail.vue')
   }
 ]
 

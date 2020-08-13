@@ -1,7 +1,7 @@
 <template>
 <!-- 设计团队-->
   <div class="buildLibrary">
-    <img src="../assets/img/banner3.png" class="img" alt />
+    <img src="../assets/img/sjtd.png" class="img" alt />
     <!-- 村墅人家设计团队村墅人家设计团队 -->
     <div class="text_cen designer">
       <h4>村墅人家设计团队</h4>
@@ -11,26 +11,26 @@
     </div>
     <!-- 设计师介绍 -->
     <main>
-      <div class="flex info" v-for="(item,index) in list" :key="index">
-        <img :src="item.img" alt />
+      <div class="flex info" v-for="(item,k) in teamList" :key="k">
+        <img :src="item.cover" alt />
         <div class="rbox flex flex_col flex_b">
           <div>
             <div class="top flex_be">
               <div class="rname flex">
                 <span>{{item.name}}</span>
-                <span>{{item.name2}}</span>
+                <span>{{item.position}}</span>
               </div>
-              <div class="ldetail flex" @click="handdetai(item)">
+              <div class="ldetail flex" @click="handdetai(item.id)">
                 <span>查看详情</span>
                 <span class="span flex_cen">···</span>
               </div>
             </div>
-            <p>{{item.info}}</p>
+            <p class="two-wrap">{{item.intro}}</p>
           </div>
           <div>
             <span class="jx">作品精选</span>
             <div class="piclist flex_ar">
-              <img :src="child" alt v-for="(child,idx) in item.pic" :key="idx" />
+              <img :src="child" alt v-for="(child,idx) in item.works" :key="idx" />
             </div>
           </div>
         </div>
@@ -40,53 +40,35 @@
 </template>
 
 <script>
+import request from "@/request.js";
 export default {
   name: "buildLibrary",
   data() {
     return {
-      list: [
-        {
-          img: require("../assets/img/2.png"),
-          name: "钟滢晶",
-          name2: "总设计师",
-          info: "感受爱，表达爱。",
-          pic: [
-            require("../assets/img/2.png"),
-            require("../assets/img/2.png"),
-            require("../assets/img/2.png")
-          ]
-        },
-        {
-          img: require("../assets/img/2.png"),
-          name: "钟滢晶",
-          name2: "总设计师",
-          info: "感受爱，表达爱。",
-          pic: [
-            require("../assets/img/2.png"),
-            require("../assets/img/2.png"),
-            require("../assets/img/2.png")
-          ]
-        },
-        {
-          img: require("../assets/img/2.png"),
-          name: "钟滢晶",
-          name2: "总设计师",
-          info: "感受爱，表达爱。",
-          pic: [
-            require("../assets/img/2.png"),
-            require("../assets/img/2.png"),
-            require("../assets/img/2.png")
-          ]
-        }
-      ]
-    };
+      teamList:[]
+    }
+  },
+  created() {
+    request
+      .getTeam({
+        page:1
+      })
+      .then((res) => {
+        console.log(res, "设计团队");
+        this.teamList=res.data
+      })
+      .catch(() => {})
+      .finally(() => {});
   },
   methods: {
     //设计师详情
-    handdetai(item) {
+    handdetai(num) {
+      console.log(num)
       this.$router.push({
         path: "/desigerDetail",
-        query:item
+        query:{
+          id:num
+        }
       });
     }
   }
@@ -139,8 +121,8 @@ main {
       .mb(19);
     }
     > img {
-      .w(189);
-      .h(284);
+      .w(190);
+      .h(285);
     }
     .rbox {
       .w(460);
@@ -173,10 +155,10 @@ main {
         }
       }
       p {
-        .mt(29);
+        .mt(14);
         .fs(17);
         color: #6e6e6e;
-        .lh(24);
+        .lh(28);
       }
 
       .piclist {

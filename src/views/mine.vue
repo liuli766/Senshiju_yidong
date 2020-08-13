@@ -2,18 +2,19 @@
   <!-- 我的 -->
   <div class="mine">
     <div class="bg_header">
-      <img src="../assets/img/1.png" alt />
+      <img src="../assets/img/mine/b1.png" alt />
       <div class="modalbox">
         <div class="flex">
           <div class="img flex_cen">
-            <img src="../assets/logo.png" alt />
+            <img src="../assets/img/mine/headerimg.png" alt />
           </div>
-          <div class="info flex flex_col">
-            <span>陈某某</span>
-            <span>普通用户</span>
+          <div class="info flex flex_col" @click="gologin">
+            <!-- <span>陈某某</span>
+            <span>普通用户</span>-->
+            <span>立即登录</span>
           </div>
         </div>
-        <div class="toperfect">去完善</div>
+        <div class="toperfect" @click="goperfect">去完善</div>
       </div>
     </div>
     <!-- main -->
@@ -26,13 +27,19 @@
         <div class="gird flex_col flex_cen" v-for="(gird,k) in gridList" :key="k">
           <img :src="gird.img" alt />
           <span>{{gird.name}}</span>
+          <div>1</div>
         </div>
       </div>
       <div class="mineorder">
         <h6>我的工具</h6>
       </div>
       <div class="girdbox flex">
-        <div class="gird flex_col flex_cen" v-for="(gird,k) in toolList" :key="k">
+        <div
+          class="gird flex_col flex_cen"
+          v-for="(gird,k) in toolList"
+          :key="k"
+          @click="handPage(k)"
+        >
           <img :src="gird.img" alt />
           <span>{{gird.name}}</span>
         </div>
@@ -46,44 +53,67 @@
 import tabbar from "@/components/tabBar.vue";
 export default {
   components: {
-    tabbar
+    tabbar,
   },
   data() {
     return {
       gridList: [
         {
-          img: require("../assets/logo.png"),
-          name: "待付款"
+          img: require("../assets/img/mine/dfk.png"),
+          name: "待付款",
         },
         {
-          img: require("../assets/logo.png"),
-          name: "待发货"
+          img: require("../assets/img/mine/dfh.png"),
+          name: "待发货",
         },
         {
-          img: require("../assets/logo.png"),
-          name: "待收货"
+          img: require("../assets/img/mine/dsh.png"),
+          name: "待收货",
         },
         {
-          img: require("../assets/logo.png"),
-          name: "待评价"
+          img: require("../assets/img/mine/sh.png"),
+          name: "售后",
         },
-        {
-          img: require("../assets/logo.png"),
-          name: "售后"
-        }
       ],
       toolList: [
         {
-          img: require("../assets/logo.png"),
-          name: "收货地址"
+          img: require("../assets/img/mine/shdz.png"),
+          name: "收货地址",
         },
         {
-          img: require("../assets/logo.png"),
-          name: "收藏"
-        }
-      ]
+          img: require("../assets/img/mine/wzsc.png"),
+          name: "文章收藏",
+        },
+        {
+          img: require("../assets/img/mine/tzsc.png"),
+          name: "图纸收藏",
+        },
+        {
+          img: require("../assets/img/mine/tzsc.png"),
+          name: "购物车",
+        },
+      ],
     };
-  }
+  },
+  methods: {
+    gologin() {
+      this.$router.push({
+        path: "/login",
+      });
+    },
+    goperfect() {
+      this.$router.push({
+        path: "/personInfo",
+      });
+    },
+    handPage(k) {
+      if (k == 3) {
+        this.$router.push({
+          path: "/cart",
+        });
+      }
+    },
+  },
 };
 </script>
 
@@ -107,7 +137,6 @@ export default {
     }
     .modalbox {
       position: absolute;
-      background: rgba(0, 0, 0, 0.6);
       top: 0;
       left: 0;
       width: 100%;
@@ -181,6 +210,24 @@ export default {
         }
       }
     }
+  }
+}
+.gird {
+  position: relative;
+  img {
+    vertical-align: middle;
+  }
+  div {
+    background: url("../assets/img/xhd.png") no-repeat;
+    background-size: 100% 100%;
+    .w(30);
+    .h(30);
+    color: #fff;
+    position: absolute;
+    top: -0.1rem;
+    line-height: 0.3rem;
+    text-align: center;
+    left: 0.9rem;
   }
 }
 </style>

@@ -23,7 +23,8 @@
             placeholder="请输入验证码"
             :rules="[{ pattern:pattern1, message: '请输入正确内容' }]"
           />
-          <span>获取验证码</span>
+          <span v-if="tmeValue==60" @click="time">获取验证码</span>
+          <span v-else>{{ tmeValue }} s 后获取</span>
         </div>
 
         <div>
@@ -39,20 +40,58 @@
 </template>
 
 <script>
+// import { mapState } from "vuex";
+import request from "@/request.js";
 export default {
   data() {
     return {
       tel: "",
       code: "",
-      pattern: /\d{6}/,
-      pattern1: /\d{4}/
+      pattern: /\d{11}/,
+      pattern1: /\d{4}/,
+      tmeValue: 60, //获取验证码时间
+      flag: 0,
     };
   },
   methods: {
+    time() {
+      //倒计时
+      this.tmeValue = this.tmeValue - 1;
+      this.flag = 1;
+      if (this.tmeValue <= 0) {
+        this.tmeValue = 60;
+        this.flag = 0;
+        return "";
+      } else {
+        setTimeout(() => {
+          this.time();
+        }, 1000);
+      }
+    },
     onSubmit(values) {
+      request
+        .loginByMsg({
+          phone_num: this.tel,
+          msg_code: this.code,
+        })
+        .then((res) => {
+          if (res.data.code == 0) {
+            console.log(res, "登录");
+            this.$toast("登录成功");
+            this.$router.push({
+              path: "/",
+            });
+          }else{
+            this.$toast("验证码错误");
+          }
+        })
+        .catch(() => {
+          this.$toast("登录失败");
+        })
+        .finally(() => {});
       console.log("submit", values);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -64,8 +103,9 @@ export default {
   height: 100%;
   position: fixed;
   width: 100%;
-  .main{
-    background:#fff;
+  font-family: SimHei;
+  .main {
+    background: #fff;
     .margin(217,20,0,20);
   }
   h6 {
@@ -95,7 +135,7 @@ export default {
   .van-cell::after {
     border-bottom: 0;
   }
-  .van-icon{
+  .van-icon {
     .mb(30);
   }
   .tel {

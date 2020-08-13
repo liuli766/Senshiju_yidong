@@ -53,7 +53,7 @@ export default {
 }
 .rate {
   .pt(10);
-  .mb(1rem);
+  .mb(100);
   .userinfo {
     img {
       .w(62);

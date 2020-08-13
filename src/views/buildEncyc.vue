@@ -13,7 +13,7 @@
     <div>
       <div class="bscroll" ref="bscroll">
         <div class="bscroll-container">
-          <img src="../assets/item.png" alt v-for="(item,k) in 6" :key="k" />
+          <img src="../assets/item.png" alt v-for="(item,k) in 6" :key="k" @click="gobuildencycDetail" />
         </div>
       </div>
       <p>欧式别墅怎么设计好看，两层庭s欧式别墅怎么设计好看，两层庭院</p>
@@ -25,6 +25,15 @@
       </div>
       <div class="videobox">
         <video src="../assets/xc.mp4" controls width="100%" height="100%" preload="none"></video>
+      </div>
+      <p class="vp">
+        欧式别墅怎么设计好看，两层庭s欧式别墅怎么设计好看，两层庭院
+      </p>
+      <div class="flex_be">
+        <span>3天前</span>
+        <span class="flex_cen">
+          <van-icon name="eye-o" />2778人已读
+        </span>
       </div>
     </div>
   </div>
@@ -42,14 +51,20 @@ export default {
         "装修百科",
         "施工百科",
         "风水百科",
-        "建房日志"
+        "建房日志",
       ],
-      navid: 0 //当前选中的导航值
+      navid: 0, //当前选中的导航值
     };
   },
   methods: {
     chosenav(k) {
       this.navid = k;
+      
+    },
+    gobuildencycDetail(){
+      this.$router.push({
+        path:'/buildencycDetail'
+      })
     }
   },
   mounted() {
@@ -57,10 +72,10 @@ export default {
       let bscrollDom = this.$refs.bscroll; //查找bscroll元素
       this.aBScroll = new BScroll(bscrollDom, {
         scrollX: true,
-        eventPassthrough: "vertical"
+        eventPassthrough: "vertical",
       });
     });
-  }
+  },
 };
 </script>
 
@@ -107,12 +122,15 @@ export default {
     .lh(39);
     .mb(30);
   }
+  .vp{
+    .mt(24);
+  }
   .eeebot {
     .pb(19);
     .mb(17);
     border-bottom: 0.17rem solid #eee;
   }
-  .videobox{
+  .videobox {
     .pt(24);
   }
 }

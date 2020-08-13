@@ -51,7 +51,7 @@
       <img src="../assets/img/b2.png" alt />
     </div>
     <!-- 服务电话 -->
-    <div class="tel" @tap="handtel">
+    <div class="tel">
       24小时服务电话:
       <a :href="'tel:' + phone">{{phone}}</a>
     </div>
@@ -114,24 +114,24 @@
           </p>
         </div>
       </div>
-      <img src="../assets/img/banner2.png" alt />
+      <img src="../assets/img/type1.png" alt />
     </div>
     <div class="type_box">
       <div class="flex_be type">
-        <div>
+        <div style="position:static;">
           <h6>四合院</h6>
           <p>QUADRANGLE</p>
           <p>
             <span>传统合院</span>，礼遇中式院落，历史悠久
           </p>
         </div>
-        <img src="../assets/logo.png" alt />
+        <img src="../assets/img/c2.png" alt style="width:3.28rem,height:3.08rem" />
       </div>
-      <img src="../assets/img/banner2.png" alt />
+      <img src="../assets/img/type2.png" alt />
     </div>
     <div class="type_box">
       <div class="flex_be type">
-        <img src="../assets/logo.png" alt />
+        <img src="../assets/img/c3.png" alt style="width:3.57rem,height:3.36rem" />
         <div>
           <h6>欧式别墅</h6>
           <p>EUROPEAN VILLAS</p>
@@ -140,20 +140,20 @@
           </p>
         </div>
       </div>
-      <img src="../assets/img/banner2.png" alt />
+      <img src="../assets/img/type3.png" alt />
     </div>
     <div class="type_box">
       <div class="flex_be type">
-        <div>
+        <div style="position:static;">
           <h6>现代别墅</h6>
           <p>MODERN VILLA</p>
           <p>
             <span>简而不凡</span>，时尚又大气，摩登新选择
           </p>
         </div>
-        <img src="../assets/logo.png" alt />
+        <img src="../assets/img/c4.png" alt />
       </div>
-      <img src="../assets/img/banner2.png" alt />
+      <img src="../assets/img/type4.png" alt />
     </div>
     <!-- 定制案列展示 -->
     <div class="show text_cen">
@@ -213,9 +213,7 @@ export default {
       .catch(() => {})
       .finally(() => {});
   },
-  methods: {
-    handtel() {},
-  },
+  methods: {},
 };
 </script>
 <style lang="less" scoped>
@@ -236,7 +234,6 @@ export default {
   }
 }
 .logo {
-  background: #121911;
   background: url("../assets/img/homebg.png");
   color: @base-header-color;
   .pb(40);
@@ -344,8 +341,8 @@ export default {
     }
     .mt(23);
     img {
-      .w(271);
-      .h(237);
+      .w(258);
+      .h(238);
     }
     h6 {
       .fs(56);
@@ -369,8 +366,8 @@ export default {
     }
   }
   > img {
-    .w(750);
-    .h(452);
+    width: 100%;
+    height: 100%;
     .mt(56);
   }
 }
@@ -393,7 +390,7 @@ export default {
 }
 footer {
   .mb(108);
-  background: #151d13;
+  background: url("../assets/img/homebg.png");
   h4 {
     .fs(46);
     .mt(38);
@@ -404,9 +401,7 @@ footer {
     .fs(24);
   }
   font-family: SimHei;
-
   color: @base-header-color;
-  opacity: 0.63;
   .pt(26);
   .pb(60);
 }

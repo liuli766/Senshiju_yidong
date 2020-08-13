@@ -1,34 +1,32 @@
 <template>
-<!-- 设计详情 -->
+  <!-- 设计详情 -->
   <div class="desigerDetail">
     <!-- 头部 -->
     <div class="headimg flex">
-      <img src="../assets/img/1.png" alt />
+      <img :src="detailList.cover" alt />
       <div class="headr flex_col">
         <div class="flex">
           <div class="flex_cen">
-            <div class="name">汤丞昱</div>
-            <div class="small_font">设计总监</div>
+            <div class="name">{{detailList.name}}</div>
+            <div class="small_font">{{detailList.position}}</div>
           </div>
           <div class="flex_cen small_font">
-            <van-icon name="star-o" size="0.2rem" style="margin-right:0.05rem" /><span>评价星级:</span>
-            <van-rate v-model="value" size="0.2rem" />
+            <van-icon name="star-o" size="0.2rem" style="margin-right:0.05rem" />
+            <span>评价星级:</span>
+            <van-rate v-model="detailList.star_level" size="0.2rem" />
           </div>
-          <div class="small_font flex_cen">从业年限：10年以上</div>
+          <div class="small_font flex_cen">从业年限：{{detailList.job_year}}</div>
         </div>
-        <div class="shool">毕业院校：武汉理工大学</div>
+        <div class="shool">毕业院校：{{detailList.school}}</div>
       </div>
     </div>
     <!--  -->
-    <p
-      class="text"
-    >湖南中烟I业公司技术中心施工总承包;湖南省委党校湖南行政学院第二教学楼施I项目;湖南省委大院四办公楼施I项目;长沙奥克斯广场审计;湖南大德地产全过程成本控制:恒大地产浏阳恒大全过程审计:长沙玫瑰园审计:长沙金鼎宜居花园全过程成本控制长沙橘子洲景区财政评审审计;国家超级计算长沙中心财政评审审计等。 武汉理工大学本科毕业，拥有8年的丰富从业经验，国家注册建造师，造价工程师。心以诚信 行以致远。</p>
+    <p class="text">{{detailList.intro}}</p>
     <!-- 代表作品 -->
     <div class="works text_cen">
       <h6>代表作品</h6>
       <div class="border">
-        <img src="../assets/img/1.png" alt />
-        <img src="../assets/img/1.png" alt />
+        <img v-for="(item,k) in detailList.works" :key="k" :src="item" alt />
       </div>
       <div class="btn">立即预约</div>
     </div>
@@ -36,15 +34,26 @@
 </template>
 
 <script>
+import request from "@/request.js";
 export default {
   data() {
     return {
-      value: 5
+      value: 5,
+      detailList: [],
     };
   },
   created() {
-    console.log(this.$route.query);
-  }
+    request
+      .getTeamDetail({
+        id: this.$route.query.id,
+      })
+      .then((res) => {
+        console.log(res, "设计师详情");
+        this.detailList = res.data;
+      })
+      .catch(() => {})
+      .finally(() => {});
+  },
 };
 </script>
 

@@ -1,10 +1,10 @@
 <template>
   <!-- 私人定制 -->
   <div class="personalttailor">
-    <img src="../assets/img/banner3.png" class="img" alt />
+    <img src="../assets/img/srdz.png" class="img" alt />
     <!-- 简介 -->
     <div class="intro flex">
-      <img src="../assets/img/banner3.png" alt />
+      <img src="../assets/img/sh1.png" alt />
       <div >
         <p>更懂您的别墅生活</p>
         <p>村墅人家</p>
@@ -26,7 +26,7 @@
       <p>更加专业，更加精细化，满足高品质的设计需求</p>
       <div class="flex_be">
         <div class="item" v-for="(item,index) in 4" :key="index" @click="handdtail">
-          <img src="../assets/img/2.png" alt />
+          <img src="../assets/img/sh2.png" alt />
           <div class="block">
             <span>蔡壮保</span>
             <span>设计总监</span>
@@ -35,7 +35,7 @@
       </div>
       <!--  -->
       <div class="black text_cen">
-        <img src="../assets/img/1.png" alt />
+        <img src="../assets/img/sh2.png" alt />
         <div class="block">
           <p>来自湖南设计院团队，中国十大建院之一</p>
           <p>10年以上设计的经验，已累计为20000+个家庭建筑家居</p>
@@ -215,9 +215,9 @@ export default {
       position: absolute;
       left: 0;
       top: 0;
-      background: rgba(0, 0, 0, 0.5);
+      // background: rgba(0, 0, 0, 0.3);
       .w(750);
-      .h(118);
+      .h(100);
     }
     p {
       margin: 0;

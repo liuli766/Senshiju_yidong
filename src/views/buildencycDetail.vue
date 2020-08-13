@@ -14,11 +14,11 @@
           <span>{{item.name}}</span>
         </div>
         <div>
-          <span>
-            <van-icon name="good-job-o" />0
+          <span class="up">
+            <img src="../assets/img/up.png" alt />0
           </span>
-          <span>
-            <van-icon name="good-job-o" />0
+          <span class="up">
+            <img src="../assets/img/down.png" alt />0
           </span>
         </div>
       </div>
@@ -30,29 +30,33 @@
           <div class="reply text_cen" @click="handreply">10回复</div>
         </div>
         <div class="replybox">
-          <span class="allreply" @click="showPopup" @showpop='jh'>
+          <span class="allreply" @click="showPopup" @showpop="jh">
             全部10条评论
             <van-icon name="arrow" />
           </span>
         </div>
-        
       </div>
     </div>
 
     <footer v-if="falsepanl">
-      <div class="flex_be">
+      <div class="flex_cen">
         <div class="writeraate" @click="showcontent">写评论...</div>
-        <div>
-          <van-icon name="star-o" />
-          <van-icon name="star-o" />
-          <van-icon name="star-o" />
+        <div class="flex_be footicon">
+          <div class="xx">
+            <img src="../assets/img/xx.png" alt />
+            <div>1</div>
+          </div>
+          <img src="../assets/img/wjx.png" alt />
+          <img src="../assets/img/fx.png" alt />
         </div>
       </div>
     </footer>
     <div class="silde">
       <articontent v-show="showpanl" @submit="addmment" @canel="canelmmit" />
     </div>
-     <van-popup v-model="show" position="bottom" :style="{ height: '60%' }"><replay /></van-popup>
+    <van-popup v-model="show" position="bottom" :style="{ height: '60%' }">
+      <replay />
+    </van-popup>
   </div>
 </template>
 
@@ -63,22 +67,25 @@ import $ from "jquery";
 export default {
   components: {
     articontent,
-    replay
+    replay,
   },
   data() {
     return {
       showpanl: false, //评论版
       falsepanl: true,
       comment: [], //评论内容
-      show: false
+      show: false,
     };
+  },
+  created() {
+    
   },
   methods: {
     showcontent() {
       this.falsepanl = false;
       this.showpanl = true;
       $(".silde").css({
-        bottom: 0
+        bottom: 0,
       });
     },
     // 添加评论
@@ -100,26 +107,25 @@ export default {
         content: data,
         name: "陈某某",
         TimeY: `${tY}-${tM}-${tD}`,
-        TimeH: `${th}:${tm}:${ts}`
+        TimeH: `${th}:${tm}:${ts}`,
       });
       this.showpanl = false;
       this.falsepanl = true;
     },
     //监听到了取消评论
     canelmmit() {
-      // this.type = 0;
+      this.showpanl = false;
+      this.falsepanl = true;
     },
     handreply() {},
     showPopup() {
       //评论详情页
       console.log(1);
-      
+
       this.show = true;
     },
-    jh(){
-
-    }
-  }
+    jh() {},
+  },
 };
 </script>
 
@@ -132,6 +138,42 @@ export default {
   font-family: SimSun;
   font-weight: bold;
   .pb(100);
+  .mb(182);
+  .xx {
+    position: relative;
+    img {
+      vertical-align: middle;
+    }
+    div {
+      background: url("../assets/img/xhd.png") no-repeat;
+      background-size: 100% 100%;
+      .w(30);
+      .h(30);
+      color: #fff;
+      position: absolute;
+      top: 0.05rem;
+      .lh(30);
+    text-align: center;
+    left: 0.3rem;
+    }
+  }
+  .up {
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+    img {
+      .w(31);
+      .h(31);
+      .mr(8);
+    }
+  }
+  .footicon {
+    .w(250);
+    img {
+      .w(42);
+      .h(42);
+    }
+  }
   h6 {
     .fs(35);
 
@@ -155,7 +197,7 @@ export default {
   }
   .rate {
     .pt(10);
-    .mb(1rem);
+    .mb(100);
     .userinfo {
       img {
         .w(62);
@@ -241,7 +283,7 @@ footer {
     .lh(59);
     .w(283);
     .b-radius(30);
-    .mr(16);
+    .mr(140);
     .pl(18);
     box-sizing: border-box;
     font-family: SimSun;
