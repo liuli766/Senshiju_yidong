@@ -6,6 +6,7 @@ html {
   -webkit-tap-highlight-color: transparent;
   background-color: #f9f9f9;
 }
+
 .content-box {
   display: -webkit-box;
   display: -webkit-flex;
@@ -18,6 +19,7 @@ html {
   width: 100%;
   height: 100%;
 }
+
 .page-content {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
@@ -29,4 +31,8 @@ html {
   -webkit-overflow-scrolling: touch;
   /* ios5+ */
   overflow-y: scroll;
+}
+
+.process .bg_color {
+  margin-right: 0.3rem;
 }

@@ -2,7 +2,7 @@
   <!-- 确认支付页 -->
   <div class="surepay">
     <div class="nav_bar flex">
-      <van-icon name="arrow-left" />
+      <van-icon name="arrow-left" @click="go" />
       <span>确认支付</span>
     </div>
     <!--  -->
@@ -63,6 +63,9 @@ export default {
   methods: {
       onSubmit(){
 
+      },
+      go(){
+        this.$router.go(-1);
       }
   },
 };

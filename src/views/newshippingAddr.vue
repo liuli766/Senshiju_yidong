@@ -2,13 +2,13 @@
   <!-- 新建收获地址 -->
   <div class="newshippingAddr">
     <div class="flex navigation">
-      <van-icon name="cross" />
+      <van-icon name="cross" @click="go"/>
       <span>新建收货地址</span>
     </div>
     <!--  -->
     <div style="background:#fff">
       <div class="nav_bar flex">
-        <van-icon name="arrow-left" />
+        <van-icon name="arrow-left" @click="go" />
         <span>新建收货地址</span>
       </div>
     </div>
@@ -55,12 +55,14 @@
       </div>
     </div>
     <div class="eee" ref="eee">
-      <button>保存并使用</button>
+      <button @click="onSave">保存并使用</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import request from "@/request.js";
 import areaList from "../assets/city";
 export default {
   data() {
@@ -74,10 +76,58 @@ export default {
       areaList: areaList // 数据格式见 Area 组件文档
     };
   },
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+      headimg: (state) => state.headimg,
+    }),
+  },
   methods: {
+    // 保存地址
+    onSave(){
+      let add=this.value.split('/');
+      console.log(add)
+      request.getAddr({
+          uid: this.userInfor.member_id,
+          address:this.addr,
+          name:this.name,
+          phone:this.tel,
+          province:add[0],
+          city:add[1],
+          district:add[2],
+          is_default:this.checked
+      }).then(res=>{
+        console.log(res,'添加收货地址')
+        this.$toast("保存成功");
+      }).catch(() => {
+          this.$toast("保存失败");
+        })
+        .finally(() => {})
+      if(this.name==''){
+        this.$toast('用户名不能为空')
+        return false;
+      }
+      if(this.tel==''){
+        this.$toast('电话号码不能为空')
+        return false;
+      }
+      if(this.value==''){
+        this.$toast('所在地区不能为空')
+        return false;
+      }
+      if(this.addr==''){
+        this.$toast('详细地址不能为空')
+        return false;
+      }
+    },
+    // 选择地区
     onConfirm(values) {
       this.value = values.map(item => item.name).join("/");
       this.showArea = false;
+    },
+    go(){
+      this.$router.go(-1)
     }
   },
   mounted() {}

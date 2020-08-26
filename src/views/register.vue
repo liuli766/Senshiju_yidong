@@ -23,7 +23,7 @@
             placeholder="请输入验证码"
             :rules="[{ pattern:pattern1, message: '请输入正确内容' }]"
           />
-          <span v-if="tmeValue==60" @click="time">获取验证码</span>
+          <span v-if="tmeValue==60" @click="getauth">获取验证码</span>
           <span v-else>{{ tmeValue }} s 后获取</span>
         </div>
 
@@ -54,6 +54,30 @@ export default {
     };
   },
   methods: {
+    getauth() {
+      let that = this
+      if (/^1[34578]\d{9}$/.test(that.tel)) {
+        request
+          .getCode({
+            phone_num: that.tel,
+          })
+          .then((res) => {
+            // if (res.data.code == 0) {
+              console.log(res, "短信");
+              this.$toast("发送成功");
+              that.time()
+            // } else {
+            //   this.$toast("发送失败");
+            // }
+          })
+          .catch(() => {
+            this.$toast("发送失败");
+          })
+          .finally(() => {});
+      } else {
+        this.$toast("手机号格式不正确");
+      }
+    },
     time() {
       //倒计时
       this.tmeValue = this.tmeValue - 1;
@@ -75,15 +99,17 @@ export default {
           msg_code: this.code,
         })
         .then((res) => {
-          if (res.data.code == 0) {
+          // if (res.data.code == 0) {
             console.log(res, "登录");
+            this.$store.commit('settoken', res.data)
+            localStorage.setItem('istoken', res.data.token)
             this.$toast("登录成功");
             this.$router.push({
               path: "/",
             });
-          }else{
-            this.$toast("验证码错误");
-          }
+          // } else {
+          //   this.$toast("验证码错误");
+          // }
         })
         .catch(() => {
           this.$toast("登录失败");

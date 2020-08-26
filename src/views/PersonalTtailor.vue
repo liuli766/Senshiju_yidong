@@ -5,7 +5,7 @@
     <!-- 简介 -->
     <div class="intro flex">
       <img src="../assets/img/sh1.png" alt />
-      <div >
+      <div>
         <p>更懂您的别墅生活</p>
         <p>村墅人家</p>
         <p>让您体验“真正的别墅生活”</p>
@@ -24,19 +24,19 @@
     <div class="support text_cen">
       <h5>设计团队支持</h5>
       <p>更加专业，更加精细化，满足高品质的设计需求</p>
-      <div class="flex_be">
-        <div class="item" v-for="(item,index) in 4" :key="index" @click="handdtail">
-          <img src="../assets/img/sh2.png" alt />
+      <div class="flex">
+        <div class="item" v-for="(item,index) in teamList" :key="index" @click="handdtail(item.id)">
+          <img :src="item.cover" alt />
           <div class="block">
-            <span>蔡壮保</span>
-            <span>设计总监</span>
+            <span>{{item.name}}</span>
+            <span>{{item.position}}</span>
           </div>
         </div>
       </div>
       <!--  -->
       <div class="black text_cen">
         <img src="../assets/img/sh2.png" alt />
-        <div class="block">
+        <div class="block" style="background: rgba(255,255,255,.1);">
           <p>来自湖南设计院团队，中国十大建院之一</p>
           <p>10年以上设计的经验，已累计为20000+个家庭建筑家居</p>
         </div>
@@ -46,33 +46,32 @@
     <div class="business text_cen">
       <h5>营业执照</h5>
       <p>您的安心，我们的放心</p>
+      <div class="dpic flex_be">
+        <img :src="link+item.cover" alt v-for="(item,k) in licenselist" :key="k" />
+      </div>
     </div>
     <!-- 定图展示 -->
     <div class="show text_cen">
       <h5>定制图纸展示</h5>
       <p>私人定制能带来更贴心的享受</p>
       <div>
-        <div class="dpic flex_be">
-          <img src="../assets/img/1.png" alt />
-          <img src="../assets/img/1.png" alt />
+        <div class="dpic1 flex_be">
+          <img :src="link+item.cover" alt v-for="(item,k) in dzlist" :key="k" />
         </div>
         <div class="xpic flex_be">
-          <img src="../assets/img/1.png" alt />
-          <img src="../assets/img/1.png" alt />
-          <img src="../assets/img/1.png" alt />
-          <img src="../assets/img/1.png" alt />
+          <img :src="item.cover" alt v-for="(item,k) in moreList" :key="k" />
         </div>
       </div>
-      <div class="more">查看更多</div>
+      
+      <div  v-if="moreList.length<=picList.length">没有更多了</div>
+      <div class="more" @click="more" v-else>查看更多</div>
     </div>
     <!-- 口碑您来决定 -->
     <div class="mouth text_cen">
       <h5>我们的口碑您来决定</h5>
       <p>为您与客户真实的聊天记录</p>
       <div class="flex_be">
-        <img src="../assets/img/1.png" alt />
-        <img src="../assets/img/1.png" alt />
-        <img src="../assets/img/1.png" alt />
+        <img :src="link+item.cover" alt v-for="(item,k) in dzlist" :key="k" />
       </div>
       <div class="more">
         <a :href="'tel:' + phone">查看更多客户反馈请咨询客服</a>
@@ -84,22 +83,87 @@
 
 <script>
 import tabbar from "@/components/tabBar.vue";
+import request from "@/request.js";
 export default {
   components: {
-    tabbar
+    tabbar,
   },
   data() {
     return {
-      phone: 18883614674
+      phone: 18883614674,
+      teamList: [], //设计团队
+      licenselist: [],
+      link: "http://villa.jisapp.cn",
+      dzlist: [],
+      picList: [],
+      moreList: [],
     };
   },
+  created() {
+    request
+      .getTeam({
+        page: 1,
+      })
+      .then((res) => {
+        console.log(res, "设计团队");
+        this.teamList = res.data;
+      })
+      .catch(() => {})
+      .finally(() => {});
+    this.getdata();
+    this.getTail();
+  },
   methods: {
-    handdtail() {
+    more() {
+      let list = [...this.moreList]
+      this.moreList = [...list, ...this.picList.slice(this.idx++, this.idx + 1)]
+    },
+    getTail() {
+      // 定制图纸
+      request
+        .teamDrawings({
+          page: 1,
+        })
+        .then((res) => {
+          console.log(res, "定制图纸");
+          this.picList = res.data;
+          if (this.picList < 4) {
+            this.moreList = this.picList;
+          } else {
+            this.moreList = this.picList.slice(0, 4);
+          }
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+    getdata() {
+      this.flag = true;
+      request
+        .getHomeData()
+        .then((res) => {
+          console.log(res, "首页");
+        })
+        .catch(() => {})
+        .finally(() => {});
+      request
+        .getDrawings({})
+        .then((res) => {
+          console.log(res, "营业执照");
+          this.licenselist = res.data.license;
+          this.dzlist = res.data.praise;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+    handdtail(num) {
       this.$router.push({
-        path: "/desigerDetail"
+        path: "/desigerDetail",
+        query: {
+          id: num,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -122,7 +186,7 @@ export default {
     .h(216);
     .mr(26);
   }
-  >div{
+  > div {
     .mt(20);
   }
   .line {
@@ -179,6 +243,9 @@ export default {
       .w(178);
       .h(228.8);
     }
+  }
+  .item + .item {
+    margin-left: 0.1rem;
   }
   .block {
     .w(178);
@@ -265,5 +332,21 @@ export default {
     .mt(30);
     .lh(40);
   }
+}
+.dpic {
+  flex-wrap: wrap;
+}
+.dpic img {
+  .w(284);
+  .h(430);
+}
+.dpic img:nth-of-type(3) {
+  .w(730);
+}
+.dpic img:nth-of-type(1) {
+  .ml(50);
+}
+.dpic img:nth-of-type(2) {
+  .mr(50);
 }
 </style>

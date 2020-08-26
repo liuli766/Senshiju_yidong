@@ -2,17 +2,18 @@
   <!-- 图纸收藏列表 -->
   <div class="collectionList">
     <div class="nav_bar flex">
-      <van-icon name="arrow-left" />
-      <span>收藏的图纸</span>
+      <van-icon name="arrow-left" @click="go" />
+      <span>文章的收藏</span>
     </div>
     <!--  -->
-    <div class="list flex">
-      <img src="../assets/logo.png" alt />
+    <div  class="list flex"  v-if="articleList.length==0">没有收藏的文章</div>
+    <div class="list flex" v-for="(item,k) in articleList" :key="k" @click="gopicdetail(item)" v-else>
+      <img :src="item.cover" alt />
       <div>
-        <p>农村小庭院怎么设计好看，两层庭院好看只要40万</p>
+        <p>{{item.title}}</p>
         <div class="flex_be colltbtn">
-          <span>2020-05-26</span>
-          <span class="text_cen">已收藏</span>
+          <span>￥{{item.price}}</span>
+          <span class="text_cen"  @click.stop="qxcollect(item.collect_id)">已收藏</span>
         </div>
       </div>
     </div>
@@ -20,7 +21,70 @@
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+import request from "@/request.js";
+export default {
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+      headimg: (state) => state.headimg,
+    }),
+  },
+data() {
+  return {
+    articleList:[]
+  }
+},
+created() {
+  this.collect(2)
+},
+  methods: {
+    gopicdetail(item) {
+      //跳转产品详情
+      let idname = item.object_id
+      this.$router.push({
+        path: '/productDetail',
+        query: {
+          id: idname,
+        },
+      })
+    },
+    go() {
+      this.$router.go(-1);
+    },
+    // 文章收藏
+    collect(num) {
+      request
+        .fachcollect({
+          uid: this.userInfor.member_id,
+          type: num,
+        })
+        .then((res) => {
+            this.articleList = res.data;        
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+     //取消收藏
+    qxcollect(idx) {
+      request
+        .getCancelcollect({
+          uid: this.userInfor.member_id,
+          c_id: idx,
+        })
+        .then((res) => {
+          this.collect(2)
+          console.log(res,'取消收藏')
+          this.$toast("取消成功");
+        })
+        .catch(() => {
+          this.$toast("取消失败");
+        })
+        .finally(() => {})
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -57,24 +121,25 @@ export default {};
     .mr(31);
   }
   p {
+    width: 4.5rem;
     .fs(24);
     .lh(36);
     font-family: Microsoft YaHei;
     font-weight: bold;
   }
-  .colltbtn{
+  .colltbtn {
     .mt(26);
-    span:nth-of-type(1){
-      color: #5E5E5E;
+    span:nth-of-type(1) {
+      color: #f93822;
       .fs(26);
     }
-    span:nth-of-type(2){
+    span:nth-of-type(2) {
       color: #fff;
       .fs(22);
       display: inline-block;
       .w(118);
       .lh(34);
-      background: #FFC92F;
+      background: #ffc92f;
       .b-radius(17);
     }
   }

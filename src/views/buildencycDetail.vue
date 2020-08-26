@@ -1,12 +1,10 @@
 <template>
   <!-- 建房百科 详情页-->
   <div class="buildencyc">
-    <h6>欧式别墅怎么设计好看，两层庭s欧式别墅怎么设计好看，两层庭院</h6>
-    <img src="../assets/item.png" class="img1" alt />
-    <p
-      class="p1"
-    >有时就想人这一生挺无聊的，无非是为了车子，房子， 票子，女子和孩子，其中房子是中国人的头等大事，有钱了 要么在城市买房，要么在农村建房，如果你在农村也有宅基 地，一定要回家建房， 一家人住一个大院子。农村小庭院 怎么设计好看?</p>
-    <p class="p2">下面为大家分享40万两层简欧景观庭院简单实用，如 果你也喜欢，可以咨询客服定制设计哦。</p>
+    <h6>{{picDetail.title}}</h6>
+    <img :src="picDetail.cover" class="img1" alt />
+    <p class="p1" v-html="picDetail.content"
+    ></p>
     <div class="rate" v-for="(item,k) in comment" :key="k">
       <div class="flex_be">
         <div class="userinfo flex_cen">
@@ -14,10 +12,10 @@
           <span>{{item.name}}</span>
         </div>
         <div>
-          <span class="up">
+          <span class="up" @click="handUp(item)">
             <img src="../assets/img/up.png" alt />0
           </span>
-          <span class="up">
+          <span class="up" @click="handDown(item)">
             <img src="../assets/img/down.png" alt />0
           </span>
         </div>
@@ -30,7 +28,7 @@
           <div class="reply text_cen" @click="handreply">10回复</div>
         </div>
         <div class="replybox">
-          <span class="allreply" @click="showPopup" @showpop="jh">
+          <span class="allreply" @click="showPopup(item)" @showpop="jh">
             全部10条评论
             <van-icon name="arrow" />
           </span>
@@ -46,7 +44,8 @@
             <img src="../assets/img/xx.png" alt />
             <div>1</div>
           </div>
-          <img src="../assets/img/wjx.png" alt />
+          <img src="../assets/img/wjx.png" alt @click="Collect(picDetail.id)"  v-if="picDetail.is_collect==true"/>
+          <img src="../assets/img/ysc.png" alt @click="Collect(picDetail.id)" style="width: 0.6rem;height: 0.6rem;" v-if="picDetail.is_collect==false"/>
           <img src="../assets/img/fx.png" alt />
         </div>
       </div>
@@ -54,20 +53,24 @@
     <div class="silde">
       <articontent v-show="showpanl" @submit="addmment" @canel="canelmmit" />
     </div>
-    <van-popup v-model="show" position="bottom" :style="{ height: '60%' }">
-      <replay />
-    </van-popup>
   </div>
 </template>
 
 <script>
 import articontent from "@/components/articContent.vue";
-import replay from "@/components/replay.vue";
+// import replay from "@/components/replay.vue";
 import $ from "jquery";
+import { mapState } from "vuex";
+import request from "@/request.js";
 export default {
   components: {
     articontent,
-    replay,
+  },
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+    }),
   },
   data() {
     return {
@@ -75,12 +78,42 @@ export default {
       falsepanl: true,
       comment: [], //评论内容
       show: false,
+      picDetail:[],//图纸详情内容
     };
   },
   created() {
-    
+      this.handdetail()
   },
   methods: {
+    handdetail(){
+      request.getInfo({
+        id: this.$route.query.id,
+          uid: this.userInfor.member_id,
+      }).then(res=>{
+        console.log(res,'文章百科详情')
+        this.picDetail=res.data.detail
+      }).catch(() => {})
+        .finally(() => {});
+    },
+    // 收藏
+    Collect(num) {
+      request
+        .getCollect({
+          uid: this.userInfor.member_id,
+          type: 2,
+          object: num,
+        })
+        .then((res) => {
+          console.log(res)
+          this.handdetail()
+          this.$toast("收藏成功");
+        })
+        .catch((e) => {
+          console.log(e)
+          this.$toast("收藏失败");
+        })
+        .finally(() => {})
+    },
     showcontent() {
       this.falsepanl = false;
       this.showpanl = true;
@@ -88,29 +121,86 @@ export default {
         bottom: 0,
       });
     },
-    // 添加评论
+    // 文章评论分页数据
+    getcommentcontent() {
+      request
+        .getComment({
+           uid: this.userInfor.member_id,
+           aid: this.$route.query.id,
+           page:1
+        })
+        .then((res) => {
+          console.log(res, "评论分页数据");
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+    // 添加评论 评论内容
     addmment(data) {
-      let time = new Date();
-      let tY = time.getFullYear();
-      let tM =
-        time.getMonth() + 1 < 10
-          ? "0" + (time.getMonth() + 1)
-          : time.getMonth() + 1;
-      let tD = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
-      let th = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
-      let tm =
-        time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
-      let ts =
-        time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
-      console.log(tY, tM, tD, th, tm, ts);
-      this.comment.push({
-        content: data,
-        name: "陈某某",
-        TimeY: `${tY}-${tM}-${tD}`,
-        TimeH: `${th}:${tm}:${ts}`,
-      });
+      request
+        .getDoComment({
+          uid: this.userInfor.member_id,
+          aid: this.$route.query.id,
+          content: data,
+          type: 1,
+        })
+        .then((res) => {
+          console.log(res, "评论内容", data);
+          this.$toast("发表成功");
+        })
+        .catch(() => {
+          this.$toast("发表失败");
+        })
+        .finally(() => {});
+      // let time = new Date();
+      // let tY = time.getFullYear();
+      // let tM =
+      //   time.getMonth() + 1 < 10
+      //     ? "0" + (time.getMonth() + 1)
+      //     : time.getMonth() + 1;
+      // let tD = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
+      // let th = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+      // let tm =
+      //   time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+      // let ts =
+      //   time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+      // console.log(tY, tM, tD, th, tm, ts);
+      // this.comment.push({
+      //   content: data,
+      //   name: "陈某某",
+      //   TimeY: `${tY}-${tM}-${tD}`,
+      //   TimeH: `${th}:${tm}:${ts}`,
+      // });
       this.showpanl = false;
       this.falsepanl = true;
+    },
+    // 评论踩
+    handDown(item) {
+      console.log(item);
+      request.getupdown({
+          type:1,
+          aid:1,
+          uid: this.userInfor.member_id
+      }).then(res=>{
+          console.log(res,'点赞')
+      }).catch(() => {
+          this.$toast("点赞失败");
+        })
+        .finally(() => {});
+    },
+    // 评论顶
+    handUp(item) {
+      console.log(item);
+      request.getupdown({
+          type:2,
+          aid:1,
+          uid: this.userInfor.member_id
+      }).then(res=>{
+          console.log(res,'点赞')
+      }).catch(() => {
+          this.$toast("点赞失败");
+        })
+        .finally(() => {});
     },
     //监听到了取消评论
     canelmmit() {
@@ -118,11 +208,14 @@ export default {
       this.falsepanl = true;
     },
     handreply() {},
+    //评论详情页
     showPopup() {
-      //评论详情页
-      console.log(1);
-
-      this.show = true;
+      this.$router.push({
+        path: "/commentDetail",
+        query: {
+          aid: 1,
+        },
+      });
     },
     jh() {},
   },
@@ -153,8 +246,8 @@ export default {
       position: absolute;
       top: 0.05rem;
       .lh(30);
-    text-align: center;
-    left: 0.3rem;
+      text-align: center;
+      left: 0.3rem;
     }
   }
   .up {
@@ -259,7 +352,7 @@ export default {
   background: #fff;
   position: fixed;
   bottom: -999px;
-  transition: all 0.8s;
+  transition: all 0.3s;
 }
 footer {
   .h(95);

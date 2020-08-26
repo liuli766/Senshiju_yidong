@@ -6,12 +6,15 @@
       <div class="modalbox">
         <div class="flex">
           <div class="img flex_cen">
-            <img src="../assets/img/mine/headerimg.png" alt />
+            <img src="../assets/img/mine/headerimg.png" alt v-if="userInfor.token==''" />
+            <img :src="headimg" alt v-else />
           </div>
           <div class="info flex flex_col" @click="gologin">
-            <!-- <span>陈某某</span>
-            <span>普通用户</span>-->
-            <span>立即登录</span>
+            <span v-if="userInfor.token==''">立即登录</span>
+            <div class="flex_col" v-else>
+              <span>{{userInfor.nickname}}</span>
+              <span>普通用户</span>
+            </div>
           </div>
         </div>
         <div class="toperfect" @click="goperfect">去完善</div>
@@ -24,7 +27,12 @@
         <h6>我的订单</h6>
       </div>
       <div class="girdbox flex_be">
-        <div class="gird flex_col flex_cen" v-for="(gird,k) in gridList" :key="k">
+        <div
+          class="gird flex_col flex_cen"
+          v-for="(gird,k) in gridList"
+          :key="k"
+          @click="handOrder(k)"
+        >
           <img :src="gird.img" alt />
           <span>{{gird.name}}</span>
           <div>1</div>
@@ -50,10 +58,20 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+// import request from '@/request.js'
 import tabbar from "@/components/tabBar.vue";
 export default {
   components: {
     tabbar,
+  },
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+      navactivechoseid: (state) => state.navactivechoseid,
+      headimg: (state) => state.headimg,
+    }),
   },
   data() {
     return {
@@ -101,15 +119,43 @@ export default {
         path: "/login",
       });
     },
+    handOrder(k) {
+      this.$store.commit("gonav", k);
+      if (k == 0 || k == 1 || k == 2) {
+        this.$router.push({
+          path: "/drawingOrder",
+          query: {
+            navactivechoseid: k,
+          },
+        });
+      }
+    },
+    // 跳转个人中心页面
     goperfect() {
       this.$router.push({
         path: "/personInfo",
       });
     },
+    // 跳转购物车页面
     handPage(k) {
       if (k == 3) {
         this.$router.push({
           path: "/cart",
+        });
+      }
+      if (k == 1) {
+        this.$router.push({
+          path: "/piccolltList",
+        });
+      }
+      if (k == 2) {
+        this.$router.push({
+          path: "/Drawingcollection",
+        });
+      }
+      if(k==0){
+        this.$router.push({
+          path: "/newshippingAddr",
         });
       }
     },

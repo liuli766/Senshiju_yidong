@@ -160,10 +160,10 @@
       <h3>定制案例展示</h3>
       <span>Custom-made case show</span>
       <div class="dpic flex_be">
-        <img v-for="(item,index) in piclist" :key="index" alt :src="item" />
+         <img v-for="(item,index) in dzlist" :key="index" alt :src="link+item.cover" v-show="index>0"/>
       </div>
       <div class="xpic flex_be">
-        <img v-for="(item,index) in xpiclist" :key="index" alt :src="item" />
+        <img v-for="(item,index) in dzlist" :key="index" alt :src="link+item.cover" />
       </div>
     </div>
     <!-- footer -->
@@ -184,36 +184,38 @@ export default {
   name: "Home",
   data() {
     return {
-      piclist: [
-        require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png"),
-      ],
-      xpiclist: [
-        require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png"),
-        require("../assets/img/banner7.png"),
-      ],
       phone: 17683242994,
+      dzlist: [],
+      link: "http://villa.jisapp.cn",
+      flag: false,
     };
   },
   components: {
     tabbar,
   },
   created() {
-    request
-      .getHomeData()
-      .then((res) => {
-        console.log(res, "首页");
-      })
-      .catch(() => {})
-      .finally(() => {});
+    this.getdata()
   },
-  methods: {},
+  methods: {
+    getdata() {
+      this.flag=true
+      request
+        .getHomeData()
+        .then((res) => {
+          console.log(res, "首页");
+        })
+        .catch(() => {})
+        .finally(() => {});
+      request
+        .getDrawings({})
+        .then((res) => {
+          console.log(res, "定制图纸");
+          this.dzlist = res.data.praise;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

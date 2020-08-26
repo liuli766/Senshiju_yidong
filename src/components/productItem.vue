@@ -1,42 +1,92 @@
 <template>
   <!-- 产品列表 -->
   <div class="productitem flex flex_b">
-    <div v-for="(item,k) in productitem" :key="k" class="productitemlist" @click="goprodutDetail">
-      <img :src="item.img" alt />
+    <div v-for="(item,k) in productitem" :key="k" class="productitemlist" @click.prevent="goprodutDetail(item.id)">
+      <img :src="item.cover" alt />
       <div class="padd">
-        <p>{{item.p}}</p>
-        <span class="baoyou">{{item.baoyou}}</span>
+        <p>{{item.intro}}</p>
+        <span class="baoyou">包邮</span>
         <div class="price">{{item.price}}</div>
         <div class="flex_be people">
-          <span>{{item.people}}人付款</span>
-          <div class="flex_cen">
+          <span>{{item.moods}}人付款</span>
+          <div class="flex_cen"  @click.stop="JoinCart(item)">
             <van-icon name="shopping-cart-o" />
           </div>
         </div>
       </div>
+      <!-- 购物车 -->
+      <!-- <van-popup v-model="showpop" position="bottom" :style="{ height: '60%' }">
+        <div class="cartfff">
+          <div class="cartbox">
+            <div class="cartlist flex">
+              <img src="../assets/logo.png" alt />
+              <div class="red">￥598.00</div>
+            </div>
+            <div class="flex_be stepper">
+              <span class="num">数量</span>
+              <van-stepper @change="change(item.value,index)" />
+            </div>
+          </div>
+          <button @click="goJoinCart(item)">加入购物车</button>
+        </div>
+      </van-popup> -->
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import request from "@/request.js";
 export default {
   props: {
     productitem: {
       type: Array,
-      default: () => [] // es6的箭头函数
-    }
+      default: () => [], // es6的箭头函数
+    },
+  },
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+    }),
   },
   data() {
     return {
-      //   itemlist: this.productItemList
+      showpop: false,
     };
   },
   methods: {
-    goprodutDetail(){
+    JoinCart(item) {
+      this.showpop = true;
+      request
+        .getJoinCart({
+          uid: this.userInfor.member_id,
+          b_id: item.id,
+          num: 1,
+        })
+        .then((res) => {
+          console.log(res, "加入购物车");
+          this.$toast({
+            message:"添加成功",
+            icon:'success'
+          });
+        })
+        .catch(() => {
+          this.$toast({
+            message:"添加失败",
+            icon:'error'
+          });
+        })
+        .finally(() => {});
+    },
+    goprodutDetail(id) {
       this.$router.push({
-        path:'/productDetail'
-      })
-    }
+        path: "/productDetail",
+        query:{
+          id,
+        }
+      });
+    },
   },
 };
 </script>
@@ -46,10 +96,10 @@ export default {
 @import "../styles/variable.less";
 .productitem {
   flex-wrap: wrap;
-  .padd{
-      .pr(14);
-      .pl(14);
-      .pb(18);
+  .padd {
+    .pr(14);
+    .pl(14);
+    .pb(18);
   }
   .productitemlist {
     background: #fff;

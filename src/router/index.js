@@ -101,11 +101,23 @@ VueRouter.prototype.push = function push (location) {
   { // 建房百科详情页
     path: '/buildencycDetail',
     component: () => import(/* webpackChunkName: "about" */ '../views/buildencycDetail.vue')
+  },
+  { // 评论详情页
+    path: '/commentDetail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/commentDetail.vue')
+  },
+  { // 文章收藏
+    path: '/piccolltList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/piccolltList.vue')
+  },
+  { // 图纸收藏
+    path: '/Drawingcollection',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Drawingcollection.vue')
   }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes
 })

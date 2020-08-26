@@ -2,29 +2,27 @@
   <!-- 商品详情页 -->
   <div class="productdetail">
     <van-swipe @change="onChange">
-      <van-swipe-item>
-        <img src="../assets/img/1.png" alt />
-      </van-swipe-item>
-      <van-swipe-item>
-        <img src="../assets/img/1.png" alt />
-      </van-swipe-item>
-      <van-swipe-item>
-        <img src="../assets/img/1.png" alt />
-      </van-swipe-item>
-      <van-swipe-item>
-        <img src="../assets/img/1.png" alt />
+      <van-swipe-item v-for="(item,k) in ProDetail.imgs" :key="k">
+        <img :src="item" alt />
       </van-swipe-item>
       <template #indicator>
-        <div class="custom-indicator text_cen">{{ current + 1 }}/4</div>
+        <div class="custom-indicator text_cen">{{ current + 1 }}/ProDetail.imgs.length</div>
       </template>
     </van-swipe>
     <!-- 价格 -->
     <div class="price">
-      <span>¥599.00</span>
+      <span>¥{{ProDetail.price}}</span>
       <span></span>
     </div>
     <!-- 简介 -->
-    <p class="title">B537二层四合院别墅设计图纸中式新农村自建房样图效果图全套</p>
+    <div class="sharebox">
+      <p class="title">{{ProDetail.title}}</p>
+      <div class="share flex_cen">
+        <img src="../assets/img/share.png" alt />
+        <span>分享</span>
+      </div>
+    </div>
+
     <!-- 发货 -->
     <div class="flex_be goods">
       <div>
@@ -32,7 +30,7 @@
         <span>四川成都</span> | 快递：
         <span>免运费</span>
       </div>
-      <div>月销：10</div>
+      <div>月销：{{ProDetail.moods}}</div>
     </div>
     <!-- 浏览量 -->
     <div class="views flex_be">
@@ -40,7 +38,7 @@
         <img src="../assets/img/1.png" alt />
         <img src="../assets/img/1.png" alt />
       </div>
-      <div>2778人在逛</div>
+      <div>{{ProDetail.moods}}人在逛</div>
     </div>
     <!-- 服务 -->
     <div class="serves flex_be" @click="showPopup">
@@ -72,28 +70,10 @@
       </div>
       <div class="btn text_cen" @click="closepanl">完成</div>
     </van-popup>
-    <!-- 宝贝评价 -->
-    <div>
-      <!-- <div class="rate flex_be">
-        <span>宝贝评价</span>
-        <div class="flex_cen">
-          <span class="all">查看全部</span>
-          <van-icon name="arrow" size="0.3rem" color="#F3AF1C" />
-        </div>
-      </div>-->
-      <!--  -->
-      <!-- <div class="cont">
-        <div>
-          <img src alt />
-          fas
-        </div>
-        <p>是室内设计师时间内大厦是你的看是打开的难道是看打多久啊</p>
-      </div>-->
-    </div>
     <!-- 图纸介绍 -->
     <div class="introduce">
       <span>图纸介绍</span>
-      <p>设计很好,设计很好设计号很好设计很好设计很好设计很好设计设计很好,设计很好设计号很好设计很好设计很好设计很好设计设计很好,设计很好设计号很好设计很好设计很好设计很好设计很好设计号很好设计很好设计很好设计很好设计设计很好</p>
+      <p>{{ProDetail.intro}}</p>
     </div>
     <!-- 商品详情底部 -->
     <div class="fixed">
@@ -105,17 +85,45 @@
           :text="text"
           color="#676767"
           class="size"
-          @click="onClickIcon"
+          @click="onClickIcon(ProDetail.id)"
         />
-        <van-goods-action-button type="warning" text="加入购物车" class="size"  @click="gocard"/>
-        <van-goods-action-button text="直接购买" class="size danger" />
+        <van-goods-action-button type="warning" text="加入购物车" class="size" @click="gocard" />
+        <van-goods-action-button text="直接购买" class="size danger" @click="gosurepay" />
       </van-goods-action>
+    </div>
+    <div>
+      <van-popup
+        v-model="showpop"
+        position="bottom"
+        :style="{ height: '60%' }"
+        style="border-radius:0.3rem 0.3rem 0px 0px;"
+      >
+        <div class="cartfff">
+          <div class="cartbox">
+            <div class="cartlist flex">
+              <img :src="ProDetail.cover" alt />
+              <div class="red">￥{{ProDetail.price}}</div>
+            </div>
+            <div class="flex_be stepper">
+              <span class="num">数量</span>
+              <div>
+                <span :class="[cunt==1?'disabled':'squer']" @click="reducecart(ProDetail)">-</span>
+                <span class="squer squer1">{{cunt}}</span>
+                <span class="squer" @click="addcart(ProDetail)">+</span>
+              </div>
+            </div>
+          </div>
+          <button @click="goJoinCart">加入购物车</button>
+        </div>
+      </van-popup>
     </div>
   </div>
 </template>
 
 <script>
-import { Toast } from "vant";
+// import { Toast } from "vant";
+import { mapState } from "vuex";
+import request from "@/request.js";
 export default {
   data() {
     return {
@@ -123,10 +131,29 @@ export default {
       show: false,
       result: ["a", "b", "c", "d"],
       text: "收藏",
-      icon: "like-o"
+      icon: "like-o",
+      showpop: false,
+      ProDetail: [],
+      cunt: 1, //购物车数量
+      cartinfoList: [], //购物车数量
     };
   },
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+    }),
+  },
+  created() {
+
+    this.handdetail();
+  },
   methods: {
+    gosurepay() {
+      this.$router.push({
+        path: "/surePay",
+      });
+    },
     onChange(index) {
       //轮播
       this.current = index;
@@ -144,16 +171,91 @@ export default {
       //选中选框
       console.log(names);
     },
-    gocard(){ //加入购物车
-      this.$router.push({
-        path:'/cart'
-      })
+    gocard() {
+      // 显示购物车组件
+      this.showpop = true;
     },
-    onClickIcon() {
-      (this.text = "已收藏"), (this.icon = "like");
-      Toast("点击图标");
-    }
-  }
+    handdetail() {
+      request
+        .getProDetail({
+          uid: this.userInfor.member_id,
+          id: this.$route.query.id,
+        })
+        .then((res) => {
+          console.log(res, "图纸详情");
+          this.ProDetail = res.data;
+        })
+        .catch(() => {
+          // this.$toast("添加失败");
+        })
+        .finally(() => {});
+    },
+    onClickIcon(num) {
+      request
+        .getCollect({
+          uid: this.userInfor.member_id,
+          type: 1,
+          object: num,
+        })
+        .then((res) => {
+          console.log(res);
+          this.handdetail();
+          this.$toast("收藏成功");
+          (this.text = "已收藏"), (this.icon = "like");
+        })
+        .catch((e) => {
+          console.log(e);
+          this.$toast("收藏失败");
+        })
+        .finally(() => {});
+    },
+    // 立即购买
+    goJoinCart() {
+      //加入购物车
+      request
+        .getJoinCart({
+          uid: this.userInfor.member_id,
+          b_id: 2,
+          num: this.cunt,
+        })
+        .then((res) => {
+          console.log(res, "加入购物车");
+          this.$toast({
+            message: "添加成功",
+            icon: "success",
+          });
+        })
+        .catch(() => {
+          this.$toast("添加失败");
+        })
+        .finally(() => {});
+    },
+    reducecart(item) {
+      console.log(item);
+      if (this.cunt == 1) {
+        return false;
+        // request
+        //   .getReduceCart({
+        //     uid: this.userInfor.member_id,
+        //     id: item.b_id,
+        //   })
+        //   .then((res) => {
+        //     console.log(res, "删除购物车");
+        //     this.$toast("删除成功");
+        //     this.CartInfo();
+        //   })
+        //   .catch(() => {
+        //     this.$toast("删除失败");
+        //   })
+        //   .finally(() => {});
+      }
+      this.cunt--;
+    },
+    addcart(item) {
+      console.log(item);
+      this.cunt++;
+    },
+  },
 };
 </script>
 
@@ -195,6 +297,8 @@ export default {
   .ml(22);
   .mt(41);
   .lh(40);
+  padding-right: 1.35rem;
+  height: 1rem;
 }
 .goods,
 .serves {
@@ -311,5 +415,83 @@ export default {
   img + img {
     .ml(-26);
   }
+}
+.sharebox {
+  position: relative;
+}
+.share {
+  .w(108);
+  .h(58);
+  border-radius: 0.3rem 0 0 0.3rem;
+  background: #eeeeee;
+  position: absolute;
+  top: 0;
+  right: 0;
+  img {
+    .w(24);
+    .h(24);
+  }
+}
+
+.cartfff {
+  background: #fff;
+  border-radius: 0.3rem 0.3rem 0 0;
+  .pl(29);
+  .pr(29);
+  button {
+    .w(691);
+    .h(87);
+    .b-radius(44);
+    border: 0;
+    outline: none;
+    background: #ff2913;
+    color: #fff;
+    .fs(30);
+    font-family: SimHei;
+    font-weight: bold;
+  }
+  .cartbox {
+    .num {
+      color: #aeaeae;
+      .fs(30);
+    }
+    .stepper {
+      .mt(28);
+      .mb(32);
+    }
+  }
+  .cartlist {
+    .pt(34);
+    .pb(14);
+    border-bottom: 1px solid #f1f1f1;
+    img {
+      .w(148);
+      .h(148);
+      .mr(33);
+    }
+    .red {
+      .fs(40);
+      font-weight: bold;
+      font-weight: bold;
+      color: #fd3723;
+      .lh(44);
+      .mt(16);
+    }
+  }
+}
+.squer,
+.disabled {
+  .w(62);
+  .h(58);
+  background: rgba(241, 241, 241, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  .mr(3);
+  .fs(63);
+  color: #878787;
+}
+.disabled {
+  color: #ddd;
 }
 </style>

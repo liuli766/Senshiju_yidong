@@ -2,83 +2,268 @@
   <!-- 成品 -->
   <div class="product">
     <div class="serchbox">
-      <van-search v-model="searchContent" shape="round" background="#fff" placeholder="请输入搜索内容" />
+      <van-search v-model="searchContent" shape="round" background="#fff" placeholder="请输入搜索内容" @change="handserch" />
     </div>
     <!--  -->
     <div class="dropdown flex_be">
       <div class="all">全部</div>
       <div class="dropdownbox">
         <van-dropdown-menu active-color="#FE9E15">
-          <van-dropdown-item v-model="value1" :options="option1" />
-          <van-dropdown-item v-model="value2" :options="option2" />
-          <van-dropdown-item v-model="value1" :options="option1" />
-          <van-dropdown-item v-model="value2" :options="option2" />
+          <van-dropdown-item v-model="value1" :options="cate1" @change="handchange1(value1)" />
+          <van-dropdown-item v-model="value2" :options="cate2" @change="handchange2(value2)" />
+          <van-dropdown-item v-model="value3" :options="cate3" @change="handchange3(value3)" />
+          <van-dropdown-item v-model="value4" :options="cate4" @change="handchange4(value4)" />
         </van-dropdown-menu>
         <van-dropdown-menu active-color="#FE9E15">
-          <van-dropdown-item v-model="value1" :options="option1" />
-          <van-dropdown-item v-model="value2" :options="option2" />
-          <van-dropdown-item v-model="value1" :options="option1" />
-          <van-dropdown-item v-model="value2" :options="option2" />
+          <van-dropdown-item v-model="value5" :options="cate5" @change="handchange5(value5)" />
+          <van-dropdown-item v-model="value6" :options="cate6" @change="handchange6(value6)" />
+          <van-dropdown-item v-model="value7" :options="cate7" @change="handchange7(value7)" />
+          <van-dropdown-item v-model="value8" :options="cate8" @change="handchange8(value8)" />
         </van-dropdown-menu>
       </div>
     </div>
     <!-- 产品列表 -->
-    <div class="list">
-        <productitem :productitem='productItemList'/>
+    <div class="list" v-if="productItemList.length!==0">
+      <productitem :productitem="productItemList" />
+    </div>
+    <div class="list" v-else>
+      <p style="text-align: center;padding-top:0.3rem">无相关产品</p>
     </div>
     <!--  -->
-    <tabbar :tabid='1'/>
+    <tabbar :tabid="1" />
   </div>
 </template>
 
 <script>
-import productitem from '@/components/productItem.vue'
-import tabbar from '@/components/tabBar.vue'
+import productitem from "@/components/productItem.vue";
+import tabbar from "@/components/tabBar.vue";
+import { mapState } from "vuex";
+import request from "@/request.js";
 export default {
-    components:{
-        productitem,
-        tabbar
-    },
+  components: {
+    productitem,
+    tabbar,
+  },
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+    }),
+  },
+  watch: {
+    searchContent(){
+      this.handserch()
+    }
+  },
   data() {
     return {
       searchContent: "", //搜索内容值
       value1: 0, //当前选中项对应的 value
-      value2: "a", //当前选中项对应的 value
-      productItemList: [
-        {
-          img: require("../assets/item.png"),
-          p: "A116新农村一层四合院A116新农村一层四合院",
-          baoyou: "包邮",
-          price: "¥598.00",
-          people: 1
-        },
-        {
-          img: require("../assets/item.png"),
-          p: "A116新农村一层四合院A116新农村一层四合院",
-          baoyou: "包邮",
-          price: "¥598.00",
-          people: 1
-        },
-        {
-          img: require("../assets/item.png"),
-          p: "A116新农村一层四合院A116新农村一层四合院",
-          baoyou: "包邮",
-          price: "¥598.00",
-          people: 1
-        }
-      ],
-      option1: [
-        { text: "全部", value: 0 },
-        { text: "一层别墅", value: 1 },
-        { text: "二层别墅", value: 2 }
-      ],
-      option2: [
-        { text: "进深", value: "a" },
-        { text: "占地", value: "b" },
-        { text: "结构", value: "c" }
-      ]
+      value2: 0, //当前选中项对应的 value
+      value3: 0, //当前选中项对应的 value
+      value4: 0, //当前选中项对应的 value
+      value5: 0, //当前选中项对应的 value
+      value6: 0, //当前选中项对应的 value
+      value7: 0, //当前选中项对应的 value
+      value8: 0, //当前选中项对应的 value
+      productItemList: [],
+      cate1: [],
+      cate2: [],
+      cate3: [],
+      cate4: [],
+      cate5: [],
+      cate6: [],
+      cate7: [],
+      cate8: [],
+      filterSelData1:'全部' , //选中的数据
+      filterSelData2:'全部' , //选中的数据
+      filterSelData3: '全部', //选中的数据
+      filterSelData4:'全部', //选中的数据
+      filterSelData5: '全部', //选中的数据
+      filterSelData6: '全部', //选中的数据
+      filterSelData7:'全部', //选中的数据
+      filterSelData8: '全部', //选中的数据
+      filterlist:'全部'
     };
-  }
+  },
+  created() {
+    request
+      .getCate({
+        cate_id: "",
+      })
+      .then((res) => {
+        console.log(res, "分类");
+        this.filterlist=res.data.list
+        this.cate1 = res.data.list[0].child;
+        this.cate2 = res.data.list[1].child;
+        this.cate3 = res.data.list[2].child;
+        this.cate4 = res.data.list[3].child;
+        this.cate5 = res.data.list[4].child;
+        this.cate6 = res.data.list[5].child;
+        this.cate7 = res.data.list[6].child;
+        this.cate8 = res.data.list[7].child;
+        this.cate1.map((item, k) => {
+          item.text = item.cate_name;
+          item.value = k;
+        });
+        this.cate2.map((item, k) => {
+          item.text = item.cate_name;
+          item.value = k;
+        });
+        this.cate3.map((item, k) => {
+          item.text = item.cate_name;
+          item.value = k;
+        });
+        this.cate4.map((item, k) => {
+          item.text = item.cate_name;
+          item.value = k;
+        });
+        this.cate5.map((item, k) => {
+          item.text = item.cate_name;
+          item.value = k;
+        });
+        this.cate6.map((item, k) => {
+          item.text = item.cate_name;
+          item.value = k;
+        });
+        this.cate7.map((item, k) => {
+          item.text = item.cate_name;
+          item.value = k;
+        });
+        this.cate8.map((item, k) => {
+          item.text = item.cate_name;
+          item.value = k;
+        });
+      })
+      .catch(() => {})
+      .finally(() => {});
+    this.getdata();
+  },
+  methods: {
+    // 搜索
+     handserch() {
+      request
+        .getHots({
+          page: 1,
+          search: this.searchContent,
+        })
+        .then((res) => {
+          console.log(res)
+          this.getdata()
+        })
+        .catch(() => {})
+        .finally(() => {})
+    },
+    getdata() {
+      request
+        .getHots({
+          page: 1,
+          style:this.filterSelData1,
+          area:this.filterSelData2,
+          face_width:this.filterSelData3,
+          depth:this.filterSelData4,
+          plies:this.filterSelData5,
+          function:this.filterSelData6,
+          structure:this.filterSelData7,
+          cost:this.filterSelData8,
+          search:this.searchContent
+        })
+        .then((res) => {
+          console.log(res, "图纸展示");
+          this.productItemList = res.data;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+    handchange1(value) {
+      console.log(value)
+      let newArray = [];
+      this.cate1.map((item) => {
+        if (item.value == value) {
+          newArray.push(item.cate_name);
+        }
+      });
+      this.filterSelData1 = newArray[0];
+      this.getdata(this.filterSelData1)
+    },
+    handchange2(value) {
+      console.log(value)
+      let newArray = [];
+      this.cate2.map((item) => {
+        if (item.value == value) {
+          newArray.push(item.cate_name);
+        }
+      });
+      this.filterSelData2 = newArray[0];
+      this.getdata(this.filterSelData2)
+    },
+    handchange3(value) {
+      console.log(value)
+      let newArray = [];
+      this.cate3.map((item) => {
+        if (item.value == value) {
+          newArray.push(item.cate_name);
+        }
+      });
+      this.filterSelData3 = newArray[0];
+      this.getdata(this.filterSelData3)
+    },
+    handchange4(value) {
+      console.log(value)
+      let newArray = [];
+      this.cate4.map((item) => {
+        if (item.value == value) {
+          newArray.push(item.cate_name);
+        }
+      });
+      this.filterSelData4 = newArray[0];
+      this.getdata(this.filterSelData4)
+    },
+    handchange5(value) {
+      console.log(value)
+      let newArray = [];
+      this.cate5.map((item) => {
+        if (item.value == value) {
+          newArray.push(item.cate_name);
+        }
+      });
+      this.filterSelData5 = newArray[0];
+      this.getdata(this.filterSelData5)
+    },
+    handchange6(value) {
+      console.log(value)
+      let newArray = [];
+      this.cate6.map((item) => {
+        if (item.value == value) {
+          newArray.push(item.cate_name);
+        }
+      });
+      this.filterSelData6 = newArray[0];
+      this.getdata(this.filterSelData6)
+    },
+    handchange7(value) {
+      console.log(value)
+      let newArray = [];
+      this.cate7.map((item) => {
+        if (item.value == value) {
+          newArray.push(item.cate_name);
+        }
+      });
+      this.filterSelData7 = newArray[0];
+      this.getdata(this.filterSelData7)
+    },
+    handchange8(value) {
+      console.log(value)
+      let newArray = [];
+      this.cate8.map((item) => {
+        if (item.value == value) {
+          newArray.push(item.cate_name);
+        }
+      });
+      this.filterSelData8 = newArray[0];
+      this.getdata(this.filterSelData8)
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -103,12 +288,12 @@ export default {
     width: 80%;
   }
 }
-.list{
-    background: #F0F0F0;
-    .pr(21);
-    .pl(21);
-    .mt(48);
-    .pb(197);
+.list {
+  background: #f0f0f0;
+  .pr(21);
+  .pl(21);
+  .mt(48);
+  .pb(197);
 }
 </style>
 <style>

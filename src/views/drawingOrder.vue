@@ -2,7 +2,7 @@
   <!-- 图纸订单 -->
   <div class="drawingorder">
     <div class="nav_bar flex">
-      <van-icon name="arrow-left" />
+      <van-icon name="arrow-left" @click="go" />
       <span>图纸订单</span>
     </div>
     <van-search v-model="seachdata" placeholder="请输入订单号或商品名称" />
@@ -11,12 +11,12 @@
         v-for="(item,k) in navlist"
         :key="k"
         @click="swichChose(k)"
-        :class="{activ_chose:navactivechoseid===k}"
+        :class="{activ_chose:navactivechoseid==k}"
       >{{item}}</span>
     </nav>
-      <orderlist :orderlist="orderlist" v-if="navactivechoseid==0" :navid=0 />
-      <orderlist :orderlist="orderlist1" v-if="navactivechoseid==1" :navid=1 />
-      <orderlist :orderlist="orderlist2" v-if="navactivechoseid==2" :navid=2 />
+    <orderlist :orderlist="orderlist" v-if="navactivechoseid==0||navid==0" :navid="0" />
+    <orderlist :orderlist="orderlist1" v-if="navactivechoseid==1|| navid==1" :navid="1" />
+    <orderlist :orderlist="orderlist2" v-if="navactivechoseid==2 ||navid==2" :navid="2" />
   </div>
 </template>
 
@@ -24,81 +24,90 @@
 import { mapState } from "vuex";
 import orderlist from "@/components/orderlist.vue";
 export default {
-  computed: mapState({
-    navactivechoseid: state => state.navactivechoseid
-  }),
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+    }),
+  },
   components: {
-    orderlist
+    orderlist,
   },
   data() {
     return {
       seachdata: "",
       navlist: ["待付款", "待发货", "待收货"],
       navid: 0,
+      navactivechoseid:0,
       orderlist: [
         {
           img: require("../assets/logo.png"),
           p: "A116新农村一层四合院别墅设计图纸",
           num: 1,
-          price: "198.00"
+          price: "198.00",
         },
         {
           img: require("../assets/logo.png"),
           p: "A116新农村一层四合院别墅设计图纸",
           num: 1,
-          price: "198.00"
+          price: "198.00",
         },
         {
           img: require("../assets/logo.png"),
           p: "A116新农村一层四合院别墅设计图纸",
           num: 1,
-          price: "198.00"
+          price: "198.00",
         },
         {
           img: require("../assets/logo.png"),
           p: "A116新农村一层四合院别墅设计图纸",
           num: 1,
-          price: "198.00"
-        }
+          price: "198.00",
+        },
       ],
       orderlist1: [
         {
           img: require("../assets/item.png"),
           p: "A116新农村一层四合院别墅设计图纸",
           num: 1,
-          price: "198.00"
+          price: "198.00",
         },
         {
           img: require("../assets/item.png"),
           p: "A116新农村一层四合院别墅设计图纸",
           num: 1,
-          price: "198.00"
-        }
+          price: "198.00",
+        },
       ],
       orderlist2: [
         {
           img: require("../assets/img/1.png"),
           p: "A116新农村一层四合院别墅设计图纸",
           num: 1,
-          price: "198.00"
+          price: "198.00",
         },
         {
           img: require("../assets/item.png"),
           p: "A116新农村一层四合院别墅设计图纸",
           num: 1,
-          price: "198.00"
-        }
-      ]
+          price: "198.00",
+        },
+      ],
     };
   },
   created() {
+    this.navactivechoseid=this.$route.query.navactivechoseid
   },
   methods: {
     swichChose(k) {
-      this.$store.commit("gonav", k);
       this.navid = k;
-    }
-  }
+      this.navactivechoseid=k
+    },
+
+    go() {
+      this.$router.go(-1);
+    },
+  },
 };
 </script>
 
@@ -111,8 +120,9 @@ export default {
   position: fixed;
   width: 100%;
   .mb(100);
-  overflow: scroll;}
-  
+  overflow: scroll;
+}
+
 .nav_bar {
   background: @base-header-color;
   .lh(80);

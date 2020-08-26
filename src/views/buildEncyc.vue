@@ -10,25 +10,35 @@
       >{{item}}</span>
     </nav>
     <!--  -->
-    <div>
-      <div class="bscroll" ref="bscroll">
-        <div class="bscroll-container">
-          <img src="../assets/item.png" alt v-for="(item,k) in 6" :key="k" @click="gobuildencycDetail" />
+    <div v-show="navid==1">
+      <div v-for="(item,k) in articleList" :key="k+0">
+        <div class="bscroll" ref="bscrollapper">
+          <div class="bscroll-container">
+            <img :src="item.cover" alt @click="gobuildencycDetail(item.id)" />
+          </div>
         </div>
+        <p>{{item.content}}</p>
       </div>
-      <p>欧式别墅怎么设计好看，两层庭s欧式别墅怎么设计好看，两层庭院</p>
+
       <div class="flex_be eeebot">
         <span>3天前</span>
         <span class="flex_cen">
           <van-icon name="eye-o" />2778人已读
         </span>
       </div>
-      <div class="videobox">
-        <video src="../assets/xc.mp4" controls width="100%" height="100%" preload="none"></video>
+      <div v-for="(item,k) in articleList" :key="k+1">
+        <div class="videobox">
+          <video
+            src="../assets/xc.mp4"
+            controls
+            width="100%"
+            height="100%"
+            preload="none"
+            :poster="item.cover"
+          ></video>
+        </div>
+        <p class="vp">{{item.content}}</p>
       </div>
-      <p class="vp">
-        欧式别墅怎么设计好看，两层庭s欧式别墅怎么设计好看，两层庭院
-      </p>
       <div class="flex_be">
         <span>3天前</span>
         <span class="flex_cen">
@@ -40,8 +50,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import request from "@/request.js";
 import BScroll from "better-scroll";
 export default {
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+    }),
+  },
   data() {
     return {
       buiilnavlist: [
@@ -53,23 +71,64 @@ export default {
         "风水百科",
         "建房日志",
       ],
-      navid: 0, //当前选中的导航值
+      aBScroll: "",
+      navid: 1, //当前选中的导航值
+      classid: "推荐",
+      articleList: [], //百科内容
     };
   },
+  created() {
+    this.getdata(this.classid);
+  },
   methods: {
+    getdata(str) {
+      //获取百科文章
+      request
+        .getArticle({
+          class: str,
+          page: 1,
+        })
+        .then((res) => {
+          console.log(res, "百科文章");
+          this.articleList = res.data;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
     chosenav(k) {
       this.navid = k;
-      
+      if (k == 1) {
+        this.classid = "推荐";
+        this.getdata(this.classid);
+      } else if (k == 2) {
+        this.classid = "设计百科";
+        this.getdata(this.classid);
+      } else if (k == 3) {
+        this.classid = "装修百科";
+        this.getdata(this.classid);
+      } else if (k == 4) {
+        this.classid = "施工百科";
+        this.getdata(this.classid);
+      } else if (k == 5) {
+        this.classid = "风水百科";
+        this.getdata(this.classid);
+      } else if (k == 6) {
+        this.classid = "建房日志";
+        this.getdata(this.classid);
+      }
     },
-    gobuildencycDetail(){
+    gobuildencycDetail(id) {
       this.$router.push({
-        path:'/buildencycDetail'
-      })
-    }
+        path: "/buildencycDetail",
+        query: {
+          id,
+        },
+      });
+    },
   },
   mounted() {
     this.$nextTick(() => {
-      let bscrollDom = this.$refs.bscroll; //查找bscroll元素
+      let bscrollDom = this.$refs.bscrollapper; //查找bscroll元素
       this.aBScroll = new BScroll(bscrollDom, {
         scrollX: true,
         eventPassthrough: "vertical",
@@ -117,12 +176,12 @@ export default {
   p {
     color: #191919;
     font-family: SimSun;
-    font-weight: bold;
+    font-weight: 400;
     .fs(26);
     .lh(39);
     .mb(30);
   }
-  .vp{
+  .vp {
     .mt(24);
   }
   .eeebot {

@@ -11,13 +11,16 @@
         <span>头像</span>
         <div class="flex_cen">
           <div class="fl_center adatar">
-            <img :src="adatar?adatar:headerimg" alt class="photo" />
+            <!-- <form action method="POST" enctype="multipart/form-data" id="form1"> -->
+            <img :src="headimg?headimg:userInfor.photo" alt class="photo" />
             <input
               type="file"
+              id="file"
               name
               accept="image/gif, image/jpeg, image/jpg, image/png"
               @change="fileChange"
             />
+            <!-- </form> -->
           </div>
           <van-icon name="arrow" />
         </div>
@@ -25,42 +28,106 @@
       <div class="flex_be nikename">
         <span>昵称</span>
         <div>
-          <span style="margin-right:0.15rem"><input type="text" name="" id="" value="某某某"></span>
+          <span style="margin-right:0.15rem">
+            <input type="text" name id :value="userInfor.nickname" />
+          </span>
           <van-icon name="arrow" />
         </div>
       </div>
       <div class="flex_be modify">
         <span>修改手机号</span>
         <div>
-          <span style="margin-right:0.15rem;">已绑定：<input type="text" name="" id="" value="151212154568"></span>
+          <span style="margin-right:0.15rem;">
+            已绑定：
+            <input type="text" name id :value="userInfor.phone_num" />
+          </span>
           <van-icon name="arrow" />
         </div>
       </div>
     </div>
-    <button>退出登录</button>
+    <button @click="baocun">保存</button>
+    <button @click="outlogin">退出登录</button>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import request from "@/request.js";
+// import axios from "axios";
+import $ from "jquery";
 export default {
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+      headimg: (state) => state.headimg,
+    }),
+  },
   data() {
     return {
       adatar: "", //头像
       headerimg: require("../assets/img/mine/headerimg.png"),
     };
   },
+  created() {
+    console.log(this.userInfor);
+  },
   methods: {
     //头像选择
     fileChange(e) {
-      var that = this;
-      var file = e.target.files[0];
-      this.adatar = e.target.files[0];
-
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        that.adatar = e.target.result;
-      };
-      reader.readAsDataURL(file);
+      let file = e.target.files[0];
+      let param = new FormData(); //创建form对象
+      param.append("file", file); //通过append向form对象添加数据
+      param.append("uid", this.userInfor.member_id); //通过append向form对象添加数据
+      console.log(param.get("file")); //FormData私有类对象，访问不到，可以通过get判断值是否传进去
+      console.log(param.get("uid"));
+      // let config = {
+      //   headers: { "Content-Type": "multipart/form-data" }, //这里是重点，需要和后台沟通好请求头，Content-Type不一定是这个值
+      // }; //添加请求头
+      $.ajax({
+        type: "post",
+        url: "http://villa.jisapp.cn/index/User/up_image",
+        data: param,
+        async: false,
+        cache: false,
+        contentType: false,
+        processData: false,
+      }).then((res) => {
+        console.log(res);
+        if(res.code==0){
+          this.adatar=res.data
+        this.$toast("上传成功");
+        localStorage.setItem('headImg', res.data)
+         let img = localStorage.getItem('headImg')
+         this.$store.commit('uploadimg', img)
+        }else{
+          this.$toast("上传失败");
+        }
+        
+      });
+    },
+    // 修改个人资料
+    baocun() {
+      request
+        .getupInfo({
+          member_id: this.userInfor.member_id,
+          phone_num: this.userInfor.phone_num,
+          nickname: this.userInfor.nickname,
+          password: "",
+        })
+        .then((res) => {
+          console.log(res, "修改个人资料");
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+    // 退出登录
+    outlogin() {
+      this.$store.commit("cleartoken");
+      this.$toast("退出成功");
+      this.$router.push({
+        path: "/login",
+      });
     },
     go() {
       this.$router.go(-1);
@@ -144,7 +211,7 @@ button {
   opacity: 0;
   cursor: pointer;
 }
-input{
+input {
   text-align: right;
   width: 2rem;
 }
