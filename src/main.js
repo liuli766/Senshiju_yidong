@@ -16,6 +16,8 @@ import axios from 'axios'
 Vue.prototype.$axios=axios;
 import qs from 'qs'; //用来解决vue中post请求（详情）
 Vue.prototype.qs = qs;
+import smartParse from 'vue-smart-parse';//智能识别
+Vue.use(smartParse)
 new Vue({
   router,
   store,

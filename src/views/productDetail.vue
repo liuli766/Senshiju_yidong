@@ -6,7 +6,7 @@
         <img :src="item" alt />
       </van-swipe-item>
       <template #indicator>
-        <div class="custom-indicator text_cen">{{ current + 1 }}/ProDetail.imgs.length</div>
+        <div class="custom-indicator text_cen">{{ current + 1 }}/{{ProDetail.imgs.length}}</div>
       </template>
     </van-swipe>
     <!-- 价格 -->
@@ -234,20 +234,6 @@ export default {
       console.log(item);
       if (this.cunt == 1) {
         return false;
-        // request
-        //   .getReduceCart({
-        //     uid: this.userInfor.member_id,
-        //     id: item.b_id,
-        //   })
-        //   .then((res) => {
-        //     console.log(res, "删除购物车");
-        //     this.$toast("删除成功");
-        //     this.CartInfo();
-        //   })
-        //   .catch(() => {
-        //     this.$toast("删除失败");
-        //   })
-        //   .finally(() => {});
       }
       this.cunt--;
     },

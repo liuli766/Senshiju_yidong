@@ -113,6 +113,10 @@ VueRouter.prototype.push = function push (location) {
   { // 图纸收藏
     path: '/Drawingcollection',
     component: () => import(/* webpackChunkName: "about" */ '../views/Drawingcollection.vue')
+  },
+  { // 地址列表
+    path: '/AddressList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/AddressList.vue')
   }
 ]
 

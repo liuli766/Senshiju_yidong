@@ -155,7 +155,7 @@ export default {
       }
       if(k==0){
         this.$router.push({
-          path: "/newshippingAddr",
+          path: "/AddressList",
         });
       }
     },

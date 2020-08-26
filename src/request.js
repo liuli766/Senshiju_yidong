@@ -164,6 +164,24 @@ function getAddr(data) {
   }
   return http.fetchPost('/index/User/add_ress', params)
 }
+function getAddress(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/User/address', params)
+}
+function getUpdress(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/User/upd_ress', params)
+}
+function getRemoveAddr(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/User/del_ress', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -193,4 +211,7 @@ export default {
   getInfo,//百科详情
   getCollect,//收藏
   getAddr,//添加收货地址
+  getAddress, //收货地址展示
+  getUpdress,//修改地址
+  getRemoveAddr,// 删除收货地址
 }

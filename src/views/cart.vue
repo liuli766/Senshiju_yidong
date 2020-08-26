@@ -16,30 +16,35 @@
       </div>
       <div>
         <img class="cl" src="../assets/img/qq.png" alt />
-        <span>管理</span>
+        <span @click="admin">管理</span>
       </div>
     </div>
     <!-- 购物车条数 -->
-    <div v-if="cartData.length==0" style="padding-left:0.3rem">购物车空空如也</div>
-    <div class="itemlist flex" v-for="(item,k) in cartData" :key="k" v-else>
-      <span @click="cartCheck(item,k)"  :class="[item.cheakG==true?'gg':'ggh']"><!-- :class="{gg:item.cheakG=='true'}"-->
-        <van-icon name="success" />
-      </span>
-      <img :src="item.cover" alt />
-      <div>
-        <p>{{item.title}}</p>
-        <div class="price flex_be">
-          <span>￥{{item.price}}</span>
-          <div class="nun flex_ar">
-            <span>-</span>
-            <span>{{item.num}}</span>
-            <span>+</span>
+
+    <div class="cart_box">
+      <div v-if="cartData.length==0" style="padding-left:0.3rem">购物车空空如也</div>
+      <div class="itemlist flex" v-for="(item,k) in cartData" :key="k" v-else>
+        <span @click="cartCheck(item,k)" :class="[item.cheakG==true?'gg':'ggh']">
+          <!-- :class="{gg:item.cheakG=='true'}"-->
+          <van-icon name="success" />
+        </span>
+        <img :src="item.cover" alt />
+        <div>
+          <p>{{item.title}}</p>
+          <div class="price flex_be">
+            <span>￥{{item.price*item.num}}</span>
+            <div class="nun flex_ar">
+              <span @click="reducecart(item,k)">-</span>
+              <span>{{item.num}}</span>
+              <span @click="addcart(item,k)">+</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
     <!-- 底部 -->
-    <footer class="flex flex_be">
+    <footer class="flex flex_be" v-show="showfoot2">
       <div class="ggcheck">
         <span class="gg" v-if="allChecked" @click="handleChecked">
           <van-icon name="success" />
@@ -48,16 +53,27 @@
         <span>全选</span>
       </div>
       <div class="flex flex_col price">
-        <!-- <span>¥{{totalPrice}}</span> -->
+        <span>¥{{totalPrice}}</span>
         <span>含运费</span>
       </div>
-      <!-- <div class="jiesuan" @click="goOrderpay">结算（{{totalNum}}）</div> -->
+      <div class="jiesuan" @click="goOrderpay">结算（{{totalNum}}）</div>
+    </footer>
+    <footer class="flex flex_be" v-show="showfoot1">
+      <div class="ggcheck">
+        <span class="gg" v-if="allChecked" @click="handleChecked">
+          <van-icon name="success" />
+        </span>
+        <span class="ggh" v-else @click="handleChecked"></span>
+        <span>全选</span>
+      </div>
+      <div class="flex flex_col price price1">移入收藏夹</div>
+      <div class="jiesuan jiesuan1">删除</div>
     </footer>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import request from "@/request.js";
 export default {
   computed: {
@@ -65,13 +81,26 @@ export default {
       token: (state) => state.token,
       userInfor: (state) => state.userInfor,
     }),
-    ...mapGetters({
-      // cartData: "addShopList",
-      // totalNum: "totalNum",
-      // totalPrice: "totalPrice",
-    }),
+    totalPrice() {
+      let totalPrice = 0;
+      for (let i = 0; i < this.cartData.length; i++) {
+        if (this.cartData[i].cheakG) {
+          totalPrice += Number(this.cartData[i].price * this.cartData[i].num);
+        }
+      }
+      return totalPrice.toFixed(2);
+    },
+    totalNum() {
+      let totalNum = 0;
+      for (let i = 0; i < this.cartData.length; i++) {
+        if (this.cartData[i].cheakG) {
+          totalNum += this.cartData[i].num;
+        }
+      }
+      return totalNum;
+    },
   },
-  watch: {},
+
   data() {
     return {
       allChecked: false, //是否全选
@@ -79,8 +108,11 @@ export default {
       cartlist: [],
       cartData: [], //购物车信息
       num: 0,
+      showfoot1:false,
+      showfoot2:true
     };
   },
+  watch: {},
   created() {
     this.cartlist = this.$store.getters.addShopList;
     console.log(this.$store.state.cartList);
@@ -104,10 +136,10 @@ export default {
         })
         .then((res) => {
           console.log(res, "购物车信息");
-          
+
           for (let i = 0; i < res.data.length; i++) {
             let item = res.data[i];
-            item.cheakG = false
+            item.cheakG = false;
           }
           console.log(res);
           this.cartData = res.data;
@@ -124,11 +156,8 @@ export default {
       });
     },
     // 单选
-    cartCheck(item,k) {
-      console.log(k);
-      this.cartData[k].cheakG=!this.cartData[k].cheakG
-      // item.cheakG = !item.cheakG;
-      console.log(this.cartData[k].cheakG);
+    cartCheck(item, k) {
+      this.cartData[k].cheakG = !this.cartData[k].cheakG;
       if (item.cheakG) {
         this.allSelectedGoods.push(item.id);
 
@@ -143,13 +172,14 @@ export default {
         this.allSelectedGoods.pop(item.id);
         this.allChecked = false;
       }
-      console.log(this.allSelectedGoods);
     },
 
     // 全选
     handleChecked() {
       //全选
       if (this.allChecked == false) {
+        this.totalnum = 0;
+        this.total = 0;
         for (let i = 0; i < this.cartData.length; i++) {
           let item = this.cartData[i];
           item.cheakG = true;
@@ -161,7 +191,41 @@ export default {
           item.cheakG = false;
         }
       }
+
       this.allChecked = !this.allChecked;
+    },
+
+    addcart(item) {
+      //购物车数量加
+      item.num++;
+    },
+    reducecart(item) {
+      //购物车数量减
+
+      console.log(item.num);
+
+      if (item.num == 1) {
+        request
+          .getReduceCart({
+            uid: this.userInfor.member_id,
+            id: item.id,
+          })
+          .then((res) => {
+            console.log(res, "删除购物车");
+            this.$toast("删除成功");
+            this.CartInfo();
+          })
+          .catch(() => {
+            this.$toast("删除失败");
+          })
+          .finally(() => {});
+      }
+      item.num--;
+    },
+
+    admin() {
+      this.showfoot1=!this.showfoot1
+      this.showfoot2=!this.showfoot2
     },
     goOrderpay() {
       this.$router.push({
@@ -328,6 +392,16 @@ footer {
     text-align: center;
     .lh(93);
   }
+  .jiesuan1 {
+    .w(123);
+    .h(50);
+    border: 0.03rem solid rgba(250, 61, 41, 1);
+    border-radius: 0.25rem;
+    color: #FA3D29;
+    background:#fff;
+    .lh(50);
+    margin-right: 0.6rem;
+  }
   .price {
     .ml(272);
     .mr(32);
@@ -340,6 +414,15 @@ footer {
       .fs(24);
       .mt(11);
     }
+  }
+  .price1 {
+    .w(179);
+    .h(50);
+    color: #fe9e15;
+    border: 0.03rem solid rgba(254, 158, 21, 1);
+    border-radius: 0.25rem;
+    .lh(50);
+    text-align: center;
   }
 }
 .itemlist .price .nun {
@@ -385,6 +468,9 @@ footer {
   align-items: center;
   justify-content: center;
   color: #fff;
+}
+.cart_box {
+  margin-bottom: 1rem;
 }
 </style>
 <style lang="css">
