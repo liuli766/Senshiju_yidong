@@ -10,18 +10,26 @@
       <p>
         请尽快完成付款，还剩
         <span>
-          20分（超时按
-          <span>取消订单</span>处理）
+          <span style="color:#FA3D29;display: inline-block; ">
+            <countdown :time="time"  tag="p">
+              <template slot-scope="props">{{ props.minutes }}分{{ props.seconds }}秒</template>
+            </countdown>
+          </span>&nbsp;&nbsp;&nbsp;&nbsp;（超时按
+          <span style="color:#FA3D29">取消订单</span>处理）
         </span>
       </p>
       <!--  -->
-      <div class="flex_be addr">
+      <div class="flex_be addr" @click="gonewshippingAddr(orderaddress)">
         <div class="flex">
-          <van-icon name="location-o" style="margin-right:0.28rem;align-self: flex-end;" />
+          <van-icon
+            name="location-o"
+            style="margin-right:0.28rem;align-self: flex-end;margin-bottom:0.1rem"
+          />
           <div>
-            <span class="info">瞅瞅 18720459981</span>
+            <span class="info">{{orderaddress.name}} {{orderaddress.phone}}</span>
             <div class="flex_cen" style="font-size:0.25rem;">
-              <span class="express">快递</span>四川省成都市武侯区清江西路东苑338号
+              <span class="express">快递</span>
+              {{orderaddress.province}}{{orderaddress.city}}{{orderaddress.district}}{{orderaddress.address}}
             </div>
           </div>
         </div>
@@ -31,24 +39,24 @@
       <div class="item">
         <div class="flex_be ser">
           <span>优选别墅图纸</span>
-          <span>
+          <!-- <span>
             联系客服
             <van-icon name="chat-o" />
-          </span>
+          </span>-->
         </div>
         <van-card
-          num="1"
-          price="598.00"
-          origin-price="10.00"
-          desc="A116新农村一层四合院别墅设计图纸乡村 自建一层中式风格房子"
-          :thumb="img"
+          :num="orderdetail.num"
+          :price="orderdetail.price"
+          :desc="orderdetail.title"
+          :thumb="orderdetail.cover"
         />
       </div>
+      <!--           origin-price="10.00" -->
       <!--  -->
       <div class="number">
         <div class="flex_be fs26">
           <span>商品金额</span>
-          <span>¥598.00</span>
+          <span>¥{{orderdetail.price}}</span>
         </div>
         <div class="flex_be fs26">
           <span>优惠方式</span>
@@ -60,11 +68,11 @@
         </div>
         <div class="flex_be fs26">
           <span>订单总价</span>
-          <span>¥598.00</span>
+          <span>¥{{orderdetail.num*orderdetail.price}}</span>
         </div>
         <div class="flex_be bordert">
           <span>实际付款</span>
-          <span>¥598.00</span>
+          <span>¥{{orderdetail.num*orderdetail.price}}</span>
         </div>
       </div>
       <div class="order_number fs26">
@@ -81,7 +89,7 @@
         </div>
       </div>
       <div class="flex_be bottom">
-        <span>取消订单</span>
+        <span @click="canelOrder(orderdetail)">取消订单</span>
         <button>立即支付</button>
       </div>
     </main>
@@ -90,22 +98,77 @@
 
 <script>
 import { mapState } from "vuex";
+import request from "@/request.js";
 import Clipboard from "clipboard";
+// import CountDown from "vue2-countdown";
 export default {
-  computed: mapState({
-    navactivechoseid: state => state.navactivechoseid
-  }),
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+      navactivechoseid: (state) => state.navactivechoseid,
+    }),
+  },
+  components: {
+    // CountDown,
+  },
   data() {
     return {
       img: require("../assets/logo.png"),
-      aorder: "d2sg4hfha7hph555fd5558"
+      aorder: "d2sg4hfha7hph555fd5558",
+      orderaddress: [],
+      orderdetail: [],
+      time: 10000, //倒计时
+      counting: false,
     };
   },
-
+  created() {
+    request
+      .getOrderDetail({
+        uid: this.userInfor.member_id,
+        oid: this.$route.query.oid,
+      })
+      .then((res) => {
+        console.log(res, "订单详情");
+        this.orderaddress = res.data.address;
+        this.orderdetail = res.data.detail;
+      })
+      .catch(() => {})
+      .finally(() => {});
+  },
+  mounted() {},
   methods: {
+    countDownS_cb: function (x) {
+      console.log(x);
+    },
+    countDownE_cb: function (x) {
+      console.log(x);
+    },
     onClickLeft() {
       history.go(-1);
-      this.$store.commit('gonav',0)
+      this.$store.commit("gonav", 0);
+    },
+    // 取消订单
+    canelOrder(item) {
+      let oid = item.id;
+      request
+        .getCancelOrder({
+          oid,
+        })
+        .then((res) => {
+          console.log(res);
+          this.$toast({
+            message: "取消成功",
+            icon: "success",
+          });
+        })
+        .catch(() => {
+          this.$toast({
+            message: "取消失败",
+            icon: "error",
+          });
+        })
+        .finally(() => {});
     },
     copy(e, text) {
       var clipboard = new Clipboard(e.target, { text: () => text });
@@ -118,8 +181,16 @@ export default {
         this.$toast("复制失败");
         clipboard.destroy();
       });
-    }
-  }
+    },
+    gonewshippingAddr(orderaddress) {
+      this.$router.push({
+        path: "/newshippingAddr",
+        query: {
+          item: orderaddress,
+        },
+      });
+    },
+  },
 };
 </script>
 
@@ -162,7 +233,7 @@ main {
       .mb(22);
     }
     .express {
-      .w(52);
+      width: 0.7rem;
       .h(26);
       .lh(26);
       background: #fb3c29;

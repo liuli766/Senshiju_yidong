@@ -66,8 +66,8 @@
         <span class="ggh" v-else @click="handleChecked"></span>
         <span>全选</span>
       </div>
-      <div class="flex flex_col price price1">移入收藏夹</div>
-      <div class="jiesuan jiesuan1">删除</div>
+      <div class="flex flex_col price price1" @click="Allcollect">移入收藏夹</div>
+      <div class="jiesuan jiesuan1" @click="Alldelate">删除</div>
     </footer>
   </div>
 </template>
@@ -108,8 +108,9 @@ export default {
       cartlist: [],
       cartData: [], //购物车信息
       num: 0,
-      showfoot1:false,
-      showfoot2:true
+      showfoot1: false,
+      showfoot2: true,
+      selallgoods: [],
     };
   },
   watch: {},
@@ -222,10 +223,75 @@ export default {
       }
       item.num--;
     },
-
+    Allcollect() {
+      //全部收藏
+      let list = [];
+      for (let i in this.cartData) {
+        if (this.cartData[i].cheakG) {
+          list.push(this.cartData[i]);
+        }
+      }
+      console.log(list);
+      for (let i = 0; i < list.length; i++) {
+        request
+          .getCollect({
+            uid: this.userInfor.member_id,
+            type: 1,
+            object: list[i].id,
+          })
+          .then((res) => {
+            console.log(res);
+            this.$toast({
+              message: "收藏成功",
+              icon: "success",
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+            this.$toast({
+              message: "收藏失败",
+              icon: "error",
+            });
+          })
+          .finally(() => {});
+      }
+    },
+    Alldelate() {
+      //全部删除 清除购物车
+      let list = [];
+      for (let i in this.cartData) {
+        if (this.cartData[i].cheakG) {
+          list.push(this.cartData[i]);
+        }
+      }
+      console.log(list);
+      for (let i = 0; i < list.length; i++) {
+        request
+          .getReduceCart({
+            uid: this.userInfor.member_id,
+            id: list[i].id,
+          })
+          .then((res) => {
+            this.CartInfo()
+            console.log(res);
+            this.$toast({
+              message: "删除成功",
+              icon: "success",
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+            this.$toast({
+              message: "删除失败",
+              icon: "error",
+            });
+          })
+          .finally(() => {});
+      }
+    },
     admin() {
-      this.showfoot1=!this.showfoot1
-      this.showfoot2=!this.showfoot2
+      this.showfoot1 = !this.showfoot1;
+      this.showfoot2 = !this.showfoot2;
     },
     goOrderpay() {
       this.$router.push({
@@ -397,13 +463,13 @@ footer {
     .h(50);
     border: 0.03rem solid rgba(250, 61, 41, 1);
     border-radius: 0.25rem;
-    color: #FA3D29;
-    background:#fff;
+    color: #fa3d29;
+    background: #fff;
     .lh(50);
     margin-right: 0.6rem;
   }
   .price {
-    .ml(272);
+    .ml(200);
     .mr(32);
     span:nth-of-type(1) {
       color: #f93420;

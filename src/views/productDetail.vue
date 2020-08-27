@@ -6,7 +6,7 @@
         <img :src="item" alt />
       </van-swipe-item>
       <template #indicator>
-        <div class="custom-indicator text_cen">{{ current + 1 }}/{{ProDetail.imgs.length}}</div>
+        <!-- <div class="custom-indicator text_cen">{{ current + 1 }}/{{ProDetail.imgs.length}}</div> -->
       </template>
     </van-swipe>
     <!-- 价格 -->
@@ -78,8 +78,8 @@
     <!-- 商品详情底部 -->
     <div class="fixed">
       <van-goods-action>
-        <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" />
-        <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" />
+        <!-- <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" />
+        <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" /> -->
         <van-goods-action-icon
           :icon="icon"
           :text="text"

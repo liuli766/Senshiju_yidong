@@ -303,10 +303,13 @@ export default {
     .h(250);
   }
   .xpic {
+    justify-content: flex-start;
     img {
       .w(174);
       .h(122);
       .mt(20);
+      .mb(20);
+      .mr(15);
     }
   }
   .more {

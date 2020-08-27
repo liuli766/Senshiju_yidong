@@ -8,6 +8,7 @@
       @add="onAdd"
       @edit="onEdit"
     ></van-address-list>
+    <van-loading type="spinner" vertical='vertical'/>
   </div>
 </template>
 
@@ -27,6 +28,7 @@ export default {
     return {
       chosenAddressId: "1", //当前选中的地址id
       AddressList: [], //地址列表
+      vertical:false
     };
   },
   created() {
@@ -40,6 +42,7 @@ export default {
         })
         .then((res) => {
           res.data.map((item) => {
+            this.vertical=true
             item.tel = item.phone;
             this.chosenAddressId = item.id;
             if (item.is_default == 0) {
@@ -52,8 +55,12 @@ export default {
           this.AddressList = res.data.reverse();
           console.log(this.AddressList, "地址展示");
         })
-        .catch(() => {})
-        .finally(() => {});
+        .catch(() => {
+          this.vertical=false
+        })
+        .finally(() => {
+          this.vertical=false
+        });
     },
     onAdd() {
       this.$router.push({

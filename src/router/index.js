@@ -24,7 +24,8 @@ VueRouter.prototype.push = function push (location) {
   },
   { //个人中心
     path: '/person',
-    component: () => import(/* webpackChunkName: "about" */ '../views/person.vue')
+    redirect: '/mine',
+    component: () => import(/* webpackChunkName: "about" */ '../views/mine.vue')
   },
   { //建房百科
     path: '/buildEncyc',

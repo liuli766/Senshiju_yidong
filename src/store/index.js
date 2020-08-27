@@ -11,6 +11,7 @@ export default new Vuex.Store({
     downNum: 0, //点赞数
     upNum: 0,//踩赞数
     headimg:localStorage.getItem('headImg'),
+    canelOrderItem:'',
     cartList: [
       {
         id: 1,
@@ -151,6 +152,10 @@ export default new Vuex.Store({
       state.headimg=img
       state.userInfor.photo
     },
+    // 取消订单
+    canelOrderItem(state,data){
+        state.canelOrderItem=data
+    }
   },
   actions: {
     //加入购物车

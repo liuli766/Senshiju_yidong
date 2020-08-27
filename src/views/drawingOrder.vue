@@ -15,7 +15,7 @@
       >{{item}}</span>
     </nav>
     <orderlist :orderlist="orderlist" v-if="navactivechoseid==0||navid==0" :navid="0" />
-    <orderlist :orderlist="orderlist1" v-if="navactivechoseid==1|| navid==1" :navid="1" />
+    <orderlist :orderlist="orderlist1" v-if="navactivechoseid==1|| navid==1" :navid="1"/>
     <orderlist :orderlist="orderlist2" v-if="navactivechoseid==2 ||navid==2" :navid="2" />
   </div>
 </template>
@@ -23,6 +23,7 @@
 <script>
 import { mapState } from "vuex";
 import orderlist from "@/components/orderlist.vue";
+import request from "@/request.js";
 export default {
   computed: {
     ...mapState({
@@ -38,70 +39,45 @@ export default {
       seachdata: "",
       navlist: ["待付款", "待发货", "待收货"],
       navid: 0,
-      navactivechoseid:0,
-      orderlist: [
-        {
-          img: require("../assets/logo.png"),
-          p: "A116新农村一层四合院别墅设计图纸",
-          num: 1,
-          price: "198.00",
-        },
-        {
-          img: require("../assets/logo.png"),
-          p: "A116新农村一层四合院别墅设计图纸",
-          num: 1,
-          price: "198.00",
-        },
-        {
-          img: require("../assets/logo.png"),
-          p: "A116新农村一层四合院别墅设计图纸",
-          num: 1,
-          price: "198.00",
-        },
-        {
-          img: require("../assets/logo.png"),
-          p: "A116新农村一层四合院别墅设计图纸",
-          num: 1,
-          price: "198.00",
-        },
-      ],
-      orderlist1: [
-        {
-          img: require("../assets/item.png"),
-          p: "A116新农村一层四合院别墅设计图纸",
-          num: 1,
-          price: "198.00",
-        },
-        {
-          img: require("../assets/item.png"),
-          p: "A116新农村一层四合院别墅设计图纸",
-          num: 1,
-          price: "198.00",
-        },
-      ],
-      orderlist2: [
-        {
-          img: require("../assets/img/1.png"),
-          p: "A116新农村一层四合院别墅设计图纸",
-          num: 1,
-          price: "198.00",
-        },
-        {
-          img: require("../assets/item.png"),
-          p: "A116新农村一层四合院别墅设计图纸",
-          num: 1,
-          price: "198.00",
-        },
-      ],
+      navactivechoseid: 0,
+      orderlist: [],
+      orderlist1: [],
+      orderlist2: [],
     };
   },
   created() {
-    this.navactivechoseid=this.$route.query.navactivechoseid
+    this.navactivechoseid = this.$route.query.navactivechoseid;
+    this.myorder();
   },
   methods: {
+    // 我的订单
+    myorder() {
+      request
+        .getMyOrders({
+          uid: this.userInfor.member_id,
+        })
+        .then((res) => {
+          this.vertical=true
+          console.log(res, "我的订单");
+          this.orderlist=res.data
+          this.orderlist1=res.data
+          this.orderlist2=res.data
+          this.orderlist=this.orderlist.filter((item)=>item.status==1)//待付款
+          this.orderlist1=this.orderlist1.filter((item)=>item.status==2)//待付款
+          this.orderlist2=this.orderlist2.filter((item)=>item.status==3)//待付款
+        })
+        .catch(() => {
+          this.vertical=false
+        })
+        .finally(() => {
+          this.vertical=false
+        });
+    },
     swichChose(k) {
+      this.myorder()
       this.navid = k;
-      this.navactivechoseid=k
+      this.navactivechoseid = k;
+      this.$store.commit('gonav',k)
     },
 
     go() {

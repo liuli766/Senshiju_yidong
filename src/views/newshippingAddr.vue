@@ -91,6 +91,7 @@ export default {
       let item = this.$route.query.item;
       this.name = item.name;
       this.tel = item.tel;
+      this.tel = item.phone;
       this.value = `${item.province} / ${item.city} / ${item.district}`;
       this.addr = item.address;
       this.checked = item.is_default;

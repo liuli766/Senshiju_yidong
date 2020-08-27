@@ -26,25 +26,6 @@
           <van-icon name="eye-o" />2778人已读
         </span>
       </div>
-      <div v-for="(item,k) in articleList" :key="k+1">
-        <div class="videobox">
-          <video
-            src="../assets/xc.mp4"
-            controls
-            width="100%"
-            height="100%"
-            preload="none"
-            :poster="item.cover"
-          ></video>
-        </div>
-        <p class="vp">{{item.content}}</p>
-      </div>
-      <div class="flex_be">
-        <span>3天前</span>
-        <span class="flex_cen">
-          <van-icon name="eye-o" />2778人已读
-        </span>
-      </div>
     </div>
   </div>
 </template>

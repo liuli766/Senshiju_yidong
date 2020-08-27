@@ -18,6 +18,8 @@ import qs from 'qs'; //用来解决vue中post请求（详情）
 Vue.prototype.qs = qs;
 import smartParse from 'vue-smart-parse';//智能识别
 Vue.use(smartParse)
+import VueCountdown from '@chenfengyuan/vue-countdown';
+Vue.component(VueCountdown.name, VueCountdown);
 new Vue({
   router,
   store,

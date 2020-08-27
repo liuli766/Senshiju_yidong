@@ -182,6 +182,18 @@ function getRemoveAddr(data) {
   }
   return http.fetchPost('/index/User/del_ress', params)
 }
+function getMyOrders(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/User/my_orders', params)
+}
+function getOrderDetail(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Member/order_detail', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -214,4 +226,6 @@ export default {
   getAddress, //收货地址展示
   getUpdress,//修改地址
   getRemoveAddr,// 删除收货地址
+  getMyOrders,//我的订单
+  getOrderDetail,//订单详情
 }

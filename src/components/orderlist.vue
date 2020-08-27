@@ -2,35 +2,42 @@
   <!--付款，发货，收货 -->
   <div class="orderlist">
     <main v-if="orderlist.length!==0">
-      <div @click="godetail(navid)" v-for="(item,k) in orderlist" :key='k'>
+      <div @click="godetail(item,navid)" v-for="(item,k) in orderlist" :key="k">
         <div class="tagname flex_be">
-          <span>2020-07-16 13:49:52</span>
-          <span v-if="navactivechoseid===0">待付款</span>
-          <span v-else-if="navactivechoseid===1">待发货</span>
-          <span v-else-if="navactivechoseid===2">待收货</span>
+          <span>{{item.add_time}}</span>
+          <span v-if="navactivechoseid===0" style="color:#FD3723">待付款</span>
+          <span v-else-if="navactivechoseid===1" style="color:#FD3723">待发货</span>
+          <span v-else-if="navactivechoseid===2" style="color:#FD3723">待收货</span>
         </div>
         <div class="flex">
-          <img :src="item.img" alt />
+          <img :src="item.cover" alt />
           <div class="right">
-            <p>{{item.p}}</p>
+            <p>{{item.title}}</p>
             <div class="text_r">
-              <van-icon name="cross" />{{item.num}}
+              <van-icon name="cross" />
+              <span>{{item.num}}</span>
             </div>
             <div>{{item.price}}</div>
           </div>
         </div>
-        <div class="text_r price_pay" v-if="navactivechoseid===0">共1件 待付款:¥598.00</div>
-        <div class="text_r price_pay" v-else-if="navactivechoseid===1">共1件 待发货:¥598.00</div>
-        <div class="text_r price_pay" v-else-if="navactivechoseid===2">共1件 待收货:¥598.00</div>
-      </div>
-
-      <div class="bor_red" v-if="navactivechoseid===0">
-        <span class="text_cen">取消订单</span>
-        <span class="text_cen" @click="gopay">立即支付</span>
-      </div>
-      <div class="bor_red" v-else-if="navactivechoseid===1"></div>
-      <div class="bor_red" v-else-if="navactivechoseid===2">
-        <span class="text_cen" @click="goLogistics">查看物流</span>
+        <div class="text_r price_pay" v-if="navactivechoseid===0">共{{item.num}}件 待付款:¥{{item.price}}</div>
+        <div
+          class="text_r price_pay"
+          v-else-if="navactivechoseid===1"
+        >共{{item.num}}件 待发货:¥{{item.price}}</div>
+        <div
+          class="text_r price_pay"
+          v-else-if="navactivechoseid===2"
+        >共{{item.num}}件 待收货:¥{{item.price}}</div>
+        <div class="bor_red" v-if="navactivechoseid===0">
+          <span class="text_cen" @click.stop="canelOrder(item)">取消订单</span>
+          <span class="text_cen" @click="gopay">立即支付</span>
+        </div>
+        <div class="bor_red" v-if="navactivechoseid===1">
+        </div>
+        <div class="bor_red" v-if="navactivechoseid===2">
+          <span class="text_cen" @click="goLogistics">查看物流</span>
+        </div>
       </div>
     </main>
     <main v-else class="nodata">暂无数据</main>
@@ -39,54 +46,88 @@
 
 <script>
 import { mapState } from "vuex";
+import request from "@/request.js";
 export default {
   computed: mapState({
-    navactivechoseid: state => state.navactivechoseid
+    navactivechoseid: (state) => state.navactivechoseid,
+    token: (state) => state.token,
+    userInfor: (state) => state.userInfor,
+    canelOrderItem: (state) => state.canelOrderItem,
   }),
   props: {
     orderlist: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
+
     navid: {
       type: Number,
-      default: 0
+      default: 0,
     }
   },
   data() {
     return {};
   },
+  watch: {},
   created() {
     console.log(this.orderlist);
   },
   methods: {
-    godetail(navid) {
+    // 取消订单
+    canelOrder(item) {
+      console.log(item);
+      request
+        .getCancelOrder({
+          oid: item.id,
+        })
+        .then((res) => {
+          console.log(res);
+          this.$parent.myorder();
+          this.$toast({
+            message: "取消成功",
+            icon: "success",
+          });
+        })
+        .catch(() => {
+          this.$toast({
+            message: "取消失败",
+            icon: "error",
+          });
+        })
+        .finally(() => {});
+    },
+    godetail(item, navid) {
       //跳转详情
       if (navid === 0) {
         this.$router.push({
-          path: "/orderpay"
+          path: "/orderpay",
+          query: {
+            oid: item.id,
+          },
         });
       } else if (navid === 1) {
         this.$router.push({
-          path: "/stayGoods"
+          path: "/stayGoods",
         });
       } else if (navid === 2) {
         this.$router.push({
-          path: "/productDetail"
+          path: "/productDetail",
         });
       }
     },
-    goLogistics() { //跳转物流
+    goLogistics() {
+      //跳转物流
       this.$router.push({
-        path: "/logisticsInfo"
+        path: "/logisticsInfo",
       });
     },
-    gopay(){ //跳转支付
+    gopay() {
+      //跳转支付
       this.$router.push({
-        path: "/logisticsInfo"
+        path: "/logisticsInfo",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -121,6 +162,9 @@ main {
   .text_r {
     text-align: right;
     .pb(23);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
   .price_pay {
     .mt(60);
@@ -157,5 +201,6 @@ main {
   color: #afafaf;
   .fs(30);
   background: #eee;
+  text-align: center;
 }
 </style>
