@@ -10,8 +10,9 @@ export default new Vuex.Store({
     userInfor: JSON.parse(localStorage.getItem('loginData')), //当前账号信息
     downNum: 0, //点赞数
     upNum: 0,//踩赞数
-    headimg:localStorage.getItem('headImg'),
-    canelOrderItem:'',
+    headimg: localStorage.getItem('headImg'),
+    canelOrderItem: '',
+    cartNum:1,
     cartList: [
       {
         id: 1,
@@ -57,7 +58,7 @@ export default new Vuex.Store({
       }
       return {}
     },
-    gettoken(state, getters) { //获取token
+    gettoken(state, getters) {
       const loginData = getters.loginData
       console.log(loginData, 1111)
       return loginData.token
@@ -86,7 +87,6 @@ export default new Vuex.Store({
         total += n.num;
         console.log(n)
       })
-      console.log(total)
       return total;
     },
 
@@ -96,20 +96,22 @@ export default new Vuex.Store({
       getters.addShopList.map(n => {
         total += n.num * n.price
       })
-      console.log(total)
       return total;
     },
   },
   mutations: {
+    datanum(state,num){
+        state.cartNum=num
+    },
     gonav(state, num) {
       state.navactivechoseid = num
+      console.log(state.navactivechoseid)
     },
     settoken(state, data) { //vuex存放toke
-      let token = localStorage.getItem('istoken')
-      console.log(token)
-      state.token = token
+      state.token = data.token
       state.userInfor = data
       localStorage.setItem("loginData", JSON.stringify(data))
+      state.headimg = data.photo
     },
     cleartoken(state) { // 清除token
       state.token = ""
@@ -143,18 +145,18 @@ export default new Vuex.Store({
     },
 
     // 点赞数
-    handdown(state,num) {
-      state.downNum=num
+    handdown(state, num) {
+      state.downNum = num
     },
     // 头像
-    uploadimg(state,img){
-      state.userInfor.photo= img
-      state.headimg=img
+    uploadimg(state, img) {
+      state.userInfor.photo = img
+      state.headimg = img
       state.userInfor.photo
     },
     // 取消订单
-    canelOrderItem(state,data){
-        state.canelOrderItem=data
+    canelOrderItem(state, data) {
+      state.canelOrderItem = data
     }
   },
   actions: {

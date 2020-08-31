@@ -28,7 +28,7 @@
       <div class="border">
         <img v-for="(item,k) in detailList.works" :key="k" :src="item" alt />
       </div>
-      <div class="btn">立即预约</div>
+      <!-- <div class="btn">立即预约</div> -->
     </div>
   </div>
 </template>
@@ -119,14 +119,16 @@ export default {
   img {
     .w(334);
     .h(260);
-  }
-  img + img {
     .ml(28);
+    margin-bottom: 0.28rem;
+    border-radius: 0.1rem;
   }
   .border {
     border-top: 1px solid #fafafa;
     .pt(40);
     .mb(40);
+    display: flex;
+
   }
   .btn {
     .w(200);

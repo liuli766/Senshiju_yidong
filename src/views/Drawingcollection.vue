@@ -12,7 +12,7 @@
       <div>
         <p>{{item.title}}</p>
         <div class="flex_be colltbtn">
-          <span>￥{{item.price}}</span>
+          <span>￥{{item.cost}}</span>
           <span class="text_cen"  @click.stop="qxcollect(item.collect_id)">已收藏</span>
         </div>
       </div>
@@ -51,16 +51,20 @@ created() {
           type: num,
         })
         .then((res) => {
-            this.articleList = res.data;        
+            this.articleList = res.data;      
+            console.log(res)  
         })
         .catch(() => {})
         .finally(() => {});
     },
      goartic(item) {
+       console.log(item)
       //跳转文章详情
       this.$router.push({
-        path: '/buildencycDetail',
-        query: item,
+        path: '/productDetail',
+        query: {
+          id:item.object_id
+        },
       })
     },
      //取消收藏

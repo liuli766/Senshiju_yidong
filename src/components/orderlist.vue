@@ -1,8 +1,8 @@
 <template>
   <!--付款，发货，收货 -->
   <div class="orderlist">
-    <main v-if="orderlist.length!==0">
-      <div @click="godetail(item,navid)" v-for="(item,k) in orderlist" :key="k">
+    <main v-if="orderli.length!==0">
+      <div @click="godetail(item,navid)" v-for="(item,k) in orderli" :key="k">
         <div class="tagname flex_be">
           <span>{{item.add_time}}</span>
           <span v-if="navactivechoseid===0" style="color:#FD3723">待付款</span>
@@ -55,11 +55,10 @@ export default {
     canelOrderItem: (state) => state.canelOrderItem,
   }),
   props: {
-    orderlist: {
+    orderli: {
       type: Array,
       default: () => [],
     },
-
     navid: {
       type: Number,
       default: 0,
@@ -70,7 +69,7 @@ export default {
   },
   watch: {},
   created() {
-    console.log(this.orderlist);
+    console.log(this.orderli);
   },
   methods: {
     // 取消订单
@@ -97,6 +96,7 @@ export default {
         .finally(() => {});
     },
     godetail(item, navid) {
+      console.log(navid)
       //跳转详情
       if (navid === 0) {
         this.$router.push({
@@ -111,7 +111,10 @@ export default {
         });
       } else if (navid === 2) {
         this.$router.push({
-          path: "/productDetail",
+          path: "/logisticsInfo",
+          query:{
+            ordernum:item.order_num
+          }
         });
       }
     },

@@ -181,8 +181,8 @@ export default {
 .intro {
   background: #fff;
   .mt(40);
-  > img {
-    .w(475);
+  img {
+    width: 60%;
     .h(216);
     .mr(26);
   }

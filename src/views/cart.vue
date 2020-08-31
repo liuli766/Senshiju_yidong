@@ -35,7 +35,7 @@
             <span>￥{{item.price*item.num}}</span>
             <div class="nun flex_ar">
               <span @click="reducecart(item,k)">-</span>
-              <span>{{item.num}}</span>
+              <span>{{cartNum}}</span>
               <span @click="addcart(item,k)">+</span>
             </div>
           </div>
@@ -80,6 +80,7 @@ export default {
     ...mapState({
       token: (state) => state.token,
       userInfor: (state) => state.userInfor,
+      cartNum:(state) => state.cartNum
     }),
     totalPrice() {
       let totalPrice = 0;
@@ -100,7 +101,6 @@ export default {
       return totalNum;
     },
   },
-
   data() {
     return {
       allChecked: false, //是否全选
@@ -113,7 +113,6 @@ export default {
       selallgoods: [],
     };
   },
-  watch: {},
   created() {
     this.cartlist = this.$store.getters.addShopList;
     console.log(this.$store.state.cartList);
@@ -199,6 +198,8 @@ export default {
     addcart(item) {
       //购物车数量加
       item.num++;
+      // localStorage.setItem('cartnum',item.num)
+      this.$store.commit('datanum',item.num)
     },
     reducecart(item) {
       //购物车数量减
@@ -222,6 +223,8 @@ export default {
           .finally(() => {});
       }
       item.num--;
+      // localStorage.setItem('cartnum',item.num)
+       this.$store.commit('datanum',item.num)
     },
     Allcollect() {
       //全部收藏

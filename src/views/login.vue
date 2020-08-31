@@ -20,9 +20,9 @@
       <div class="weixin flex_cen">
         <img src="../assets/img/wx.png" alt />
       </div>
-      <div class="qq flex_cen">
+      <!-- <div class="qq flex_cen">
         <img src="../assets/img/qq.png" alt />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -92,7 +92,6 @@ p {
     border: 1px solid #bfbfbf;
   }
   .weixin {
-    .mr(85);
     img {
       .w(56);
       .h(47);

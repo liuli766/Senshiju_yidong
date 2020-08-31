@@ -11,7 +11,7 @@
     <div class="mainuser">
       <div class="flex_be">
         <div class="userinfo flex_cen">
-          <img src="../assets/item.png" alt />
+          <!-- <img src="../assets/item.png" alt /> -->
           <span>刘某某</span>
         </div>
         <div>
@@ -37,7 +37,7 @@
       <div class="mainuser">
         <div class="flex_be">
           <div class="userinfo flex_cen">
-            <img src="../assets/item.png" alt />
+            <!-- <img src="../assets/item.png" alt /> -->
             <span>刘某某</span>
           </div>
           <div>

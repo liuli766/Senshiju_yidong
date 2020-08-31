@@ -33,7 +33,7 @@
       </van-form>
       <p class="agreement text_cen">注册/登录即表示同意</p>
       <div class="text_cen">
-        <van-icon name="cross" />
+        <van-icon name="cross" @click="closeGoLogin" />
       </div>
     </div>
   </div>
@@ -55,20 +55,20 @@ export default {
   },
   methods: {
     getauth() {
-      let that = this
+      let that = this;
       if (/^1[34578]\d{9}$/.test(that.tel)) {
         request
           .getCode({
             phone_num: that.tel,
           })
           .then((res) => {
-            // if (res.data.code == 0) {
-              console.log(res, "短信");
-              this.$toast("发送成功");
-              that.time()
-            // } else {
-            //   this.$toast("发送失败");
-            // }
+            if (res.code == 0) {
+            console.log(res, "短信");
+            this.$toast("发送成功");
+            that.time();
+            } else {
+              this.$toast("发送失败");
+            }
           })
           .catch(() => {
             this.$toast("发送失败");
@@ -99,23 +99,29 @@ export default {
           msg_code: this.code,
         })
         .then((res) => {
-          // if (res.data.code == 0) {
-            console.log(res, "登录");
-            this.$store.commit('settoken', res.data)
-            localStorage.setItem('istoken', res.data.token)
-            this.$toast("登录成功");
-            this.$router.push({
-              path: "/",
-            });
-          // } else {
-          //   this.$toast("验证码错误");
-          // }
+          console.log(res)
+          if (res.code == 0) {
+          this.$store.commit("settoken", res.data);
+          localStorage.setItem("istoken", res.data.token);
+          console.log(localStorage.getItem('istoken'))
+          this.$toast("登录成功");
+          this.$router.push({
+            path: "/",
+          });
+          } else {
+            this.$toast("验证码错误");
+          }
         })
         .catch(() => {
           this.$toast("登录失败");
         })
         .finally(() => {});
       console.log("submit", values);
+    },
+    closeGoLogin() {
+      this.$router.push({
+        path: "/login",
+      });
     },
   },
 };
@@ -153,7 +159,7 @@ export default {
     .margin(0, 18);
     span {
       display: flex;
-      width: 35%;
+      width: 38%;
       color: #979797;
       .fs(32);
     }

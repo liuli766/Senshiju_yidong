@@ -7,11 +7,11 @@
     </div>
     <!--  -->
     <div class="flex_col company">
-      <span>承运公司： 申通快递</span>
-      <span>运单编号： 773046510909594</span>
+      <!-- <span>承运公司： 申通快递</span> -->
+      <span>运单编号： {{this.$route.query.ordernum}}</span>
     </div>
     <!-- 物流记录-->
-    <main>
+    <!-- <main>
       <ul>
         <li class="flex">
           <i class="node_icon">....</i>
@@ -21,17 +21,25 @@
           </div>
         </li>
       </ul>
-    </main>
+    </main> -->
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+// import request from "@/request.js";
 export default {
     data() {
         return {
-            
+            orderlist:[]
         }
     },
+    computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+    }),
+  },
     methods: {
         onClickLeft(){
             history.go(-1);

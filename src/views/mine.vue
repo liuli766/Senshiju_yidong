@@ -6,13 +6,13 @@
       <div class="modalbox">
         <div class="flex">
           <div class="img flex_cen">
-            <img src="../assets/img/mine/headerimg.png" alt v-if="userInfor.token==''" />
+            <img src="../assets/img/mine/headerimg.png" alt v-if="!token" />
             <img :src="headimg" alt v-else />
           </div>
           <div class="info flex flex_col" @click="gologin">
-            <span v-if="userInfor.token==''">立即登录</span>
+            <span v-if="!token">立即登录</span>
             <div class="flex_col" v-else>
-              <span>{{userInfor.nickname}}</span>
+              <span v-if="token">{{userInfor.nickname}}</span>
               <span>普通用户</span>
             </div>
           </div>
@@ -35,7 +35,10 @@
         >
           <img :src="gird.img" alt />
           <span>{{gird.name}}</span>
-          <div>1</div>
+          <div v-if="k==0" :class="[orderlist.length==0?'none':'']">{{orderlist.length}}</div>
+          <div v-if="k==1" :class="[orderlist1.length==0?'none':'']">{{orderlist1.length}}</div>
+          <div v-if="k==2" :class="[orderlist2.length==0?'none':'']">{{orderlist2.length}}</div>
+          <!-- <div v-if="k==3"></div> -->
         </div>
       </div>
       <div class="mineorder">
@@ -59,7 +62,7 @@
 
 <script>
 import { mapState } from "vuex";
-// import request from '@/request.js'
+import request from '@/request.js'
 import tabbar from "@/components/tabBar.vue";
 export default {
   components: {
@@ -111,7 +114,22 @@ export default {
           name: "购物车",
         },
       ],
+      orderlist:[],
+      orderlist1:[],
+      orderlist2:[],
+
     };
+  },
+
+  created() {
+    console.log(this.userInfor)
+    if (!this.token) {
+      this.$router.push({
+        path: '/login',
+      })
+      return false
+    }
+    this.myorder()
   },
   methods: {
     gologin() {
@@ -119,8 +137,31 @@ export default {
         path: "/login",
       });
     },
+    myorder() {
+      request
+        .getMyOrders({
+          uid: this.userInfor.member_id,
+        })
+        .then((res) => {
+          this.vertical = true;
+          
+          this.orderlist = res.data;
+          this.orderlist1 = res.data;
+          this.orderlist2 = res.data;
+          this.orderlist = this.orderlist.filter((item) => item.status == 1); //待付款
+          this.orderlist1 = this.orderlist1.filter((item) => item.status == 2); //待付款
+          console.log(this.orderlist1, "main我的订单");
+          this.orderlist2 = this.orderlist2.filter((item) => item.status == 3); //待付款
+        })
+        .catch(() => {
+          this.vertical = false;
+        })
+        .finally(() => {
+          this.vertical = false;
+        });
+    },
     handOrder(k) {
-      this.$store.commit("gonav", k);
+      
       if (k == 0 || k == 1 || k == 2) {
         this.$router.push({
           path: "/drawingOrder",
@@ -129,6 +170,16 @@ export default {
           },
         });
       }
+      if(k==3){
+        this.$router.push({
+          path: "/afterSale",
+          query: {
+            navactivechoseid: k,
+          },
+        });
+      }
+      this.$store.commit("gonav", k);
+
     },
     // 跳转个人中心页面
     goperfect() {
@@ -212,7 +263,7 @@ export default {
         }
       }
       .toperfect {
-        .w(126);
+        .w(140);
         .h(49);
         .b-radius(25);
         .padding(13, 24);
@@ -275,5 +326,8 @@ export default {
     text-align: center;
     left: 0.9rem;
   }
+}
+.none{
+  display: none;
 }
 </style>

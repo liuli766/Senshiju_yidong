@@ -63,7 +63,6 @@ export default {
   methods: {
     //设计师详情
     handdetai(num) {
-      console.log(num)
       this.$router.push({
         path: "/desigerDetail",
         query:{

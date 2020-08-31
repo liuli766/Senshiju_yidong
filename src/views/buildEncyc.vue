@@ -1,39 +1,52 @@
 <template>
+  <!-- <div class="bscroll" ref="bscrollapper">
+          <div class="bscroll-container">
+           
+          </div>
+  </div>-->
   <!-- 建房百科页-->
   <div class="buildnav">
     <nav class="flex_ar">
-      <span
-        v-for="(item,k) in buiilnavlist"
-        :key="k"
-        @click="chosenav(k)"
-        :class="{bg_active:navid===k}"
-      >{{item}}</span>
+      <div class="span" v-for="(item,k) in buiilnavlist" :key="k" @click="chosenav(k)">
+        <span :class="{bg_active:navid===k}">{{item}}</span>
+      </div>
     </nav>
     <!--  -->
-    <div v-show="navid==1">
+    <div v-show="navid==1 || navid==2 || navid==3 || navid==4 || navid==5 || navid==6 || navid==7">
       <div v-for="(item,k) in articleList" :key="k+0">
-        <div class="bscroll" ref="bscrollapper">
-          <div class="bscroll-container">
-            <img :src="item.cover" alt @click="gobuildencycDetail(item.id)" />
-          </div>
-        </div>
+        <img :src="item.cover" alt @click="gobuildencycDetail(item.id)" class="buidimg" />
         <p>{{item.content}}</p>
-      </div>
-
-      <div class="flex_be eeebot">
-        <span>3天前</span>
-        <span class="flex_cen">
-          <van-icon name="eye-o" />2778人已读
-        </span>
+        <div class="flex_be eeebot">
+          <span>{{item.add_time.slice(0,11)}}</span>
+          <span class="flex_cen">
+            <van-icon name="eye-o" />
+            {{item.view}}人已读
+          </span>
+        </div>
       </div>
     </div>
+    <div v-show="navid==0">
+      <div v-for="(item,k) in collectlist" :key="k+0">
+        <img :src="item.cover" alt @click="gobuildencycDetail(item.object_id)" class="buidimg" />
+        <p>{{item.title}}</p>
+        <div class="flex_be eeebot">
+          <span>{{item.add_time.slice(0,11)}}</span>
+          <span class="flex_cen">
+            <van-icon name="eye-o" />
+            {{item.view}}人已读
+          </span>
+        </div>
+      </div>
+    </div>
+    <div v-if="collectlist.length==0 || articleList.length==0" style="text-align: center;
+    margin-top: 0.3rem;">暂无内容收藏</div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import request from "@/request.js";
-import BScroll from "better-scroll";
+// import BScroll from "better-scroll";
 export default {
   computed: {
     ...mapState({
@@ -51,17 +64,35 @@ export default {
         "施工百科",
         "风水百科",
         "建房日志",
+        "建房百科",
       ],
-      aBScroll: "",
+      // aBScroll: "",
       navid: 1, //当前选中的导航值
       classid: "推荐",
       articleList: [], //百科内容
+      now: new Date(), //当前时间
+      collectlist: [],
     };
   },
   created() {
     this.getdata(this.classid);
+    this.collect();
   },
   methods: {
+    // 文章收藏
+    collect() {
+      request
+        .fachcollect({
+          uid: this.userInfor.member_id,
+          type: 2,
+        })
+        .then((res) => {
+          console.log(res, "收藏");
+          this.collectlist = res.data;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
     getdata(str) {
       //获取百科文章
       request
@@ -96,9 +127,16 @@ export default {
       } else if (k == 6) {
         this.classid = "建房日志";
         this.getdata(this.classid);
+      } else if (k == 7) {
+        this.classid = "建房百科";
+        this.getdata(this.classid);
+      }
+      if (k == 0) {
+        this.collect();
       }
     },
     gobuildencycDetail(id) {
+      //跳转建房百科详情
       this.$router.push({
         path: "/buildencycDetail",
         query: {
@@ -107,15 +145,7 @@ export default {
       });
     },
   },
-  mounted() {
-    this.$nextTick(() => {
-      let bscrollDom = this.$refs.bscrollapper; //查找bscroll元素
-      this.aBScroll = new BScroll(bscrollDom, {
-        scrollX: true,
-        eventPassthrough: "vertical",
-      });
-    });
-  },
+  mounted() {},
 };
 </script>
 
@@ -125,12 +155,19 @@ export default {
 .buildnav {
   .padding(16, 22);
   nav {
-    span {
+    flex-wrap: wrap;
+    .span {
       .h(26);
       .fs(18);
       color: #191919;
-      .padding(3, 3);
+      transform: scale(0.8);
       .lh(26);
+      width: 25%;
+      box-sizing: border-box;
+      margin-bottom: 0.15rem;
+      span {
+        padding: 0.04rem 0.1rem;
+      }
     }
     .bg_active {
       background: #f2a930;
@@ -173,5 +210,9 @@ export default {
   .videobox {
     .pt(24);
   }
+}
+.buidimg {
+  width: 100%;
+  height: 100%;
 }
 </style>

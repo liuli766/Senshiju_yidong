@@ -92,15 +92,7 @@
       <h3>设计范围</h3>
       <span>design range</span>
       <img src="../assets/img/1.png" alt />
-      <div>
-        <!-- <div class="range">
-          <img src="../assets/logo.png" alt />
-          <div class="block">
-            <p>中式别墅</p>
-            <span>CHINESE VILLA</span>
-          </div>
-        </div>-->
-      </div>
+      <div></div>
     </div>
     <!-- 别墅类型 -->
     <div class="type_box">
@@ -160,7 +152,13 @@
       <h3>定制案例展示</h3>
       <span>Custom-made case show</span>
       <div class="dpic flex_be">
-         <img v-for="(item,index) in dzlist" :key="index" alt :src="link+item.cover" v-show="index>0"/>
+        <img
+          v-for="(item,index) in dzlist"
+          :key="index"
+          alt
+          :src="link+item.cover"
+          v-show="index>0"
+        />
       </div>
       <div class="xpic flex_be">
         <img v-for="(item,index) in dzlist" :key="index" alt :src="link+item.cover" />
@@ -194,11 +192,11 @@ export default {
     tabbar,
   },
   created() {
-    this.getdata()
+    this.getdata();
   },
   methods: {
     getdata() {
-      this.flag=true
+      this.flag = true;
       request
         .getHomeData()
         .then((res) => {

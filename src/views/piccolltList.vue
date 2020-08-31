@@ -12,7 +12,7 @@
       <div>
         <p>{{item.title}}</p>
         <div class="flex_be colltbtn">
-          <span>￥{{item.price}}</span>
+          <span style="color:#666">{{item.add_time}}</span>
           <span class="text_cen"  @click.stop="qxcollect(item.collect_id)">已收藏</span>
         </div>
       </div>
@@ -44,7 +44,7 @@ created() {
       //跳转产品详情
       let idname = item.object_id
       this.$router.push({
-        path: '/productDetail',
+        path: '/buildencycDetail',
         query: {
           id: idname,
         },
@@ -61,6 +61,7 @@ created() {
           type: num,
         })
         .then((res) => {
+          console.log(res)
             this.articleList = res.data;        
         })
         .catch(() => {})

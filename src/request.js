@@ -194,6 +194,12 @@ function getOrderDetail(data) {
   }
   return http.fetchPost('/api/Member/order_detail', params)
 }
+function getArtClass(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Common/art_class', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -228,4 +234,5 @@ export default {
   getRemoveAddr,// 删除收货地址
   getMyOrders,//我的订单
   getOrderDetail,//订单详情
+  getArtClass,//百科分类收藏
 }

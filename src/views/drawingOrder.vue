@@ -14,9 +14,9 @@
         :class="{activ_chose:navactivechoseid==k}"
       >{{item}}</span>
     </nav>
-    <orderlist :orderlist="orderlist" v-if="navactivechoseid==0||navid==0" :navid="0" />
-    <orderlist :orderlist="orderlist1" v-if="navactivechoseid==1|| navid==1" :navid="1"/>
-    <orderlist :orderlist="orderlist2" v-if="navactivechoseid==2 ||navid==2" :navid="2" />
+    <orderlist :orderli="orderlist" v-if="navactivechoseid==0||navid==0" :navid="0" />
+    <orderlist :orderli="orderlist1" v-if="navactivechoseid==1|| navid==1" :navid="1" />
+    <orderlist :orderli="orderlist2" v-if="navactivechoseid==2 ||navid==2" :navid="2" />
   </div>
 </template>
 
@@ -45,8 +45,16 @@ export default {
       orderlist2: [],
     };
   },
+  watch: {
+    orderlist2(){
+      this.swichChose(this.navactivechoseid)
+    }
+  },
   created() {
     this.navactivechoseid = this.$route.query.navactivechoseid;
+    
+  },
+  mounted() {
     this.myorder();
   },
   methods: {
@@ -57,27 +65,26 @@ export default {
           uid: this.userInfor.member_id,
         })
         .then((res) => {
-          this.vertical=true
-          console.log(res, "我的订单");
-          this.orderlist=res.data
-          this.orderlist1=res.data
-          this.orderlist2=res.data
-          this.orderlist=this.orderlist.filter((item)=>item.status==1)//待付款
-          this.orderlist1=this.orderlist1.filter((item)=>item.status==2)//待付款
-          this.orderlist2=this.orderlist2.filter((item)=>item.status==3)//待付款
+          this.vertical = true;
+          this.orderlist = res.data;
+          this.orderlist1 = res.data;
+          this.orderlist2 = res.data;
+          this.orderlist = this.orderlist.filter((item) => item.status == 1); //待付款
+          this.orderlist1 = this.orderlist1.filter((item) => item.status == 2); //待发货
+          console.log(this.orderlist1, "我的订单");
+          this.orderlist2 = this.orderlist2.filter((item) => item.status == 3); //待付款
         })
         .catch(() => {
-          this.vertical=false
+          this.vertical = false;
         })
         .finally(() => {
-          this.vertical=false
+          this.vertical = false;
         });
     },
     swichChose(k) {
-      this.myorder()
       this.navid = k;
       this.navactivechoseid = k;
-      this.$store.commit('gonav',k)
+      this.$store.commit("gonav", this.navactivechoseid);
     },
 
     go() {

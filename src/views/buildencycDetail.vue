@@ -3,12 +3,11 @@
   <div class="buildencyc">
     <h6>{{picDetail.title}}</h6>
     <img :src="picDetail.cover" class="img1" alt />
-    <p class="p1" v-html="picDetail.content"
-    ></p>
+    <p class="p1" v-html="picDetail.content"></p>
     <div class="rate" v-for="(item,k) in comment" :key="k">
       <div class="flex_be">
         <div class="userinfo flex_cen">
-          <img src="../assets/item.png" alt />
+          <!-- <img src="../assets/item.png" alt /> -->
           <span>{{item.name}}</span>
         </div>
         <div>
@@ -44,8 +43,19 @@
             <img src="../assets/img/xx.png" alt />
             <div>1</div>
           </div>
-          <img src="../assets/img/wjx.png" alt @click="Collect(picDetail.id)"  v-if="picDetail.is_collect==true"/>
-          <img src="../assets/img/ysc.png" alt @click="Collect(picDetail.id)" style="width: 0.6rem;height: 0.6rem;" v-if="picDetail.is_collect==false"/>
+          <img
+            src="../assets/img/wjx.png"
+            alt
+            @click="Collect(picDetail.id)"
+            v-if="picDetail.is_collect==true"
+          />
+          <img
+            src="../assets/img/ysc.png"
+            alt
+            @click="Collect(picDetail.id)"
+            style="width: 0.6rem;height: 0.6rem;"
+            v-if="picDetail.is_collect==false"
+          />
           <img src="../assets/img/fx.png" alt />
         </div>
       </div>
@@ -78,43 +88,70 @@ export default {
       falsepanl: true,
       comment: [], //评论内容
       show: false,
-      picDetail:[],//图纸详情内容
+      picDetail: [], //图纸详情内容
     };
   },
   created() {
-      this.handdetail()
+    this.handdetail();
+    console.log(this.$store);
   },
   methods: {
-    handdetail(){
-      request.getInfo({
-        id: this.$route.query.id,
-          uid: this.userInfor.member_id,
-      }).then(res=>{
-        console.log(res,'文章百科详情')
-        this.picDetail=res.data.detail
-      }).catch(() => {})
-        .finally(() => {});
+    handdetail() {
+      if (!this.token) {
+        request
+          .getInfo({
+            id: this.$route.query.id,
+          })
+          .then((res) => {
+            console.log(res, "文章百科详情");
+            this.picDetail = res.data.detail;
+          })
+          .catch(() => {})
+          .finally(() => {});
+      } else {
+        request
+          .getInfo({
+            id: this.$route.query.id,
+            uid: this.userInfor.member_id,
+          })
+          .then((res) => {
+            console.log(res, "文章百科详情");
+            this.picDetail = res.data.detail;
+          })
+          .catch(() => {})
+          .finally(() => {});
+      }
     },
     // 收藏
     Collect(num) {
-      request
-        .getCollect({
-          uid: this.userInfor.member_id,
-          type: 2,
-          object: num,
-        })
-        .then((res) => {
-          console.log(res)
-          this.handdetail()
-          this.$toast("收藏成功");
-        })
-        .catch((e) => {
-          console.log(e)
-          this.$toast("收藏失败");
-        })
-        .finally(() => {})
+      if (!this.token) {
+        console.log(1);
+        this.$router.push({
+          path: "/register",
+        });
+        return false;
+      } else {
+        console.log(2)
+        request
+          .getCollect({
+            uid: this.userInfor.member_id,
+            type: 2,
+            object: num,
+          })
+          .then((res) => {
+            console.log(res);
+            this.handdetail();
+            this.$toast("收藏成功");
+          })
+          .catch((e) => {
+            console.log(e);
+            this.$toast("收藏失败");
+          })
+          .finally(() => {});
+      }
     },
     showcontent() {
+      //底部评论样式
       this.falsepanl = false;
       this.showpanl = true;
       $(".silde").css({
@@ -123,11 +160,17 @@ export default {
     },
     // 文章评论分页数据
     getcommentcontent() {
+      if (!this.token) {
+        this.$router.push({
+          path: "/login",
+        });
+        return false;
+      }
       request
         .getComment({
-           uid: this.userInfor.member_id,
-           aid: this.$route.query.id,
-           page:1
+          uid: this.userInfor.member_id,
+          aid: this.$route.query.id,
+          page: 1,
         })
         .then((res) => {
           console.log(res, "评论分页数据");
@@ -137,6 +180,12 @@ export default {
     },
     // 添加评论 评论内容
     addmment(data) {
+      if (!this.token) {
+        this.$router.push({
+          path: "/login",
+        });
+        return false;
+      }
       request
         .getDoComment({
           uid: this.userInfor.member_id,
@@ -177,13 +226,16 @@ export default {
     // 评论踩
     handDown(item) {
       console.log(item);
-      request.getupdown({
-          type:1,
-          aid:1,
-          uid: this.userInfor.member_id
-      }).then(res=>{
-          console.log(res,'点赞')
-      }).catch(() => {
+      request
+        .getupdown({
+          type: 1,
+          aid: 1,
+          uid: this.userInfor.member_id,
+        })
+        .then((res) => {
+          console.log(res, "点赞");
+        })
+        .catch(() => {
           this.$toast("点赞失败");
         })
         .finally(() => {});
@@ -191,13 +243,16 @@ export default {
     // 评论顶
     handUp(item) {
       console.log(item);
-      request.getupdown({
-          type:2,
-          aid:1,
-          uid: this.userInfor.member_id
-      }).then(res=>{
-          console.log(res,'点赞')
-      }).catch(() => {
+      request
+        .getupdown({
+          type: 2,
+          aid: 1,
+          uid: this.userInfor.member_id,
+        })
+        .then((res) => {
+          console.log(res, "点赞");
+        })
+        .catch(() => {
           this.$toast("点赞失败");
         })
         .finally(() => {});

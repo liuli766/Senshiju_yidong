@@ -1,7 +1,10 @@
 <template>
   <!-- 订单待付款 -->
   <div>
-    <van-nav-bar left-text="订单详情" left-arrow @click-left="onClickLeft" />
+    <div class="nav_bar flex">
+      <van-icon name="arrow-left" @click="go"/>
+      <span>订单详情</span>
+    </div>
     <div class="flex_be stay">
       <span>订单待付款</span>
       <van-icon name="arrow" />
@@ -79,13 +82,13 @@
         <div class="flex_be">
           <div>
             <span>订单编号</span>
-            <span class="tag-read">{{aorder}}</span>
+            <span class="tag-read">{{orderdetail.order_num}}</span>
           </div>
-          <span class="copy text_cen" @click="copy($event,aorder)">复制</span>
+          <span class="copy text_cen" @click="copy($event,orderdetail.order_num)">复制</span>
         </div>
         <div>
           <span>下单时间</span>
-          <span>2020-07-16 13:49:52</span>
+          <span>{{orderdetail.add_time}}</span>
         </div>
       </div>
       <div class="flex_be bottom">
@@ -144,8 +147,8 @@ export default {
     countDownE_cb: function (x) {
       console.log(x);
     },
-    onClickLeft() {
-      history.go(-1);
+    go() {
+      this.$router.go(-1)
       this.$store.commit("gonav", 0);
     },
     // 取消订单
@@ -197,6 +200,18 @@ export default {
 <style lang="less" scoped>
 @import "../styles/index.less";
 @import "../styles/variable.less";
+.nav_bar {
+  background: @base-header-color;
+  .lh(80);
+  align-items: center;
+  color: #1a1a1a;
+  .fs(34);
+  .pl(20);
+  .mb(18);
+  span {
+    .ml(265);
+  }
+}
 .stay {
   .h(214);
   background: #ff9936;

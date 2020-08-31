@@ -17,10 +17,10 @@
     <!-- 简介 -->
     <div class="sharebox">
       <p class="title">{{ProDetail.title}}</p>
-      <div class="share flex_cen">
+      <!-- <div class="share flex_cen">
         <img src="../assets/img/share.png" alt />
         <span>分享</span>
-      </div>
+      </div> -->
     </div>
 
     <!-- 发货 -->
