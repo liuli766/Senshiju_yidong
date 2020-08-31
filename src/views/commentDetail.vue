@@ -11,45 +11,47 @@
     <div class="mainuser">
       <div class="flex_be">
         <div class="userinfo flex_cen">
-          <!-- <img src="../assets/item.png" alt /> -->
-          <span>刘某某</span>
+          <img :src="CommentDetail.phtot" alt />
+          <span>{{CommentDetail.nickname}}</span>
         </div>
         <div>
           <span class="up">
             <img src="../assets/img/up.png" @click="handUp" alt />
-            {{downNum}}
+            {{CommentDetail.is_up}}
           </span>
           <span class="up">
             <img src="../assets/img/down.png" @click="handDown" alt />
-            {{upNum}}
+            {{CommentDetail.is_down}}
           </span>
         </div>
       </div>
       <p>评论内容</p>
       <div class="time">
-        <span>05-26 &nbsp; &nbsp; 10:30</span>
+        <!-- <span>{{CommentDetail.comment_time.slice(0,5)}} &nbsp; &nbsp; {{CommentDetail.comment_time.slice(-5)}}</span> -->
       </div>
     </div>
 
     <!-- 他人回复 -->
     <div class="otheruser">
-      <p class="allreply">全部回复 &nbsp; &nbsp; 10</p>
-      <div class="mainuser">
+      <p class="allreply">全部回复 &nbsp; &nbsp; {{CommentDetail.num}}</p>
+      <div class="mainuser" v-for="(item,k) in allCommentList" :key="k">
         <div class="flex_be">
           <div class="userinfo flex_cen">
-            <!-- <img src="../assets/item.png" alt /> -->
-            <span>刘某某</span>
+            <img :src="item.photo" alt />
+            <span>{{item.nickname}}</span>
           </div>
           <div>
             <span class="up">
-              <img src="../assets/img/up.png" alt @click="handUp" />0
+              <img src="../assets/img/up.png" alt @click="handUp(item)" />
+              {{item.is_up}}
             </span>
             <span class="up">
-              <img src="../assets/img/down.png" alt @click="handDown" />0
+              <img src="../assets/img/down.png" alt @click="handDown(item)" />
+              {{item.is_down}}
             </span>
           </div>
         </div>
-        <p>评论内容</p>
+        <p>{{item.comment}}</p>
         <div class="time">
           <span>05-26 &nbsp; &nbsp; 10:30</span>&nbsp; &nbsp; &nbsp;
           <span @click="handreplay">回复</span>
@@ -83,6 +85,8 @@ export default {
       showReplay: false, //评论组件是否显示
       downNum: 0,
       upNum: 0,
+      allCommentList: [], //评论列表
+      CommentDetail:[] //评论详情
     };
   },
   computed: {
@@ -91,59 +95,105 @@ export default {
       userInfor: (state) => state.userInfor,
     }),
   },
+  created() {
+    this.commentList();
+  },
   methods: {
+    // 评论列表
+    commentList() {
+      request
+        .getComment({
+          uid: this.userInfor.member_id,
+          aid: this.$route.query.aid,
+          page: 1,
+        })
+        .then((res) => {
+          console.log(res, "文章评论列表");
+          this.allCommentList = res.data;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
     //   评论详情
     getPageComment() {
       request
         .getCommentDetail({
-          aid: 2,
+          aid: this.$route.query.aid,
           uid: this.userInfor.member_id,
         })
         .then((res) => {
           console.log(res, "文章评论详情");
+          this.CommentDetail=res.data
         })
         .catch(() => {})
         .finally(() => {});
     },
     // 评论踩
-    handDown() {
-      //   request
-      //     .getupdown({
-      //       type: 1,
-      //       aid: 1,
-      //       uid: this.userInfor.member_id,
-      //     })
-      //     .then((res) => {
-      //       console.log(res, "点赞");
-      //     })
-      //     .catch(() => {
-      //       this.$toast("点赞失败");
-      //     })
-      //     .finally(() => {});
+    handDown(item) {
+      if (item.is_down == 0) {
+        return false;
+      } else {
+        item.is_down--;
+      }
+      request
+        .getupdown({
+          type: 2,
+          aid: item.comment_id,
+          uid: this.userInfor.member_id,
+        })
+        .then((res) => {
+          console.log(res, "点赞");
+          this.$toast("点赞成功");
+        })
+        .catch(() => {
+          this.$toast("点赞失败");
+        })
+        .finally(() => {});
     },
     // 评论顶
-    handUp() {
-      this.downNum++;
-      console.log(1);
-      this.$store.commit("handdown", this.downNum);
-      //   request
-      //     .getupdown({
-      //       type: 2,
-      //       aid: 1,
-      //       uid: this.userInfor.member_id,
-      //     })
-      //     .then((res) => {
-      //       console.log(res, "点赞");
-      //     })
-      //     .catch(() => {
-      //       this.$toast("点赞失败");
-      //     })
-      //     .finally(() => {});
+    handUp(item) {
+      item.is_up == !item.is_up;
+      item.is_up + 1;
+      request
+        .getupdown({
+          type: 1,
+          aid: item.comment_id,
+          uid: this.userInfor.member_id,
+        })
+        .then((res) => {
+          console.log(res, "点赞");
+          this.$toast("点赞成功");
+        })
+        .catch(() => {
+          this.$toast("点赞失败");
+        })
+        .finally(() => {});
     },
 
     //   监听到了添加评论
     addmment(data) {
       console.log(data);
+      if (!this.token) {
+        this.$router.push({
+          path: "/login",
+        });
+        return false;
+      }
+      request
+        .getDoComment({
+          uid: this.userInfor.member_id,
+          aid: this.$route.query.aid,
+          content: data,
+          type: 1,
+        })
+        .then((res) => {
+          console.log(res, "评论内容", data);
+          this.$toast("发表成功");
+        })
+        .catch(() => {
+          this.$toast("发表失败");
+        })
+        .finally(() => {});
       this.showReplay = false;
       this.showcComent = true;
     },

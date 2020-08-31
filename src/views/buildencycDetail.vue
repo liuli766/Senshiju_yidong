@@ -4,31 +4,33 @@
     <h6>{{picDetail.title}}</h6>
     <img :src="picDetail.cover" class="img1" alt />
     <p class="p1" v-html="picDetail.content"></p>
-    <div class="rate" v-for="(item,k) in comment" :key="k">
+    <div class="rate" v-for="(item,k) in CommentContent" :key="k">
       <div class="flex_be">
         <div class="userinfo flex_cen">
-          <!-- <img src="../assets/item.png" alt /> -->
-          <span>{{item.name}}</span>
+          <img :src="item.photo" alt />
+          <span>{{item.nickname}}</span>
         </div>
         <div>
           <span class="up" @click="handUp(item)">
-            <img src="../assets/img/up.png" alt />0
+            <img src="../assets/img/up.png" alt />
+            {{item.is_up}}
           </span>
           <span class="up" @click="handDown(item)">
-            <img src="../assets/img/down.png" alt />0
+            <img src="../assets/img/down.png" alt />
+            {{item.is_down}}
           </span>
         </div>
       </div>
       <div class="comment">
-        <p>{{item.content}}</p>
+        <p>{{item.comment}}</p>
         <div>
-          <span>{{item.TimeY}}</span>
-          <span>{{item.TimeH}}</span>
-          <div class="reply text_cen" @click="handreply">10回复</div>
+          <!-- <span>{{item.TimeY}}</span> -->
+          <span>{{item.comment_time}}</span>
+          <div class="reply text_cen" @click="handreply">{{allCommentList.length}}回复</div>
         </div>
         <div class="replybox">
           <span class="allreply" @click="showPopup(item)" @showpop="jh">
-            全部10条评论
+            全部{{allCommentList.length}}条评论
             <van-icon name="arrow" />
           </span>
         </div>
@@ -41,7 +43,8 @@
         <div class="flex_be footicon">
           <div class="xx">
             <img src="../assets/img/xx.png" alt />
-            <div>1</div>
+            <div  v-if="allCommentList.length!==0">{{allCommentList.length}}</div>
+            <div  v-else style="display:none"></div>
           </div>
           <img
             src="../assets/img/wjx.png"
@@ -86,9 +89,10 @@ export default {
     return {
       showpanl: false, //评论版
       falsepanl: true,
-      comment: [], //评论内容
       show: false,
       picDetail: [], //图纸详情内容
+      allCommentList: [], //评论列表
+      CommentContent: [], ////评论内容
     };
   },
   created() {
@@ -122,6 +126,21 @@ export default {
           .finally(() => {});
       }
     },
+    // 评论列表
+    commentList() {
+      request
+        .getComment({
+          uid: this.userInfor.member_id,
+          aid: this.$route.query.id,
+          page: 1,
+        })
+        .then((res) => {
+          console.log(res, "文章评论列表");
+          this.allCommentList = res.data;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
     // 收藏
     Collect(num) {
       if (!this.token) {
@@ -131,7 +150,7 @@ export default {
         });
         return false;
       } else {
-        console.log(2)
+        console.log(2);
         request
           .getCollect({
             uid: this.userInfor.member_id,
@@ -174,6 +193,7 @@ export default {
         })
         .then((res) => {
           console.log(res, "评论分页数据");
+          this.CommentContent = res.data;
         })
         .catch(() => {})
         .finally(() => {});
@@ -225,15 +245,20 @@ export default {
     },
     // 评论踩
     handDown(item) {
-      console.log(item);
+      if (item.is_down == 0) {
+        return false;
+      } else {
+        item.is_down--;
+      }
       request
         .getupdown({
-          type: 1,
-          aid: 1,
+          type: 2,
+          aid: item.comment_id,
           uid: this.userInfor.member_id,
         })
         .then((res) => {
           console.log(res, "点赞");
+          this.$toast("点赞成功");
         })
         .catch(() => {
           this.$toast("点赞失败");
@@ -242,15 +267,17 @@ export default {
     },
     // 评论顶
     handUp(item) {
-      console.log(item);
+      item.is_up == !item.is_up;
+      item.is_up + 1;
       request
         .getupdown({
-          type: 2,
-          aid: 1,
+          type: 1,
+          aid: item.comment_id,
           uid: this.userInfor.member_id,
         })
         .then((res) => {
           console.log(res, "点赞");
+          this.$toast("点赞成功");
         })
         .catch(() => {
           this.$toast("点赞失败");
@@ -264,11 +291,11 @@ export default {
     },
     handreply() {},
     //评论详情页
-    showPopup() {
+    showPopup(item) {
       this.$router.push({
         path: "/commentDetail",
         query: {
-          aid: 1,
+          aid: item.id,
         },
       });
     },

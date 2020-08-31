@@ -5,9 +5,9 @@
       <div @click="godetail(item,navid)" v-for="(item,k) in orderli" :key="k">
         <div class="tagname flex_be">
           <span>{{item.add_time}}</span>
-          <span v-if="navactivechoseid===0" style="color:#FD3723">待付款</span>
-          <span v-else-if="navactivechoseid===1" style="color:#FD3723">待发货</span>
-          <span v-else-if="navactivechoseid===2" style="color:#FD3723">待收货</span>
+          <span v-show="navactivechoseid==0" style="color:#FD3723">待付款</span>
+          <span v-show="navactivechoseid==1" style="color:#FD3723">待发货</span>
+          <span v-show="navactivechoseid==2" style="color:#FD3723">待收货</span>
         </div>
         <div class="flex">
           <img :src="item.cover" alt />
@@ -20,22 +20,22 @@
             <div>{{item.price}}</div>
           </div>
         </div>
-        <div class="text_r price_pay" v-if="navactivechoseid===0">共{{item.num}}件 待付款:¥{{item.price}}</div>
+        <div class="text_r price_pay" v-if="navactivechoseid==0">共{{item.num}}件 待付款:¥{{item.price}}</div>
         <div
           class="text_r price_pay"
-          v-else-if="navactivechoseid===1"
+          v-else-if="navactivechoseid==1"
         >共{{item.num}}件 待发货:¥{{item.price}}</div>
         <div
           class="text_r price_pay"
-          v-else-if="navactivechoseid===2"
+          v-else-if="navactivechoseid==2"
         >共{{item.num}}件 待收货:¥{{item.price}}</div>
-        <div class="bor_red" v-if="navactivechoseid===0">
+        <div class="bor_red" v-if="navactivechoseid==0">
           <span class="text_cen" @click.stop="canelOrder(item)">取消订单</span>
           <span class="text_cen" @click="gopay">立即支付</span>
         </div>
-        <div class="bor_red" v-if="navactivechoseid===1">
+        <div class="bor_red" v-if="navactivechoseid==1">
         </div>
-        <div class="bor_red" v-if="navactivechoseid===2">
+        <div class="bor_red" v-if="navactivechoseid==2">
           <span class="text_cen" @click="goLogistics">查看物流</span>
         </div>
       </div>

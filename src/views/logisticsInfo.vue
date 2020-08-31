@@ -21,7 +21,7 @@
           </div>
         </li>
       </ul>
-    </main> -->
+    </main>-->
   </div>
 </template>
 
@@ -29,23 +29,25 @@
 import { mapState } from "vuex";
 // import request from "@/request.js";
 export default {
-    data() {
-        return {
-            orderlist:[]
-        }
-    },
-    computed: {
+  data() {
+    return {
+      orderlist: [],
+    };
+  },
+  computed: {
     ...mapState({
       token: (state) => state.token,
       userInfor: (state) => state.userInfor,
     }),
   },
-    methods: {
-        onClickLeft(){
-            history.go(-1);
-            this.$store.commit('gonav',2)
-        }
+  methods: {
+    onClickLeft() {
+      this.$router.push({
+        path: `drawingOrder?navactivechoseid=0`,
+      });
+      // this.$store.commit("gonav", 2);
     },
+  },
 };
 </script>
 

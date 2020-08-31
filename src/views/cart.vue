@@ -15,7 +15,10 @@
         <span>图纸</span>
       </div>
       <div>
-        <img class="cl" src="../assets/img/qq.png" alt />
+        <img class="cl" src="../assets/img/shezhi.png" alt v-show="showfoot2" />
+        <span class="gg" style="width:0.25rem;height:0.25rem" v-show="showfoot1">
+          <van-icon name="success" />
+        </span>
         <span @click="admin">管理</span>
       </div>
     </div>
@@ -35,7 +38,7 @@
             <span>￥{{item.price*item.num}}</span>
             <div class="nun flex_ar">
               <span @click="reducecart(item,k)">-</span>
-              <span>{{cartNum}}</span>
+              <span>{{cartData[k].num}}</span>
               <span @click="addcart(item,k)">+</span>
             </div>
           </div>
@@ -80,7 +83,6 @@ export default {
     ...mapState({
       token: (state) => state.token,
       userInfor: (state) => state.userInfor,
-      cartNum:(state) => state.cartNum
     }),
     totalPrice() {
       let totalPrice = 0;
@@ -111,6 +113,7 @@ export default {
       showfoot1: false,
       showfoot2: true,
       selallgoods: [],
+      cartlistnum: [],
     };
   },
   created() {
@@ -136,10 +139,12 @@ export default {
         })
         .then((res) => {
           console.log(res, "购物车信息");
-
+          let arr = JSON.parse(localStorage.getItem("arr"));
+          console.log(JSON.parse(localStorage.getItem("arr")));
           for (let i = 0; i < res.data.length; i++) {
             let item = res.data[i];
             item.cheakG = false;
+            item.num = arr[i].num;
           }
           console.log(res);
           this.cartData = res.data;
@@ -195,13 +200,18 @@ export default {
       this.allChecked = !this.allChecked;
     },
 
-    addcart(item) {
+    addcart(item, k) {
       //购物车数量加
-      item.num++;
-      // localStorage.setItem('cartnum',item.num)
-      this.$store.commit('datanum',item.num)
+      this.cartData[k].num++;
+
+      for (let i in this.cartData) {
+        if (this.cartData[i].num) {
+          this.cartlistnum.push(this.cartData[i]);
+        }
+      }
+      localStorage.setItem("arr", JSON.stringify(this.cartlistnum));
     },
-    reducecart(item) {
+    reducecart(item, k) {
       //购物车数量减
 
       console.log(item.num);
@@ -222,9 +232,7 @@ export default {
           })
           .finally(() => {});
       }
-      item.num--;
-      // localStorage.setItem('cartnum',item.num)
-       this.$store.commit('datanum',item.num)
+      this.cartData[k].num--;
     },
     Allcollect() {
       //全部收藏
@@ -275,7 +283,7 @@ export default {
             id: list[i].id,
           })
           .then((res) => {
-            this.CartInfo()
+            this.CartInfo();
             console.log(res);
             this.$toast({
               message: "删除成功",
@@ -297,9 +305,20 @@ export default {
       this.showfoot2 = !this.showfoot2;
     },
     goOrderpay() {
-      this.$router.push({
-        path: "/orderpay",
-      });
+      let list = [];
+      for (let i in this.cartData) {
+        if (this.cartData[i].cheakG) {
+          list.push(this.cartData[i]);
+        }
+      }
+      if (this.totalNum !== 0) {
+        this.$router.push({
+          path: "/orderpay",
+          query: {
+            arr: list,
+          },
+        });
+      }
     },
     go() {
       this.$router.go(-1);

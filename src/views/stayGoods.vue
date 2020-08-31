@@ -7,17 +7,17 @@
       <van-icon name="arrow" />
     </div>
     <main>
-      <p>
+      <!-- <p>
         请尽快完成付款，还剩
         <span>
           <span style="color:#FA3D29;display: inline-block; ">
-            <!-- <countdown :time="time"  tag="p">
-              <template slot-scope="props">{{ props.minutes }}分{{ props.seconds }}秒</template>
-            </countdown> -->
+            <countdown :time="20*60*1000"  tag="p" >
+              <template slot-scope="props">{{ props.minutes }}分{{ props.seconds==0 && props.minutes==0?canelOrder(orderdetail): props.seconds}}秒</template>
+            </countdown>
           </span>&nbsp;&nbsp;&nbsp;&nbsp;（超时按
           <span style="color:#FA3D29">取消订单</span>处理）
         </span>
-      </p>
+      </p> -->
       <!--  -->
       <div class="flex_be addr" @click="gonewshippingAddr(orderaddress)">
         <div class="flex">
@@ -123,6 +123,29 @@ export default {
       .finally(() => {});
   },
   methods: {
+     // 取消订单
+    canelOrder(item) {
+      let oid = item.id;
+      request
+        .getCancelOrder({
+          oid,
+        })
+        .then((res) => {
+          console.log(res);
+          this.$toast({
+            message: "取消成功",
+            icon: "success",
+          });
+          this.onClickLeft()
+        })
+        .catch(() => {
+          this.$toast({
+            message: "取消失败",
+            icon: "error",
+          });
+        })
+        .finally(() => {});
+    },
     gonewshippingAddr(orderaddress) {
       this.$router.push({
         path: "/newshippingAddr",
@@ -132,8 +155,10 @@ export default {
       });
     },
     onClickLeft() {
-      history.go(-1);
-      this.$store.commit('gonav',1)
+      this.$router.push({
+        path:`drawingOrder?navactivechoseid=1`
+      })
+      // this.$store.commit('gonav',1)
     },
     copy(e, text) {
       var clipboard = new Clipboard(e.target, { text: () => text });

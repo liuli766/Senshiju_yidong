@@ -2,7 +2,7 @@
   <!-- 订单待付款 -->
   <div>
     <div class="nav_bar flex">
-      <van-icon name="arrow-left" @click="go"/>
+      <van-icon name="arrow-left" @click="go" />
       <span>订单详情</span>
     </div>
     <div class="flex_be stay">
@@ -14,8 +14,8 @@
         请尽快完成付款，还剩
         <span>
           <span style="color:#FA3D29;display: inline-block; ">
-            <countdown :time="time"  tag="p">
-              <template slot-scope="props">{{ props.minutes }}分{{ props.seconds }}秒</template>
+            <countdown :time="20*60*1000"  tag="p" >
+              <template slot-scope="props">{{ props.minutes }}分{{ props.seconds==0 && props.minutes==0?canelOrder(orderdetail): props.seconds}}秒</template>
             </countdown>
           </span>&nbsp;&nbsp;&nbsp;&nbsp;（超时按
           <span style="color:#FA3D29">取消订单</span>处理）
@@ -121,8 +121,15 @@ export default {
       aorder: "d2sg4hfha7hph555fd5558",
       orderaddress: [],
       orderdetail: [],
-      time: 10000, //倒计时
       counting: false,
+      isStart: false,
+      isEnd: false,
+      d: 0,
+      h: 0,
+      m: 0,
+      s: 0,
+      timer: null,
+      btnInfo: "",
     };
   },
   created() {
@@ -138,18 +145,15 @@ export default {
       })
       .catch(() => {})
       .finally(() => {});
+
   },
   mounted() {},
   methods: {
-    countDownS_cb: function (x) {
-      console.log(x);
-    },
-    countDownE_cb: function (x) {
-      console.log(x);
-    },
+
     go() {
-      this.$router.go(-1)
-      this.$store.commit("gonav", 0);
+      this.$router.push({
+        path: `drawingOrder?navactivechoseid=0`,
+      });
     },
     // 取消订单
     canelOrder(item) {
@@ -164,6 +168,7 @@ export default {
             message: "取消成功",
             icon: "success",
           });
+          this.go()
         })
         .catch(() => {
           this.$toast({

@@ -1,0 +1,41 @@
+@font-face {font-family: "iconfont";
+  src: url('https://at.alicdn.com/t/font_1897879_p79pr9kpkhf.eot');
+  src: url('https://at.alicdn.com/t/font_1897879_p79pr9kpkhf.eot?#iefix') format('embedded-opentype'),
+  url('https://at.alicdn.com/t/font_1897879_p79pr9kpkhf.woff2') format('woff2'),
+  url('https://at.alicdn.com/t/font_1897879_p79pr9kpkhf.woff') format('woff'),
+  url('https://at.alicdn.com/t/font_1897879_p79pr9kpkhf.ttf') format('truetype'),
+  url('https://at.alicdn.com/t/font_1897879_p79pr9kpkhf.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-delete:before {
+  content: "\e630";
+}
+
+.icon-jiantou:before {
+  content: "\e6b6";
+}
+
+.icon-arrow_right:before {
+  content: "\e65e";
+}
+
+.icon-jiantou-xia:before {
+  content: "\e629";
+}
+
+.icon-jiantou1:before {
+  content: "\e70a";
+}
+
+.icon-icon-:before {
+  content: "\e655";
+}
+

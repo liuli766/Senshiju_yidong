@@ -200,6 +200,12 @@ function getArtClass(data) {
   }
   return http.fetchPost('/api/Common/art_class', params)
 }
+function getEditCart(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Member/edit_cart', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -235,4 +241,5 @@ export default {
   getMyOrders,//我的订单
   getOrderDetail,//订单详情
   getArtClass,//百科分类收藏
+  getEditCart,//编辑购物车
 }

@@ -12,39 +12,12 @@ export default new Vuex.Store({
     upNum: 0,//踩赞数
     headimg: localStorage.getItem('headImg'),
     canelOrderItem: '',
-    cartNum:1,
-    cartList: [
-      {
-        id: 1,
-        img: require("../assets/logo.png"),
-        price: 598,
-        intro: "A116新农村一层四合院别墅设计图纸",
-        value: 1,
-        cheakG: false,
-        num: 1
-      },
-      {
-        id: 2,
-        img: require("../assets/logo.png"),
-        price: 598,
-        intro: "A116新农村一层四合院别墅设计图纸",
-        value: 1,
-        cheakG: false,
-        num: 1
-      },
-      {
-        id: 3,
-        img: require("../assets/logo.png"),
-        price: 598,
-        intro: "A116新农村一层四合院别墅设计图纸",
-        value: 1,
-        cheakG: false,
-        num: 1
-      },
-    ], //购物车
+    cartNum: 1,
+    cartList: [], //购物车
     add: [],  //添加到购物车的商品（已选商品）
     allCheck: false
   },
+
   getters: {
     loginData(state) {
       if (state.token) {
@@ -100,8 +73,12 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    datanum(state,num){
-        state.cartNum=num
+    datanum(state, num) {
+      console.log(state.cartList)
+      for (let i = 0; i < state.cartList.length; i++) {
+        // let item = state.cartList[i];
+        state.cartList[i] = num;
+      }
     },
     gonav(state, num) {
       state.navactivechoseid = num

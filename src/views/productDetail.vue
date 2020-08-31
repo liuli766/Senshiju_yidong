@@ -88,7 +88,7 @@
           @click="onClickIcon(ProDetail.id)"
         />
         <van-goods-action-button type="warning" text="加入购物车" class="size" @click="gocard" />
-        <van-goods-action-button text="直接购买" class="size danger" @click="gosurepay" />
+        <van-goods-action-button text="直接购买" class="size danger" @click="gosurepay(ProDetail.id)" />
       </van-goods-action>
     </div>
     <div>
@@ -149,9 +149,12 @@ export default {
     this.handdetail();
   },
   methods: {
-    gosurepay() {
+    gosurepay(id) {
       this.$router.push({
-        path: "/surePay",
+        path: "/orderpay",
+        query: {
+            oid: id,
+          },
       });
     },
     onChange(index) {

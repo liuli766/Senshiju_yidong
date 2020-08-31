@@ -9,8 +9,8 @@
             <img src="../assets/img/mine/headerimg.png" alt v-if="!token" />
             <img :src="headimg" alt v-else />
           </div>
-          <div class="info flex flex_col" @click="gologin">
-            <span v-if="!token">立即登录</span>
+          <div class="info flex flex_col">
+            <span v-if="!token"  @click="gologin">立即登录</span>
             <div class="flex_col" v-else>
               <span v-if="token">{{userInfor.nickname}}</span>
               <span>普通用户</span>
