@@ -15,7 +15,10 @@
 
     <!--  -->
     <div class="p">
-      <textarea placeholder="请输入或粘贴地址文本，自动识别姓名 电话和地址，如： 张三，18112345678，浙江省杭州市余杭区五常街道乐佳 国际3号" v-model="content"></textarea>
+      <textarea
+        placeholder="请输入或粘贴地址文本，自动识别姓名 电话和地址，如： 张三，18112345678，浙江省杭州市余杭区五常街道乐佳 国际3号"
+        v-model="content"
+      ></textarea>
     </div>
     <!--  -->
     <div style="background:#fff">
@@ -76,7 +79,7 @@ export default {
       showArea: false,
       areaList: areaList, // 数据格式见 Area 组件文档
       delbtn: false, //删除按钮是否显示
-      content:'' //复制的地址文本
+      content: "", //复制的地址文本
     };
   },
   computed: {
@@ -159,22 +162,40 @@ export default {
         })
         .finally(() => {});
     },
-    empty(){
-        this.content=''
+    empty() {
+      this.content = "";
     },
-    intelligence(){
-      console.log(this.smartParse(this.content));
-      let smartParse=this.smartParse(this.content)
-      this.name=smartParse.name
-      this.tel=smartParse.phone
-      this.value=`${smartParse.province}/${smartParse.city}/${smartParse.county}`
-      if(smartParse.street==undefined){
-        smartParse.street=''
-      }
-      if(smartParse.streetCode==undefined){
-        smartParse.streetCode=''
-      }
-      this.addr=`${smartParse.street}${smartParse.streetCode}${smartParse.address}${smartParse.zipCode}`
+    intelligence() {
+          let smartParse = this.smartParse(this.content);
+          if (smartParse.phone == undefined) {
+            smartParse.phone = "";
+          }
+          if(smartParse.city == undefined){
+            smartParse.city=''
+          }
+          if(smartParse.county == undefined){
+            smartParse.county=''
+          }
+          if(smartParse.province == undefined){
+            smartParse.province=''
+          }
+          if (smartParse.street == undefined) {
+            smartParse.street = "";
+          }
+          if (smartParse.streetCode == undefined) {
+            smartParse.streetCode = "";
+          }
+          if (smartParse.address == undefined) {
+            smartParse.address = "";
+          }
+          if (smartParse.zipCode == undefined) {
+            smartParse.zipCode = "";
+          }
+          this.name = smartParse.name;
+          this.tel = smartParse.phone;
+          this.value = `${smartParse.province}/${smartParse.city}/${smartParse.county}`;
+          this.addr = `${smartParse.street}${smartParse.streetCode}${smartParse.address}${smartParse.zipCode}`;
+          return false;
     },
     // 选择地区
     onConfirm(values) {

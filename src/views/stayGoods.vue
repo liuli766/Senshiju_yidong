@@ -75,7 +75,7 @@
         <div class="flex_be">
           <div>
             <span>订单编号</span>
-            <span class="tag-read">{{aorder}}</span>
+            <span class="tag-read">{{orderdetail.order_num}}</span>
           </div>
           <span class="copy text_cen" @click="copy($event,aorder)">复制</span>
         </div>

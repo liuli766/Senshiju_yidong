@@ -118,7 +118,6 @@ export default {
   },
   created() {
     this.cartlist = this.$store.getters.addShopList;
-    console.log(this.$store.state.cartList);
     request
       .getCarts({
         uid: this.userInfor.member_id,
@@ -142,11 +141,15 @@ export default {
           let arr = JSON.parse(localStorage.getItem("arr"));
           console.log(JSON.parse(localStorage.getItem("arr")));
           for (let i = 0; i < res.data.length; i++) {
-            let item = res.data[i];
-            item.cheakG = false;
-            item.num = arr[i].num;
+            if (arr.length!==0) {
+              let item = res.data[i];
+              item.cheakG = false;
+              item.num = arr[i].num;
+            } else {
+              let item = res.data[i];
+              item.cheakG = false;
+            }
           }
-          console.log(res);
           this.cartData = res.data;
           console.log(this.cartData);
         })
@@ -209,6 +212,7 @@ export default {
           this.cartlistnum.push(this.cartData[i]);
         }
       }
+      [...this.cartlistnum] = new Set(this.cartlistnum); //去重
       localStorage.setItem("arr", JSON.stringify(this.cartlistnum));
     },
     reducecart(item, k) {
@@ -232,6 +236,13 @@ export default {
           })
           .finally(() => {});
       }
+      for (let i in this.cartData) {
+        if (this.cartData[i].num) {
+          this.cartlistnum.push(this.cartData[i]);
+        }
+      }
+      [...this.cartlistnum] = new Set(this.cartlistnum); //去重
+      localStorage.setItem("arr", JSON.stringify(this.cartlistnum));
       this.cartData[k].num--;
     },
     Allcollect() {
@@ -308,9 +319,10 @@ export default {
       let list = [];
       for (let i in this.cartData) {
         if (this.cartData[i].cheakG) {
-          list.push(this.cartData[i]);
+          list.push(this.cartData[i].id);
         }
       }
+      console.log(list);
       if (this.totalNum !== 0) {
         this.$router.push({
           path: "/orderpay",

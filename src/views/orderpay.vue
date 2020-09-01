@@ -14,8 +14,10 @@
         请尽快完成付款，还剩
         <span>
           <span style="color:#FA3D29;display: inline-block; ">
-            <countdown :time="20*60*1000"  tag="p" >
-              <template slot-scope="props">{{ props.minutes }}分{{ props.seconds==0 && props.minutes==0?canelOrder(orderdetail): props.seconds}}秒</template>
+            <countdown :time="20*60*1000" tag="p">
+              <template
+                slot-scope="props"
+              >{{ props.minutes }}分{{ props.seconds==0 && props.minutes==0?canelOrder(orderdetail): props.seconds}}秒</template>
             </countdown>
           </span>&nbsp;&nbsp;&nbsp;&nbsp;（超时按
           <span style="color:#FA3D29">取消订单</span>处理）
@@ -93,7 +95,7 @@
       </div>
       <div class="flex_be bottom">
         <span @click="canelOrder(orderdetail)">取消订单</span>
-        <button>立即支付</button>
+        <button @click="gopay">立即支付</button>
       </div>
     </main>
   </div>
@@ -104,6 +106,7 @@ import { mapState } from "vuex";
 import request from "@/request.js";
 import Clipboard from "clipboard";
 // import CountDown from "vue2-countdown";
+import wx from "weixin-jsapi";
 export default {
   computed: {
     ...mapState({
@@ -118,38 +121,44 @@ export default {
   data() {
     return {
       img: require("../assets/logo.png"),
-      aorder: "d2sg4hfha7hph555fd5558",
       orderaddress: [],
       orderdetail: [],
       counting: false,
-      isStart: false,
-      isEnd: false,
-      d: 0,
-      h: 0,
-      m: 0,
-      s: 0,
-      timer: null,
       btnInfo: "",
     };
   },
   created() {
-    request
-      .getOrderDetail({
-        uid: this.userInfor.member_id,
-        oid: this.$route.query.oid,
-      })
-      .then((res) => {
-        console.log(res, "订单详情");
-        this.orderaddress = res.data.address;
-        this.orderdetail = res.data.detail;
-      })
-      .catch(() => {})
-      .finally(() => {});
-
+    console.log(this.$route.query.arr);
+    if (this.$route.query.arr) {
+      request
+        .getOrderDetail({
+          uid: this.userInfor.member_id,
+          ids: this.$route.query.arr,
+        })
+        .then((res) => {
+          console.log(res, "订单详情");
+          this.orderaddress = res.data.address;
+          this.orderdetail = res.data.detail;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    } else {
+      request
+        .getOrderDetail({
+          uid: this.userInfor.member_id,
+          oid: this.$route.query.oid,
+        })
+        .then((res) => {
+          console.log(res, "订单详情");
+          this.orderaddress = res.data.address;
+          this.orderdetail = res.data.detail;
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
   },
   mounted() {},
   methods: {
-
     go() {
       this.$router.push({
         path: `drawingOrder?navactivechoseid=0`,
@@ -168,7 +177,7 @@ export default {
             message: "取消成功",
             icon: "success",
           });
-          this.go()
+          this.go();
         })
         .catch(() => {
           this.$toast({
@@ -197,6 +206,50 @@ export default {
           item: orderaddress,
         },
       });
+    },
+    gopay() {
+      request
+        .getCartPay({
+          uid: this.userInfor.member_id,
+          ids: [this.$route.query.id],
+        })
+        .then((res) => {
+          console.log(res);
+          let data= res.data.apiToay
+          //   下边字段都是后台接口返回的数据
+          //  <!--通过config接口注入权限验证配置-->
+          wx.config({
+            debug: true, // 开启调试模式
+            appId: data.appId, // 公众号的唯一标识
+            timestamp: data.timeStamp, // 生成签名的时间戳
+            nonceStr: data.nonce_str, // 生成签名的随机串
+            signature: data.sign, // 签名
+            jsApiList: ["chooseWXPay"], // 填入需要使用的JS接口列表，这里是先声明我们要用到支付的JS接口
+          });
+
+          //弹出支付窗口
+          wx.chooseWXPay({
+            timestamp: data.timeStamp, // 支付签名时间戳，
+            nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
+            package: "prepay_id=" + data.prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=xxxx）
+            signType: "MD5", // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+            paySign: data.paySign, // 支付签名
+            success: function (res) {
+              // 支付成功后的回调函数
+              console.log("11111111111111", res);
+            },
+            cancel: function (res) {
+              console.log("22222", res);
+            },
+            fail: function (res) {
+              console.log("33333", res);
+            },
+          });
+        })
+        .catch(() => {
+          this.$toast("系统异常");
+        })
+        .finally(() => {});
     },
   },
 };

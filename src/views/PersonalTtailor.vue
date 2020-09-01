@@ -328,7 +328,7 @@ export default {
     .h(468);
   }
   .more {
-    .w(380);
+    .w(390);
     .h(40);
     border: 1px solid rgba(0, 0, 0, 1);
     margin: auto;

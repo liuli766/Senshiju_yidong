@@ -120,7 +120,7 @@ export default {
   }
   .baoyou {
     display: block;
-    .w(57);
+    .w(80);
     .h(26);
     background: #fed8d6;
     .b-radius(13);

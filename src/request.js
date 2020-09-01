@@ -206,6 +206,18 @@ function getEditCart(data) {
   }
   return http.fetchPost('/api/Member/edit_cart', params)
 }
+function getWXInfo(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Login/get_wxinfo', params)
+}
+function getCartPay(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Member/cart_pay', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -242,4 +254,6 @@ export default {
   getOrderDetail,//订单详情
   getArtClass,//百科分类收藏
   getEditCart,//编辑购物车
+  getWXInfo,//微信信息
+  getCartPay,//生成订单
 }
