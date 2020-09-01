@@ -322,13 +322,13 @@ export default {
   }
 }
 .mouth {
-  .pb(30);
+  .pb(230);
   img {
     .w(226);
     .h(468);
   }
   .more {
-    .w(340);
+    .w(380);
     .h(40);
     border: 1px solid rgba(0, 0, 0, 1);
     margin: auto;

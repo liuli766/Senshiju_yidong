@@ -6,8 +6,7 @@
       <div class="modalbox">
         <div class="flex">
           <div class="img flex_cen">
-            <img src="../assets/img/mine/headerimg.png" alt v-if="!token" />
-            <img :src="headimg" alt v-else />
+            <img :src="headimg?headimg:userInfor.photo" alt  />
           </div>
           <div class="info flex flex_col">
             <span v-if="!token"  @click="gologin">立即登录</span>
@@ -25,6 +24,7 @@
       <!-- 我的订单 -->
       <div class="mineorder">
         <h6>我的订单</h6>
+        
       </div>
       <div class="girdbox flex_be">
         <div

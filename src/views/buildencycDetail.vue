@@ -43,8 +43,8 @@
         <div class="flex_be footicon">
           <div class="xx">
             <img src="../assets/img/xx.png" alt />
-            <div  v-if="allCommentList.length!==0">{{allCommentList.length}}</div>
-            <div  v-else style="display:none"></div>
+            <div v-if="allCommentList.length!==0">{{allCommentList.length}}</div>
+            <div v-else style="display:none"></div>
           </div>
           <img
             src="../assets/img/wjx.png"
@@ -59,13 +59,40 @@
             style="width: 0.6rem;height: 0.6rem;"
             v-if="picDetail.is_collect==false"
           />
-          <img src="../assets/img/fx.png" alt />
+          <img src="../assets/img/fx.png" alt @click="share" />
         </div>
       </div>
     </footer>
     <div class="silde">
       <articontent v-show="showpanl" @submit="addmment" @canel="canelmmit" />
     </div>
+    <van-popup v-model="showShare" position="bottom" :style="{ height: '20%' }" class="sharebox">
+      <div class="share">
+        <h6>分享到</h6>
+        <div class="flex_ar">
+          <div class="flex_cen flex_col">
+            <img src="../assets/img/pyq.png" alt />
+            <span>朋友圈</span>
+          </div>
+          <div class="flex_cen flex_col">
+            <img src="../assets/img/wxhy.png" alt />
+            <span>微信好友</span>
+          </div>
+          <div class="flex_cen flex_col">
+            <img src="../assets/img/qqhy.png" alt />
+            <span>QQ好友</span>
+          </div>
+          <div class="flex_cen flex_col">
+            <img src="../assets/img/qqkj.png" alt />
+            <span>QQ空间</span>
+          </div>
+          <div class="flex_cen flex_col">
+            <img src="../assets/img/fzlj.png" alt />
+            <span>复制链接</span>
+          </div>
+        </div>
+      </div>
+    </van-popup>
   </div>
 </template>
 
@@ -75,9 +102,11 @@ import articontent from "@/components/articContent.vue";
 import $ from "jquery";
 import { mapState } from "vuex";
 import request from "@/request.js";
+// import share from "@/components/sharPage.vue";
 export default {
   components: {
     articontent,
+    // share,
   },
   computed: {
     ...mapState({
@@ -93,6 +122,7 @@ export default {
       picDetail: [], //图纸详情内容
       allCommentList: [], //评论列表
       CommentContent: [], ////评论内容
+      showShare: false,
     };
   },
   created() {
@@ -100,6 +130,9 @@ export default {
     console.log(this.$store);
   },
   methods: {
+    share() {
+      this.showShare = true;
+    },
     handdetail() {
       if (!this.token) {
         request
@@ -170,6 +203,12 @@ export default {
       }
     },
     showcontent() {
+      if (!this.token) {
+        this.$router.push({
+          path: "/login",
+        });
+        return false;
+      }
       //底部评论样式
       this.falsepanl = false;
       this.showpanl = true;
@@ -462,6 +501,34 @@ footer {
     .pl(18);
     box-sizing: border-box;
     font-family: SimSun;
+  }
+}
+.share,.sharebox {
+  border-radius: 0.3rem 0.3rem 0px 0px;
+  width: 100%;
+  height: 2.28rem;
+  background: #fff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  color: #232323;
+  font-size: 0.2rem;
+  font-weight: 400;
+  font-family: SimHei;
+  box-shadow: 2px 2px 2px 2px #eee;
+  img {
+    width: 0.48rem;
+    height: 0.48rem;
+    margin-bottom: 0.25rem;
+  }
+  h6 {
+    font-size: 0.26rem;
+    font-family: SimHei;
+    font-weight: 400;
+    color: #878787;
+    line-height: 0.26rem;
+    text-align: center;
+    margin: 0.34rem 0 0.4rem 0;
   }
 }
 </style>

@@ -9,6 +9,7 @@ import "./assets/commcss/animate.min.css"
 import 'vant/lib/index.css'; 
 import Vant from 'vant';
 import { Toast } from 'vant';
+import './assets/commcss/iconfont.css'
 Vue.prototype.$toast=Toast
 Vue.use(Vant);
 Vue.prototype.$toast=Toast

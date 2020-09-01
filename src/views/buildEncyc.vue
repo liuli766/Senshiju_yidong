@@ -38,8 +38,11 @@
         </div>
       </div>
     </div>
-    <div v-if="collectlist.length==0 || articleList.length==0" style="text-align: center;
-    margin-top: 0.3rem;">暂无内容收藏</div>
+    <div
+      v-if="collectlist.length==0 || articleList.length==0"
+      style="text-align: center;
+    margin-top: 0.3rem;"
+    >暂无内容收藏</div>
   </div>
 </template>
 
@@ -76,11 +79,16 @@ export default {
   },
   created() {
     this.getdata(this.classid);
-    this.collect();
   },
   methods: {
     // 文章收藏
     collect() {
+      if (!this.token) {
+        this.$router.push({
+          path: "/login",
+        });
+        return false;
+      }
       request
         .fachcollect({
           uid: this.userInfor.member_id,
