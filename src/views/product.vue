@@ -9,16 +9,16 @@
       <div class="all">全部</div>
       <div class="dropdownbox">
         <van-dropdown-menu active-color="#FE9E15">
-          <van-dropdown-item v-model="value1" :options="cate1" @change="handchange1(value1)" />
-          <van-dropdown-item v-model="value2" :options="cate2" @change="handchange2(value2)" />
-          <van-dropdown-item v-model="value3" :options="cate3" @change="handchange3(value3)" />
-          <van-dropdown-item v-model="value4" :options="cate4" @change="handchange4(value4)" />
+          <van-dropdown-item v-model="value1" :options="cate1" title="风格" @change="handchange1(value1)" />
+          <van-dropdown-item v-model="value2" :options="cate2" title="面宽" @change="handchange2(value2)" />
+          <van-dropdown-item v-model="value3" :options="cate3" title="进深" @change="handchange3(value3)" />
+          <van-dropdown-item v-model="value4" :options="cate4" title="占地" @change="handchange4(value4)" />
         </van-dropdown-menu>
         <van-dropdown-menu active-color="#FE9E15">
-          <van-dropdown-item v-model="value5" :options="cate5" @change="handchange5(value5)" />
-          <van-dropdown-item v-model="value6" :options="cate6" @change="handchange6(value6)" />
-          <van-dropdown-item v-model="value7" :options="cate7" @change="handchange7(value7)" />
-          <van-dropdown-item v-model="value8" :options="cate8" @change="handchange8(value8)" />
+          <van-dropdown-item v-model="value5" :options="cate5" title="层数" @change="handchange5(value5)" />
+          <van-dropdown-item v-model="value6" :options="cate6" title="功能" @change="handchange6(value6)" />
+          <van-dropdown-item v-model="value7" :options="cate7" title="造价" @change="handchange7(value7)" />
+          <van-dropdown-item v-model="value8" :options="cate8" title="结构" @change="handchange8(value8)" />
         </van-dropdown-menu>
       </div>
     </div>

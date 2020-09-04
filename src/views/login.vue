@@ -53,7 +53,6 @@ export default {
         })
         .then((res) => {
           console.log(res, "微信信息");
-          res=localStorage.setItem('wxdata',JSON.stringify(res.data))
           if (res.code == 0) {
             this.$router.push({
               path: "/",
@@ -86,10 +85,6 @@ export default {
       var r = window.location.search.substr(1).match(reg);
       if (r != null) return unescape(r[2]);
       return null;
-      // let str = window.location.href.split('code=')[1] //在地址栏去获取截取
-      // if (str) {
-      // 	this.code =str.split('&')[0];
-      // }
     },
     goRegister() {
       this.$router.push({

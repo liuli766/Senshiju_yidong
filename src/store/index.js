@@ -15,7 +15,9 @@ export default new Vuex.Store({
     cartNum: 1,
     cartList: [], //购物车
     add: [],  //添加到购物车的商品（已选商品）
-    allCheck: false
+    allCheck: false,
+    payObject: null,
+    orderTime:20*60*1000
   },
 
   getters: {
@@ -37,7 +39,6 @@ export default new Vuex.Store({
       return loginData.token
 
     },
-
     //获取商品列表
     getShopList: state => state.cartList,
     //获取购物车列表
@@ -134,7 +135,7 @@ export default new Vuex.Store({
     // 取消订单
     canelOrderItem(state, data) {
       state.canelOrderItem = data
-    }
+    },
   },
   actions: {
     //加入购物车

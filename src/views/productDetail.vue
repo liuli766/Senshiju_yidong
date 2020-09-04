@@ -30,7 +30,7 @@
         <span>四川成都</span> | 快递：
         <span>免运费</span>
       </div>
-      <div>月销：{{ProDetail.moods}}</div>
+      <div>月销：{{ProDetail.month_sale}}</div>
     </div>
     <!-- 浏览量 -->
     <div class="views flex_be">
@@ -51,7 +51,7 @@
     <van-popup v-model="show" position="bottom" :style="{ height: '68%' }">
       <div class="pop">
         <div class="basics text_cen">基础服务</div>
-        <van-checkbox-group v-model="result" ref="checkboxGroup" @change="handchange">
+        <van-checkbox-group v-model="result" ref="checkboxGroup" @change="handchange" disabled>
           <van-checkbox name="a" icon-size="0.3rem" checked-color="#000" class="span1">
             <span>付款后48小时内发货</span>
           </van-checkbox>
@@ -124,6 +124,7 @@
 // import { Toast } from "vant";
 import { mapState } from "vuex";
 import request from "@/request.js";
+import { Toast } from 'vant';
 export default {
   data() {
     return {
@@ -151,9 +152,10 @@ export default {
   methods: {
     gosurepay(id) {
       this.$router.push({
-        path: "/orderpay",
+        path: "/surepayblue",
+        // path: "/orderpay",
         query: {
-            oid: id,
+            bid:id
           },
       });
     },
@@ -223,13 +225,10 @@ export default {
         })
         .then((res) => {
           console.log(res, "加入购物车");
-          this.$toast({
-            message: "添加成功",
-            icon: "success",
-          });
+           Toast.success('添加成功')
         })
         .catch(() => {
-          this.$toast("添加失败");
+          Toast.fail('添加失败')
         })
         .finally(() => {});
     },
@@ -368,7 +367,7 @@ export default {
   }
 }
 .size {
-  .fs(21);
+  .fs(30);
 }
 .danger {
   background: #ef7a1c;

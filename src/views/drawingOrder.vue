@@ -5,7 +5,7 @@
       <van-icon name="arrow-left" @click="go" />
       <span>图纸订单</span>
     </div>
-    <van-search v-model="seachdata" placeholder="请输入订单号或商品名称" />
+    <van-search v-model="seachdata" placeholder="请输入订单号或商品名称" @change="handserch" />
     <nav>
       <span
         v-for="(item,k) in navlist"
@@ -46,23 +46,50 @@ export default {
     };
   },
   watch: {
-    orderlist2(){
-      this.swichChose(this.navactivechoseid)
-    }
+    orderlist2() {
+    //  return this.navactivechoseid
+      this.swichChose(this.navactivechoseid);
+    },
+    seachdata() {
+      this.handserch();
+    },
   },
   created() {
     this.navactivechoseid = this.$route.query.navactivechoseid;
-    
   },
   mounted() {
-    this.myorder();
+    if (this.navid == 0) {
+      this.myorder(1);
+    } else if (this.navid == 1) {
+      this.myorder(2);
+    } else if (this.navid == 2) {
+      this.myorder(3);
+    } else if (this.navid == 3) {
+      this.myorder(4);
+    }
   },
   methods: {
+    handserch() {
+      request.getOrderList({
+        uid: this.userInfor.member_id,
+        search: this.seachdata,
+      }).then(res=>{
+        console.log(res,'搜索订单')
+        this.myorder(1)
+      }).catch(() => {
+          this.vertical = false;
+        })
+        .finally(() => {
+          this.vertical = false;
+        });
+    },
     // 我的订单
-    myorder() {
+    myorder(num) {
       request
-        .getMyOrders({
+        .getOrderList({
           uid: this.userInfor.member_id,
+          status: num,
+          page: 1,
         })
         .then((res) => {
           this.vertical = true;
@@ -85,12 +112,21 @@ export default {
       this.navid = k;
       this.navactivechoseid = k;
       this.$store.commit("gonav", this.navactivechoseid);
+      if (k == 0) {
+        this.myorder(1);
+      } else if (k == 1) {
+        this.myorder(2);
+      } else if (k == 2) {
+        this.myorder(3);
+      } else if (k == 3) {
+        this.myorder(4);
+      }
     },
 
     go() {
       this.$router.push({
-        path:'/mine'
-      })
+        path: "/mine",
+      });
     },
   },
 };

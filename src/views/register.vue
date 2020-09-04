@@ -64,7 +64,9 @@ export default {
           .then((res) => {
             if (res.code == 0) {
             console.log(res, "短信");
-            this.$toast("发送成功");
+
+            // this.$toast("发送成功");
+            this.$toast(res.data);
             that.time();
             } else {
               this.$toast("发送失败");

@@ -7,4 +7,7 @@
 export default {};
 </script>
 <style>
+.van-icon{
+  font-size: 0.28rem;
+}
 </style>

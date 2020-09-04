@@ -218,6 +218,36 @@ function getCartPay(data) {
   }
   return http.fetchPost('/api/Member/cart_pay', params)
 }
+function getCartOrder(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Member/cart_order', params)
+}
+function getBlueOrder(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Index/blue_order', params)
+}
+function getBluePay(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Member/blue_pay', params)
+}
+function getOrderList(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Member/order_list', params)
+}
+function getOrderDetailPay(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Member/order_pay', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -256,4 +286,9 @@ export default {
   getEditCart,//编辑购物车
   getWXInfo,//微信信息
   getCartPay,//生成订单
+  getCartOrder,//购物车结算
+  getBlueOrder,//图纸购买生成订单
+  getBluePay,//图纸想起生成订单下单去支付
+  getOrderList,//订单列表
+  getOrderDetailPay,//订单详情支付
 }

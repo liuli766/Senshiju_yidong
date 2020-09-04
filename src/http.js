@@ -62,8 +62,13 @@ export function fetchPost(url, params) {
         axios.post(url, params)
 
             .then(response => {
-
+                if(response.data.code==2){
+                    this.$router.push({
+                        path:'/login'
+                    })
+                }
                 resolve(response);
+                
 
             }, err => {
 
@@ -90,7 +95,11 @@ export function fetchGet(url, param) {
         axios.get(url, { params: param })
 
             .then(response => {
-
+                if(response.data.code==2){
+                    this.$router.push({
+                        path:'/login'
+                    })
+                }
                 resolve(response)
 
             }, err => {

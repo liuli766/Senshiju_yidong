@@ -47,6 +47,7 @@
 <script>
 import { mapState } from "vuex";
 import request from "@/request.js";
+import { Toast } from 'vant';
 export default {
   computed: mapState({
     navactivechoseid: (state) => state.navactivechoseid,
@@ -82,16 +83,10 @@ export default {
         .then((res) => {
           console.log(res);
           this.$parent.myorder();
-          this.$toast({
-            message: "取消成功",
-            icon: "success",
-          });
+          Toast.success('取消成功')
         })
         .catch(() => {
-          this.$toast({
-            message: "取消失败",
-            icon: "error",
-          });
+          Toast.fail('取消失败')
         })
         .finally(() => {});
     },

@@ -1,10 +1,10 @@
 <template>
   <!-- 新建收获地址 -->
   <div class="newshippingAddr">
-    <div class="flex navigation">
+    <!-- <div class="flex navigation">
       <van-icon name="cross" @click="go" />
       <span>新建收货地址</span>
-    </div>
+    </div>-->
     <!--  -->
     <div style="background:#fff">
       <div class="nav_bar flex">
@@ -59,7 +59,9 @@
     </div>
     <div class="eee" ref="eee">
       <button v-if="delbtn" @click="removeAddr">删除</button>
-      <button @click="onSave">保存并使用</button>
+      
+      <button @click="getxiugai" v-if="this.$route.query.item">保存并使用</button>
+      <button @click="onSave" v-else>保存并使用</button>
     </div>
   </div>
 </template>
@@ -90,6 +92,7 @@ export default {
     }),
   },
   created() {
+    console.log(this.$route.query.item)
     if (this.$route.query.item !== undefined) {
       let item = this.$route.query.item;
       this.name = item.name;
@@ -142,6 +145,29 @@ export default {
         })
         .finally(() => {});
     },
+    getxiugai() {
+      let data=this.$route.query.item
+      let add = this.value.split("/");
+      request
+        .getUpdress({
+          uid: this.userInfor.member_id,
+          address:this.addr ,
+          name: this.name,
+          phone: this.tel,
+          province: add[0],
+          city: add[1],
+          district: add[2],
+          is_default: this.checked,
+          id:data.id
+        })
+        .then((res) => {
+          console.log(res,'修改')
+        })
+        .catch(() => {
+          this.$toast("修改失败");
+        })
+        .finally(() => {});
+    },
     removeAddr() {
       request
         .getRemoveAddr({
@@ -166,36 +192,36 @@ export default {
       this.content = "";
     },
     intelligence() {
-          let smartParse = this.smartParse(this.content);
-          if (smartParse.phone == undefined) {
-            smartParse.phone = "";
-          }
-          if(smartParse.city == undefined){
-            smartParse.city=''
-          }
-          if(smartParse.county == undefined){
-            smartParse.county=''
-          }
-          if(smartParse.province == undefined){
-            smartParse.province=''
-          }
-          if (smartParse.street == undefined) {
-            smartParse.street = "";
-          }
-          if (smartParse.streetCode == undefined) {
-            smartParse.streetCode = "";
-          }
-          if (smartParse.address == undefined) {
-            smartParse.address = "";
-          }
-          if (smartParse.zipCode == undefined) {
-            smartParse.zipCode = "";
-          }
-          this.name = smartParse.name;
-          this.tel = smartParse.phone;
-          this.value = `${smartParse.province}/${smartParse.city}/${smartParse.county}`;
-          this.addr = `${smartParse.street}${smartParse.streetCode}${smartParse.address}${smartParse.zipCode}`;
-          return false;
+      let smartParse = this.smartParse(this.content);
+      if (smartParse.phone == undefined) {
+        smartParse.phone = "";
+      }
+      if (smartParse.city == undefined) {
+        smartParse.city = "";
+      }
+      if (smartParse.county == undefined) {
+        smartParse.county = "";
+      }
+      if (smartParse.province == undefined) {
+        smartParse.province = "";
+      }
+      if (smartParse.street == undefined) {
+        smartParse.street = "";
+      }
+      if (smartParse.streetCode == undefined) {
+        smartParse.streetCode = "";
+      }
+      if (smartParse.address == undefined) {
+        smartParse.address = "";
+      }
+      if (smartParse.zipCode == undefined) {
+        smartParse.zipCode = "";
+      }
+      this.name = smartParse.name;
+      this.tel = smartParse.phone;
+      this.value = `${smartParse.province}/${smartParse.city}/${smartParse.county}`;
+      this.addr = `${smartParse.street}${smartParse.streetCode}${smartParse.address}${smartParse.zipCode}`;
+      return false;
     },
     // 选择地区
     onConfirm(values) {
@@ -218,6 +244,7 @@ export default {
   height: 100%;
   position: fixed;
   width: 100%;
+  overflow: auto;
 }
 .navigation {
   background: #ededed;

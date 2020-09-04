@@ -3,8 +3,8 @@
   <div class="buildencyc">
     <h6>{{picDetail.title}}</h6>
     <img :src="picDetail.cover" class="img1" alt />
-    <p class="p1" v-html="picDetail.content"></p>
-    <div class="rate" v-for="(item,k) in CommentContent" :key="k">
+    <p class="p1" v-html="picDetail.content" style="height:auto"></p>
+    <div class="rate" v-for="(item,k) in allCommentList" :key="k">
       <div class="flex_be">
         <div class="userinfo flex_cen">
           <img :src="item.photo" alt />
@@ -26,14 +26,29 @@
         <div>
           <!-- <span>{{item.TimeY}}</span> -->
           <span>{{item.comment_time}}</span>
-          <div class="reply text_cen" @click="handreply">{{allCommentList.length}}回复</div>
+          <div
+            class="reply text_cen"
+            @click="handreply(item.comment_id)"
+            v-if="item.child.length!==0"
+          >{{item.child.length}}回复</div>
+          <div class="reply text_cen" @click="handreply(item.comment_id)" v-else>回复</div>
         </div>
-        <div class="replybox">
-          <span class="allreply" @click="showPopup(item)" @showpop="jh">
-            全部{{allCommentList.length}}条评论
+        <div class="replybox" v-if="item.child.length">
+          <div
+            v-for="(child,key) in item.child"
+            :key="key"
+            class="flex"
+            style="margin-bottom:0.15rem"
+          >
+            <span class="nicname">{{child.nickname}}:</span>
+            <div class="comm">{{child.comment}}</div>
+          </div>
+          <span class="allreply" @click="showPopup(item.comment_id)" @showpop="jh">
+            全部{{item.child.length}}条评论
             <van-icon name="arrow" />
           </span>
         </div>
+        <div v-else></div>
       </div>
     </div>
 
@@ -50,14 +65,14 @@
             src="../assets/img/wjx.png"
             alt
             @click="Collect(picDetail.id)"
-            v-if="picDetail.is_collect==true"
+            v-if="picDetail.is_collect==false"
           />
           <img
             src="../assets/img/ysc.png"
             alt
             @click="Collect(picDetail.id)"
             style="width: 0.6rem;height: 0.6rem;"
-            v-if="picDetail.is_collect==false"
+            v-if="picDetail.is_collect==true"
           />
           <img src="../assets/img/fx.png" alt @click="share" />
         </div>
@@ -70,23 +85,23 @@
       <div class="share">
         <h6>分享到</h6>
         <div class="flex_ar">
-          <div class="flex_cen flex_col">
+          <div class="flex_cen flex_col" @click="frinedbox">
             <img src="../assets/img/pyq.png" alt />
             <span>朋友圈</span>
           </div>
-          <div class="flex_cen flex_col">
+          <div class="flex_cen flex_col" @click="frined">
             <img src="../assets/img/wxhy.png" alt />
             <span>微信好友</span>
           </div>
-          <div class="flex_cen flex_col">
+          <div class="flex_cen flex_col" @click="frined">
             <img src="../assets/img/qqhy.png" alt />
             <span>QQ好友</span>
           </div>
-          <div class="flex_cen flex_col">
+          <div class="flex_cen flex_col" @click="frinedbox">
             <img src="../assets/img/qqkj.png" alt />
             <span>QQ空间</span>
           </div>
-          <div class="flex_cen flex_col">
+          <div class="flex_cen flex_col" @click="copy($event,copylink)">
             <img src="../assets/img/fzlj.png" alt />
             <span>复制链接</span>
           </div>
@@ -99,10 +114,12 @@
 <script>
 import articontent from "@/components/articContent.vue";
 // import replay from "@/components/replay.vue";
+import wx from "weixin-jsapi";
 import $ from "jquery";
 import { mapState } from "vuex";
 import request from "@/request.js";
 // import share from "@/components/sharPage.vue";
+import Clipboard from "clipboard";
 export default {
   components: {
     articontent,
@@ -123,15 +140,72 @@ export default {
       allCommentList: [], //评论列表
       CommentContent: [], ////评论内容
       showShare: false,
+      link: "http://villa.jisapp.cn/shenshiju/#/",
+      copylink: "",
+      type:1,
+      pulicid:''
     };
   },
   created() {
     this.handdetail();
-    console.log(this.$store);
+    this.copylink =
+      "http://villa.jisapp.cn/shenshiju/#/" + this.$route.fullPath;
+    console.log(this.$route);
+    this.commentList();
+    this.getcommentcontent();
   },
   methods: {
     share() {
       this.showShare = true;
+    },
+    frined() {
+      console.log(1);
+      wx.ready(function () {
+        //需在用户可能点击分享按钮前就先调用
+        wx.updateAppMessageShareData({
+          title: this.$router.currentRoute.meta.title, // 分享标题
+          desc: this.picDetail.title, // 分享描述
+          link: `${this.link}${this.$route.fullPath}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: this.picDetail.cover, // 分享图标
+          success: function () {
+            // 设置成功
+            this.$toast("分享成功");
+          },
+          cancel: function () {
+            this.$toast("取消分享");
+          },
+        });
+      });
+    },
+    frinedbox() {
+      console.log(2);
+      wx.ready(function () {
+        //需在用户可能点击分享按钮前就先调用
+        wx.updateTimelineShareData({
+          title: this.$router.currentRoute.meta.title, // 分享标题
+          link: `${this.link}${this.$route.fullPath}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: this.picDetail.cover, // 分享图标
+          success: function () {
+            // 设置成功
+            this.$toast("分享成功");
+          },
+          cancel: function () {
+            this.$toast("取消分享");
+          },
+        });
+      });
+    },
+    copy(e, text) {
+      var clipboard = new Clipboard(e.target, { text: () => text });
+      clipboard.on("success", () => {
+        this.$toast("复制成功");
+        // 释放内存
+        clipboard.destroy();
+      });
+      clipboard.on("error", () => {
+        this.$toast("复制失败");
+        clipboard.destroy();
+      });
     },
     handdetail() {
       if (!this.token) {
@@ -159,21 +233,7 @@ export default {
           .finally(() => {});
       }
     },
-    // 评论列表
-    commentList() {
-      request
-        .getComment({
-          uid: this.userInfor.member_id,
-          aid: this.$route.query.id,
-          page: 1,
-        })
-        .then((res) => {
-          console.log(res, "文章评论列表");
-          this.allCommentList = res.data;
-        })
-        .catch(() => {})
-        .finally(() => {});
-    },
+
     // 收藏
     Collect(num) {
       if (!this.token) {
@@ -215,6 +275,23 @@ export default {
       $(".silde").css({
         bottom: 0,
       });
+      this.type=1
+      console.log(this.type)
+    },
+    // 评论列表
+    commentList() {
+      request
+        .getComment({
+          uid: this.userInfor.member_id,
+          aid: this.$route.query.id,
+          page: 1,
+        })
+        .then((res) => {
+          console.log(res, "文章评论列表");
+          this.allCommentList = res.data;
+        })
+        .catch(() => {})
+        .finally(() => {});
     },
     // 文章评论分页数据
     getcommentcontent() {
@@ -245,50 +322,39 @@ export default {
         });
         return false;
       }
+      let aid=''
+      if(this.type==1){
+          aid=this.$route.query.id
+      }else{
+        aid= this.pulicid
+      }
+      console.log(this.pulicid)
       request
         .getDoComment({
           uid: this.userInfor.member_id,
-          aid: this.$route.query.id,
+          aid,
           content: data,
-          type: 1,
+          type: this.type,
         })
         .then((res) => {
           console.log(res, "评论内容", data);
           this.$toast("发表成功");
+          if(this.type==1){
+             this.commentList();
+          }else if(this.type==2){
+            this.getcommentcontent();
+          }
+         
         })
         .catch(() => {
           this.$toast("发表失败");
         })
         .finally(() => {});
-      // let time = new Date();
-      // let tY = time.getFullYear();
-      // let tM =
-      //   time.getMonth() + 1 < 10
-      //     ? "0" + (time.getMonth() + 1)
-      //     : time.getMonth() + 1;
-      // let tD = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
-      // let th = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
-      // let tm =
-      //   time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
-      // let ts =
-      //   time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
-      // console.log(tY, tM, tD, th, tm, ts);
-      // this.comment.push({
-      //   content: data,
-      //   name: "陈某某",
-      //   TimeY: `${tY}-${tM}-${tD}`,
-      //   TimeH: `${th}:${tm}:${ts}`,
-      // });
       this.showpanl = false;
       this.falsepanl = true;
     },
     // 评论踩
     handDown(item) {
-      if (item.is_down == 0) {
-        return false;
-      } else {
-        item.is_down--;
-      }
       request
         .getupdown({
           type: 2,
@@ -296,18 +362,19 @@ export default {
           uid: this.userInfor.member_id,
         })
         .then((res) => {
-          console.log(res, "点赞");
-          this.$toast("点赞成功");
+          if (res.code == 0) {
+            item.is_down ++;
+            console.log(res, "点赞");
+            // this.$toast("点赞成功");
+          }
         })
         .catch(() => {
-          this.$toast("点赞失败");
+          // this.$toast("点赞失败");
         })
         .finally(() => {});
     },
     // 评论顶
     handUp(item) {
-      item.is_up == !item.is_up;
-      item.is_up + 1;
       request
         .getupdown({
           type: 1,
@@ -315,11 +382,14 @@ export default {
           uid: this.userInfor.member_id,
         })
         .then((res) => {
-          console.log(res, "点赞");
-          this.$toast("点赞成功");
+          if (res.code == 0) {
+            item.is_up++;
+            console.log(res, "点赞");
+            this.$toast("点赞成功");
+          }
         })
         .catch(() => {
-          this.$toast("点赞失败");
+          // this.$toast("点赞失败");
         })
         .finally(() => {});
     },
@@ -328,13 +398,30 @@ export default {
       this.showpanl = false;
       this.falsepanl = true;
     },
-    handreply() {},
+    handreply(id) {
+      if (!this.token) {
+        this.$router.push({
+          path: "/login",
+        });
+        return false;
+      }
+      //底部评论样式
+      this.falsepanl = false;
+      this.showpanl = true;
+      $(".silde").css({
+        bottom: 0,
+      });
+      this.type=2
+      console.log(this.type,id)
+      this.pulicid=id
+    },
     //评论详情页
-    showPopup(item) {
+    showPopup(id) {
+      console.log( this.pulicid)
       this.$router.push({
         path: "/commentDetail",
         query: {
-          aid: item.id,
+          aid: id,
         },
       });
     },
@@ -375,6 +462,7 @@ export default {
     justify-content: center;
     align-items: center;
     display: inline-flex;
+    margin-left: 0.3rem;
     img {
       .w(31);
       .h(31);
@@ -401,7 +489,6 @@ export default {
     .fs(24);
     .lh(41);
     text-indent: 0.4rem;
-    .mb(50);
     text-align: justify;
   }
   .p2 {
@@ -411,7 +498,7 @@ export default {
   }
   .rate {
     .pt(10);
-    .mb(100);
+    .mb(20);
     .userinfo {
       img {
         .w(62);
@@ -460,6 +547,13 @@ export default {
       .b-radius(10);
       .padding(12, 14);
       box-sizing: border-box;
+      .nicname {
+        font: 400 0.26rem/1 "";
+        color: #4c78b3;
+      }
+      .comm {
+        margin-left: 0;
+      }
       .allreply {
         color: #4c78b3;
         .fs(28);
@@ -503,7 +597,8 @@ footer {
     font-family: SimSun;
   }
 }
-.share,.sharebox {
+.share,
+.sharebox {
   border-radius: 0.3rem 0.3rem 0px 0px;
   width: 100%;
   height: 2.28rem;

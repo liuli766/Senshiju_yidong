@@ -2,12 +2,14 @@
   <!-- 底部菜单栏-->
   <div class="tabbar">
     <nav class="flex_ar">
-      <div v-for="(item,index) in tabbar" :key="index" class="flex_col flex_ar" :class="{tab_active:tabid===index}">
-          <span class="iconfont" :class="item.icon"></span>
-        <span @click="tabChoes(index,item)" :class="{tab_active:tabid===index}">
-          {{item.tabname}}
-        </span>
-        
+      <div
+        v-for="(item,index) in tabbar"
+        :key="index"
+        class="flex_col flex_ar"
+        :class="{tab_active:tabid===index}"
+      >
+        <span class="iconfont ico" :class="item.icon"></span>
+        <span @click="tabChoes(index,item)" :class="{tab_active:tabid===index}">{{item.tabname}}</span>
       </div>
     </nav>
   </div>
@@ -24,24 +26,21 @@ export default {
   data() {
     return {
       tabbar: [
-        { icon:'icon-shouye',
-          tabname: "首页",
-          url: "/",
-        },
+        { icon: "icon-shouye", tabname: "首页", url: "/" },
         {
           tabname: "成品",
           url: "/product",
-          icon:'icon-chengpin'
+          icon: "icon-chengpin",
         },
         {
           tabname: "定制",
           url: "/PersonalTtailor",
-          icon:'icon-dingzhi'
+          icon: "icon-dingzhi",
         },
         {
           tabname: "我的",
           url: "/mine",
-          icon:'icon-dibudaohanglan-'
+          icon: "icon-dibudaohanglan-",
         },
       ],
       // tabid:0
@@ -73,7 +72,12 @@ nav {
 .tab_active {
   color: @base-color;
 }
-.iconfont{
-    margin-bottom: 0.1rem;
+.iconfont {
+  margin-bottom: 0.1rem;
+  font-weight: bold;
+}
+span.ico:nth-of-type(2),
+span.ico:nth-of-type(3) {
+  font-weight: 400;
 }
 </style>

@@ -39,7 +39,8 @@
       </div>
     </div>
     <div
-      v-if="collectlist.length==0 || articleList.length==0"
+      v-if="collectlist.length==0"
+      v-show="flag"
       style="text-align: center;
     margin-top: 0.3rem;"
     >暂无内容收藏</div>
@@ -75,6 +76,7 @@ export default {
       articleList: [], //百科内容
       now: new Date(), //当前时间
       collectlist: [],
+      flag:false
     };
   },
   created() {
@@ -141,6 +143,11 @@ export default {
       }
       if (k == 0) {
         this.collect();
+        if(this.collectlist.length==0){
+          this.flag=false
+        }else{
+          this.flag=true
+        }
       }
     },
     gobuildencycDetail(id) {
@@ -166,7 +173,7 @@ export default {
     flex-wrap: wrap;
     .span {
       .h(26);
-      .fs(18);
+      .fs(32);
       color: #191919;
       transform: scale(0.8);
       .lh(26);

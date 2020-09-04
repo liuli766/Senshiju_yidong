@@ -1,7 +1,12 @@
 <template>
   <!-- 产品列表 -->
   <div class="productitem flex flex_b">
-    <div v-for="(item,k) in productitem" :key="k" class="productitemlist" @click.prevent="goprodutDetail(item.id)">
+    <div
+      v-for="(item,k) in productitem"
+      :key="k"
+      class="productitemlist"
+      @click.prevent="goprodutDetail(item.id)"
+    >
       <img :src="item.cover" alt />
       <div class="padd">
         <p>{{item.intro}}</p>
@@ -9,7 +14,7 @@
         <div class="price">{{item.price}}</div>
         <div class="flex_be people">
           <span>{{item.moods}}人付款</span>
-          <div class="flex_cen"  @click.stop="JoinCart(item)">
+          <div class="flex_cen" @click.stop="JoinCart(item)">
             <van-icon name="shopping-cart-o" />
           </div>
         </div>
@@ -29,7 +34,7 @@
           </div>
           <button @click="goJoinCart(item)">加入购物车</button>
         </div>
-      </van-popup> -->
+      </van-popup>-->
     </div>
   </div>
 </template>
@@ -37,6 +42,7 @@
 <script>
 import { mapState } from "vuex";
 import request from "@/request.js";
+import { Toast } from "vant";
 export default {
   props: {
     productitem: {
@@ -66,15 +72,16 @@ export default {
         })
         .then((res) => {
           console.log(res, "加入购物车");
-          this.$toast({
-            message:"添加成功",
-            icon:'success'
+          // Toast.success("添加成功");
+          Toast({
+            message: "添加成功",
+            icon: "success",
           });
         })
         .catch(() => {
-          this.$toast({
-            message:"添加失败",
-            icon:'error'
+          Toast({
+            message: "添加成功",
+            icon: "fail",
           });
         })
         .finally(() => {});
@@ -82,9 +89,9 @@ export default {
     goprodutDetail(id) {
       this.$router.push({
         path: "/productDetail",
-        query:{
+        query: {
           id,
-        }
+        },
       });
     },
   },

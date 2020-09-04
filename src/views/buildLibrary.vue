@@ -1,5 +1,5 @@
 <template>
-<!-- 设计团队-->
+  <!-- 设计团队-->
   <div class="buildLibrary">
     <img src="../assets/img/sjtd.png" class="img" alt />
     <!-- 村墅人家设计团队村墅人家设计团队 -->
@@ -45,17 +45,17 @@ export default {
   name: "buildLibrary",
   data() {
     return {
-      teamList:[]
-    }
+      teamList: [],
+    };
   },
   created() {
     request
       .getTeam({
-        page:1
+        page: 1,
       })
       .then((res) => {
         console.log(res, "设计团队");
-        this.teamList=res.data
+        this.teamList = res.data;
       })
       .catch(() => {})
       .finally(() => {});
@@ -65,12 +65,12 @@ export default {
     handdetai(num) {
       this.$router.push({
         path: "/desigerDetail",
-        query:{
-          id:num
-        }
+        query: {
+          id: num,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -151,6 +151,8 @@ main {
           box-sizing: border-box;
           border-radius: 50%;
           border: 1px solid #75716e;
+          text-align: center;
+          line-height: 0.28rem;
         }
       }
       p {

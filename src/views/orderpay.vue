@@ -14,7 +14,7 @@
         请尽快完成付款，还剩
         <span>
           <span style="color:#FA3D29;display: inline-block; ">
-            <countdown :time="20*60*1000" tag="p">
+            <countdown :time="orderTime" tag="p">
               <template
                 slot-scope="props"
               >{{ props.minutes }}分{{ props.seconds==0 && props.minutes==0?canelOrder(orderdetail): props.seconds}}秒</template>
@@ -49,12 +49,15 @@
             <van-icon name="chat-o" />
           </span>-->
         </div>
-        <van-card
-          :num="orderdetail.num"
-          :price="orderdetail.price"
-          :desc="orderdetail.title"
-          :thumb="orderdetail.cover"
-        />
+
+        <div>
+          <van-card
+            :num="orderdetail.num"
+            :price="orderdetail.price"
+            :desc="orderdetail.title"
+            :thumb="orderdetail.cover"
+          />
+        </div>
       </div>
       <!--           origin-price="10.00" -->
       <!--  -->
@@ -73,8 +76,9 @@
         </div>
         <div class="flex_be fs26">
           <span>订单总价</span>
-          <span>¥{{orderdetail.num*orderdetail.price}}</span>
+          <span>¥{{orderdetail.price}}</span>
         </div>
+
         <div class="flex_be bordert">
           <span>实际付款</span>
           <span>¥{{orderdetail.num*orderdetail.price}}</span>
@@ -90,7 +94,7 @@
         </div>
         <div>
           <span>下单时间</span>
-          <span>{{orderdetail.add_time}}</span>
+          <span>{{orderdetail.add_time}} {{rocallTime}}</span>
         </div>
       </div>
       <div class="flex_be bottom">
@@ -106,13 +110,15 @@ import { mapState } from "vuex";
 import request from "@/request.js";
 import Clipboard from "clipboard";
 // import CountDown from "vue2-countdown";
-import wx from "weixin-jsapi";
+// import wx from "weixin-jsapi";
+import { Toast } from "vant";
 export default {
   computed: {
     ...mapState({
       token: (state) => state.token,
       userInfor: (state) => state.userInfor,
       navactivechoseid: (state) => state.navactivechoseid,
+      orderTime: (state) => state.orderTime,
     }),
   },
   components: {
@@ -125,40 +131,67 @@ export default {
       orderdetail: [],
       counting: false,
       btnInfo: "",
+      flag: false,
+      goods: [],
+      total: 0,
+      creatime: "", // 开始时间
+      daoTim: "", // 倒计时时间
+      msg: "",
+      rocallTime: "",
     };
   },
   created() {
-    console.log(this.$route.query.arr);
-    if (this.$route.query.arr) {
-      request
-        .getOrderDetail({
-          uid: this.userInfor.member_id,
-          ids: this.$route.query.arr,
-        })
-        .then((res) => {
-          console.log(res, "订单详情");
-          this.orderaddress = res.data.address;
-          this.orderdetail = res.data.detail;
-        })
-        .catch(() => {})
-        .finally(() => {});
-    } else {
-      request
-        .getOrderDetail({
-          uid: this.userInfor.member_id,
-          oid: this.$route.query.oid,
-        })
-        .then((res) => {
-          console.log(res, "订单详情");
-          this.orderaddress = res.data.address;
-          this.orderdetail = res.data.detail;
-        })
-        .catch(() => {})
-        .finally(() => {});
-    }
+    console.log(this.$route.query.oid)
+    request
+      .getOrderDetail({
+        uid: this.userInfor.member_id,
+        oid: this.$route.query.oid,
+      })
+      .then((res) => {
+        console.log(res, "订单详情");
+        this.orderaddress = res.data.address;
+        this.orderdetail = res.data.detail;
+        let starttime = res.data.detail.add_time.replace(/-/g, "/"); //订单时间
+        // var mydate = new Date(starttime);
+        // mydate.setMinutes(mydate.getMinutes() + 20);
+        // this.creatime = starttime.slice(-5, -3);
+        // this.daoTim = mydate.getMinutes;
+        let tc = new Date(starttime).getTime();
+        this.creatime = starttime;
+        var ts = new Date().getTime(); //当前服务器时间
+        let cm = 20 * 60 * 1000 - (ts - tc);
+        this.runBack(cm);
+      })
+      .catch(() => {})
+      .finally(() => {});
   },
   mounted() {},
   methods: {
+    runBack(cm) {
+      if (cm > 0) {
+        cm > 60000
+          ? (this.rocallTime =
+              (new Date(cm).getMinutes() < 10
+                ? "0" + new Date(cm).getMinutes()
+                : new Date(cm).getMinutes()) +
+              ":" +
+              (new Date(cm).getSeconds() < 10
+                ? "0" + new Date(cm).getSeconds()
+                : new Date(cm).getSeconds()))
+          : (this.rocallTime =
+              "00:" +
+              (new Date(cm).getSeconds() < 10
+                ? "0" + new Date(cm).getSeconds()
+                : new Date(cm).getSeconds()));
+        let _msThis = this;
+        setTimeout(function () {
+          cm -= 1000;
+          _msThis.runBack(cm);
+        }, 1000);
+      } else {
+        // this.changeOrderState();//调用改变订单状态接口
+      }
+    },
     go() {
       this.$router.push({
         path: `drawingOrder?navactivechoseid=0`,
@@ -173,17 +206,11 @@ export default {
         })
         .then((res) => {
           console.log(res);
-          this.$toast({
-            message: "取消成功",
-            icon: "success",
-          });
+          Toast.success("取消成功");
           this.go();
         })
         .catch(() => {
-          this.$toast({
-            message: "取消失败",
-            icon: "error",
-          });
+          Toast.fail("取消失败");
         })
         .finally(() => {});
     },
@@ -207,49 +234,66 @@ export default {
         },
       });
     },
-    gopay() {
+    wechatPay() {
       request
-        .getCartPay({
+        .getOrderDetailPay({
           uid: this.userInfor.member_id,
-          ids: [this.$route.query.id],
+          oid: this.$route.query.oid,
         })
         .then((res) => {
-          console.log(res);
-          let data= res.data.apiToay
-          //   下边字段都是后台接口返回的数据
-          //  <!--通过config接口注入权限验证配置-->
-          wx.config({
-            debug: true, // 开启调试模式
-            appId: data.appId, // 公众号的唯一标识
-            timestamp: data.timeStamp, // 生成签名的时间戳
-            nonceStr: data.nonce_str, // 生成签名的随机串
-            signature: data.sign, // 签名
-            jsApiList: ["chooseWXPay"], // 填入需要使用的JS接口列表，这里是先声明我们要用到支付的JS接口
-          });
-
-          //弹出支付窗口
-          wx.chooseWXPay({
-            timestamp: data.timeStamp, // 支付签名时间戳，
-            nonceStr: data.nonceStr, // 支付签名随机串，不长于 32 位
-            package: "prepay_id=" + data.prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=xxxx）
-            signType: "MD5", // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-            paySign: data.paySign, // 支付签名
-            success: function (res) {
-              // 支付成功后的回调函数
-              console.log("11111111111111", res);
+          let data = res.data.apiToay;
+          WeixinJSBridge.invoke(
+            "getBrandWCPayRequest",
+            {
+              appId: data.appId, //公众号名称，由商户传入
+              timeStamp: data.timeStamp, //时间戳，自1970年以来的秒数
+              nonceStr: data.nonceStr, //随机串
+              package: data.package,
+              signType: data.signType, //微信签名方式：
+              paySign: data.paySign, //微信签名
             },
-            cancel: function (res) {
-              console.log("22222", res);
-            },
-            fail: function (res) {
-              console.log("33333", res);
-            },
-          });
+            function (res) {
+              if (res.err_msg == "get_brand_wcpay_request:ok") {
+                // 使用以上方式判断前端返回,微信团队郑重提示：
+                //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                this.$toast("支付成功");
+                setTimeout(function () {
+                  this.$router.push({
+                    path: "/",
+                  });
+                }, 2000);
+              } else {
+                this.$toast("支付失败");
+                setTimeout(function () {
+                  this.$router.push({
+                    path: "/orderpay",
+                  });
+                }, 2000);
+              }
+            }
+          );
         })
         .catch(() => {
           this.$toast("系统异常");
         })
         .finally(() => {});
+    },
+    gopay() {
+      if (typeof WeixinJSBridge == "undefined") {
+        this.$toast("支付失败");
+        if (document.addEventListener) {
+          document.addEventListener(
+            "WeixinJSBridgeReady",
+            this.wechatPay,
+            false
+          );
+        } else if (document.attachEvent) {
+          document.attachEvent("WeixinJSBridgeReady", this.wechatPay);
+          document.attachEvent("onWeixinJSBridgeReady", this.wechatPay);
+        }
+      } else {
+        this.wechatPay();
+      }
     },
   },
 };

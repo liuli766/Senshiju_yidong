@@ -11,7 +11,7 @@
             <div class="small_font">{{detailList.position}}</div>
           </div>
           <div class="flex_cen small_font">
-            <van-icon name="star-o" size="0.2rem" style="margin-right:0.05rem" />
+            <!-- <van-icon name="star-o" size="0.2rem" style="margin-right:0.05rem" /> -->
             <span>评价星级:</span>
             <van-rate v-model="detailList.star_level" size="0.2rem" />
           </div>
@@ -128,7 +128,7 @@ export default {
     .pt(40);
     .mb(40);
     display: flex;
-
+    flex-wrap: wrap;
   }
   .btn {
     .w(200);

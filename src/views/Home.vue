@@ -160,7 +160,7 @@
           v-show="index>0"
         />
       </div>
-      <div class="xpic flex_be">
+      <div class="xpic flex_ar">
         <img v-for="(item,index) in dzlist" :key="index" alt :src="link+item.cover" />
       </div>
     </div>
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-// import { mapState } from "vuex";
+import { mapState } from "vuex";
 import request from "@/request.js";
 import tabbar from "@/components/tabBar.vue";
 export default {
@@ -188,13 +188,66 @@ export default {
       flag: false,
     };
   },
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+    }),
+  },
   components: {
     tabbar,
   },
   created() {
+    // this.getCode()
+    if (!this.token) {
+      this.$router.push({
+        path: "/register",
+      });
+      return false;
+    }
     this.getdata();
   },
   methods: {
+    wxLogin(code) {
+      request
+        .getWXInfo({
+          code: code,
+        })
+        .then((res) => {
+          console.log(res, "微信信息");
+          if (res.code == 0) {
+            this.$router.push({
+              path: "/",
+            });
+          }else{
+             this.$toast("授权失败");
+          }
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+    getCode() {
+      // 非静默授权，第一次有弹框
+      const code = this.getUrlParam("code"); // 截取路径中的code，如果没有就去微信授权，如果已经获取到了就直接传code给后台获取openId
+      const local = window.location.href;
+      console.log(code);
+
+      if (code == null || code === "") {
+        window.location.href =
+          "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe960929de0880424&redirect_uri=" +
+          encodeURIComponent(local) +
+          "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+      } else {
+        this.wxLogin(code); //把code传给后台获取用户信息
+        this.code = code;
+      }
+    },
+    getUrlParam: function (name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return unescape(r[2]);
+      return null;
+    },
     getdata() {
       this.flag = true;
       request
@@ -226,6 +279,7 @@ export default {
     .fs(14);
     display: flex;
     flex-direction: column;
+    text-align: center;
     img {
       .w(85);
       .h(85);
@@ -292,8 +346,8 @@ export default {
     color: @base-header-color;
     background: #c2884a;
     .mb(33);
-    .w(150);
-    .h(150);
+    .w(160);
+    .h(160);
     border-radius: 50%;
     span {
       font-family: FZCuHeiSongS-B-GB;
@@ -306,8 +360,8 @@ export default {
   .bg_color::after {
     content: "";
     border: 1px solid #c2884a;
-    .w(164);
-    .h(164);
+    .w(180);
+    .h(180);
     border-radius: 50%;
     position: absolute;
   }

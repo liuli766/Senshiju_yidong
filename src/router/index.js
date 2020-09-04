@@ -206,6 +206,20 @@ VueRouter.prototype.push = function push (location) {
       title: '售后'
     },
     component: () => import(/* webpackChunkName: "about" */ '../views/afterSale.vue')
+  },
+  { // 售后
+    path: '/success',
+    meta: {
+      title: '支付成功'
+    },
+    component: () => import(/* webpackChunkName: "about" */ '../views/success.vue')
+  },
+  { // 售后
+    path: '/surepayblue',
+    meta: {
+      title: '确认支付'
+    },
+    component: () => import(/* webpackChunkName: "about" */ '../views/surepayblue.vue')
   }
 ]
 

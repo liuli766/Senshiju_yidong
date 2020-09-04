@@ -11,7 +11,7 @@
     <div class="mainuser">
       <div class="flex_be">
         <div class="userinfo flex_cen">
-          <img :src="CommentDetail.phtot" alt />
+          <img :src="CommentDetail.photo" alt />
           <span>{{CommentDetail.nickname}}</span>
         </div>
         <div>
@@ -25,7 +25,7 @@
           </span>
         </div>
       </div>
-      <p>评论内容</p>
+      <p>{{CommentDetail.comment}}</p>
       <div class="time">
         <!-- <span>{{CommentDetail.comment_time.slice(0,5)}} &nbsp; &nbsp; {{CommentDetail.comment_time.slice(-5)}}</span> -->
       </div>
@@ -34,7 +34,7 @@
     <!-- 他人回复 -->
     <div class="otheruser">
       <p class="allreply">全部回复 &nbsp; &nbsp; {{CommentDetail.num}}</p>
-      <div class="mainuser" v-for="(item,k) in allCommentList" :key="k">
+      <div class="mainuser" v-for="(item,k) in CommentDetail.child" :key="k">
         <div class="flex_be">
           <div class="userinfo flex_cen">
             <img :src="item.photo" alt />
@@ -96,7 +96,10 @@ export default {
     }),
   },
   created() {
+    console.log(this.$route.query)
     this.commentList();
+    this.getPageComment()
+    
   },
   methods: {
     // 评论列表
@@ -130,11 +133,6 @@ export default {
     },
     // 评论踩
     handDown(item) {
-      if (item.is_down == 0) {
-        return false;
-      } else {
-        item.is_down--;
-      }
       request
         .getupdown({
           type: 2,
@@ -142,18 +140,19 @@ export default {
           uid: this.userInfor.member_id,
         })
         .then((res) => {
-          console.log(res, "点赞");
-          this.$toast("点赞成功");
+          if (res.code == 0) {
+            item.is_down ++;
+            console.log(res, "点赞");
+            // this.$toast("点赞成功");
+          }
         })
         .catch(() => {
-          this.$toast("点赞失败");
+          // this.$toast("点赞失败");
         })
         .finally(() => {});
     },
     // 评论顶
     handUp(item) {
-      item.is_up == !item.is_up;
-      item.is_up + 1;
       request
         .getupdown({
           type: 1,
@@ -161,11 +160,14 @@ export default {
           uid: this.userInfor.member_id,
         })
         .then((res) => {
-          console.log(res, "点赞");
-          this.$toast("点赞成功");
+          if (res.code == 0) {
+            item.is_up ++;
+            console.log(res, "点赞");
+            this.$toast("点赞成功");
+          }
         })
         .catch(() => {
-          this.$toast("点赞失败");
+          // this.$toast("点赞失败");
         })
         .finally(() => {});
     },
@@ -184,11 +186,12 @@ export default {
           uid: this.userInfor.member_id,
           aid: this.$route.query.aid,
           content: data,
-          type: 1,
+          type: 2,
         })
         .then((res) => {
           console.log(res, "评论内容", data);
           this.$toast("发表成功");
+          this.getPageComment()
         })
         .catch(() => {
           this.$toast("发表失败");

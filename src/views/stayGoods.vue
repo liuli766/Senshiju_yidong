@@ -134,14 +134,12 @@ export default {
           console.log(res);
           this.$toast({
             message: "取消成功",
-            icon: "success",
           });
           this.onClickLeft()
         })
         .catch(() => {
           this.$toast({
             message: "取消失败",
-            icon: "error",
           });
         })
         .finally(() => {});
@@ -225,6 +223,7 @@ main {
       .padding(7, 7, 7, 7);
       .b-radius(5);
       .mr(17);
+      text-align: center;
     }
   }
   .item {

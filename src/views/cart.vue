@@ -78,6 +78,7 @@
 <script>
 import { mapState } from "vuex";
 import request from "@/request.js";
+import { Toast } from "vant";
 export default {
   computed: {
     ...mapState({
@@ -138,17 +139,17 @@ export default {
         })
         .then((res) => {
           console.log(res, "购物车信息");
-          let arr = JSON.parse(localStorage.getItem("arr"));
-          console.log(JSON.parse(localStorage.getItem("arr")));
+          // let arr = JSON.parse(localStorage.getItem("arr"));
+          // console.log(JSON.parse(localStorage.getItem("arr")));
           for (let i = 0; i < res.data.length; i++) {
-            if (arr.length!==0) {
+            // if (arr.length!==0) {
+            //   let item = res.data[i];
+            //   item.cheakG = false;
+            //   item.num = arr[i].num;
+            // } else {
               let item = res.data[i];
               item.cheakG = false;
-              item.num = arr[i].num;
-            } else {
-              let item = res.data[i];
-              item.cheakG = false;
-            }
+            // }
           }
           this.cartData = res.data;
           console.log(this.cartData);
@@ -214,6 +215,16 @@ export default {
       }
       [...this.cartlistnum] = new Set(this.cartlistnum); //去重
       localStorage.setItem("arr", JSON.stringify(this.cartlistnum));
+      request
+        .getEditCart({
+          id: item.id,
+          num: this.cartData[k].num,
+        })
+        .then((res) => {
+          console.log(res, "购物车数量");
+        })
+        .catch(() => {})
+        .finally(() => {});
     },
     reducecart(item, k) {
       //购物车数量减
@@ -244,6 +255,16 @@ export default {
       [...this.cartlistnum] = new Set(this.cartlistnum); //去重
       localStorage.setItem("arr", JSON.stringify(this.cartlistnum));
       this.cartData[k].num--;
+      request
+        .getEditCart({
+          id: item.id,
+          num: this.cartData[k].num,
+        })
+        .then((res) => {
+          console.log(res, "购物车数量");
+        })
+        .catch(() => {})
+        .finally(() => {});
     },
     Allcollect() {
       //全部收藏
@@ -263,17 +284,11 @@ export default {
           })
           .then((res) => {
             console.log(res);
-            this.$toast({
-              message: "收藏成功",
-              icon: "success",
-            });
+            Toast.success("收藏成功");
           })
           .catch((e) => {
             console.log(e);
-            this.$toast({
-              message: "收藏失败",
-              icon: "error",
-            });
+            Toast.fail("收藏失败");
           })
           .finally(() => {});
       }
@@ -296,17 +311,12 @@ export default {
           .then((res) => {
             this.CartInfo();
             console.log(res);
-            this.$toast({
-              message: "删除成功",
-              icon: "success",
-            });
+            Toast.success("删除成功");
+            localStorage.clear("arr");
           })
           .catch((e) => {
             console.log(e);
-            this.$toast({
-              message: "删除失败",
-              icon: "error",
-            });
+            Toast.fail("删除失败");
           })
           .finally(() => {});
       }
@@ -325,7 +335,8 @@ export default {
       console.log(list);
       if (this.totalNum !== 0) {
         this.$router.push({
-          path: "/orderpay",
+          path: "/surePay",
+          // path: "/orderpay",
           query: {
             arr: list,
           },
