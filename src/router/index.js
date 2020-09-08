@@ -22,14 +22,14 @@ VueRouter.prototype.push = function push (location) {
     meta: {
       title: '设计团队'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/buildLibrary.vue')
+    component: (resolve) => require(['@/views/buildLibrary.vue'], resolve)
   },
   { //私人定制
     path: '/PersonalTtailor',
     meta: {
       title: '私人定制'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/PersonalTtailor.vue')
+    component: (resolve) => require(['@/views/PersonalTtailor.vue'], resolve)
   },
   { //个人中心
     path: '/person',
@@ -37,189 +37,189 @@ VueRouter.prototype.push = function push (location) {
     meta: {
       title: '个人中心'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/mine.vue')
+    component: (resolve) => require(['@/views/mine.vue'], resolve)
   },
   { //建房百科
     path: '/buildEncyc',
     meta: {
       title: '建房百科'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/buildEncyc.vue')
+    component: (resolve) => require(['@/views/buildEncyc.vue'], resolve)
   },
   { //商务合作
     path: '/Business',
     meta: {
       title: '商务合作'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/Business.vue')
+    component: (resolve) => require(['@/views/Business.vue'], resolve)
   },
   { //设计团队详情
     path: '/desigerDetail',
     meta: {
       title: '设计团队详情'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/desigerDetail.vue')
+    component: (resolve) => require(['@/views/desigerDetail.vue'], resolve)
   },
   { //商品详情
     path: '/productDetail',
     meta: {
       title: '商品详情'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/productDetail.vue')
+    component: (resolve) => require(['@/views/productDetail.vue'], resolve)
   },
   { //订单待付款
     path: '/orderpay',
     meta: {
       title: '订单待付款'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/orderpay.vue')
+    component: (resolve) => require(['@/views/orderpay.vue'], resolve)
   },
   { //商家待发货
     path: '/stayGoods',
     meta: {
       title: '商家待发货'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/stayGoods.vue')
+    component: (resolve) => require(['@/views/stayGoods.vue'], resolve)
   },
   { //物流信息
     path: '/logisticsInfo',
     meta: {
       title: '物流信息'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/logisticsInfo.vue')
+    component: (resolve) => require(['@/views/logisticsInfo.vue'], resolve)
   },
   { //成品
     path: '/product',
     meta: {
       title: '成品'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/product.vue')
+    component: (resolve) => require(['@/views/product.vue'], resolve)
   },
   { //我的
     path: '/mine',
     meta: {
       title: '我的'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/mine.vue')
+    component: (resolve) => require(['@/views/mine.vue'], resolve)
   },
   { //新建收货地址
     path: '/newshippingAddr',
     meta: {
       title: '新建收货地址'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/newshippingAddr.vue')
+    component: (resolve) => require(['@/views/newshippingAddr.vue'], resolve)
   },
   { //注册
     path: '/register',
     meta: {
       title: '注册'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/register.vue')
+    component: (resolve) => require(['@/views/register.vue'], resolve)
   },
   { //登录
     path: '/login',
     meta: {
       title: '登录'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/login.vue')
+    component: (resolve) => require(['@/views/login.vue'], resolve)
   },
   { //个人信息
     path: '/personInfo',
     meta: {
       title: '个人信息'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/personInfo.vue')
+    component: (resolve) => require(['@/views/personInfo.vue'], resolve)
   },
   { //确认支付
     path: '/surePay',
     meta: {
       title: '支付'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/surePay.vue')
+    component: (resolve) => require(['@/views/surePay.vue'], resolve)
   },
   { //收藏列表
     path: '/collectionList',
     meta: {
       title: '收藏'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/collectionList.vue')
+    component: (resolve) => require(['@/views/collectionList.vue'], resolve)
   },
   { //图纸订单
     path: '/drawingOrder',
     meta: {
       title: '图纸订单'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/drawingOrder.vue')
+    component: (resolve) => require(['@/views/drawingOrder.vue'], resolve)
   },
   { //购物车页面
     path: '/cart',
     meta: {
       title: '购物车'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/cart.vue')
+    component: (resolve) => require(['@/views/cart.vue'], resolve)
   },
   { 
     path: '/userxy',
     meta: {
       title: '用户协议'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/userxy.vue')
+    component: (resolve) => require(['@/views/userxy.vue'], resolve)
   },
   { // 建房百科详情页
     path: '/buildencycDetail',
     meta: {
       title: '建房百科详情页'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/buildencycDetail.vue')
+    component: (resolve) => require(['@/views/buildencycDetail.vue'], resolve)
   },
   { // 评论详情页
     path: '/commentDetail',
     meta: {
       title: '评论详情页'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/commentDetail.vue')
+    component: (resolve) => require(['@/views/commentDetail.vue'], resolve)
   },
   { // 文章收藏
     path: '/piccolltList',
     meta: {
       title: '文章收藏'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/piccolltList.vue')
+    component: (resolve) => require(['@/views/piccolltList.vue'], resolve)
   },
   { // 图纸收藏
     path: '/Drawingcollection',
     meta: {
       title: '图纸收藏'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/Drawingcollection.vue')
+    component: (resolve) => require(['@/views/Drawingcollection.vue'], resolve)
   },
   { // 地址列表
     path: '/AddressList',
     meta: {
       title: '地址列表'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/AddressList.vue')
+    component: (resolve) => require(['@/views/AddressList.vue'], resolve)
   },
   { // 售后
     path: '/afterSale',
     meta: {
       title: '售后'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/afterSale.vue')
+    component: (resolve) => require(['@/views/afterSale.vue'], resolve)
   },
   { // 售后
     path: '/success',
     meta: {
       title: '支付成功'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/success.vue')
+    component: (resolve) => require(['@/views/success.vue'], resolve)
   },
   { // 售后
     path: '/surepayblue',
     meta: {
       title: '确认支付'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/surepayblue.vue')
+    component: (resolve) => require(['@/views/surepayblue.vue'], resolve)
   }
 ]
 

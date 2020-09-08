@@ -13,8 +13,8 @@
     <div class="addr flex_be" @click="gonewshippingAddr(orderaddress)">
       <div class="flex_be">
         <van-icon name="location-o" />
-        <span>请填写收货地址</span>
-        <div style="display:none">
+        <span v-if="orderaddress.length==0">请填写收货地址</span>
+        <div v-else>
           <span class="info">{{orderaddress.name}} {{orderaddress.phone}}</span>
           <div class="flex_cen" style="font-size:0.25rem;">
             <span class="express">快递</span>
@@ -114,9 +114,6 @@ export default {
     onSubmit() {
       this.gopay();
     },
-    onSubmitpay() {
-      this.gopayblue();
-    },
     wechatPay() {
       request
         .getCartPay({
@@ -142,7 +139,10 @@ export default {
                 this.$toast("支付成功");
                 setTimeout(function () {
                   this.$router.push({
-                    path: "/",
+                    path: "/success",
+                    query:{
+                      price:res.data.total
+                    }
                   });
                 }, 2000);
               } else {

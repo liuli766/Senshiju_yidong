@@ -71,6 +71,11 @@ export default {
   },
   created() {
     console.log(this.userInfor);
+    if(!this.token){
+      this.$router.push({
+        path: "/login",
+      });
+    }
   },
   methods: {
     //头像选择
@@ -126,7 +131,7 @@ export default {
       this.$store.commit("cleartoken");
       this.$toast("退出成功");
       this.$router.push({
-        path: "/login",
+        path: "/mine",
       });
     },
     go() {

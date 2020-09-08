@@ -20,7 +20,7 @@
       <!-- <div class="share flex_cen">
         <img src="../assets/img/share.png" alt />
         <span>分享</span>
-      </div> -->
+      </div>-->
     </div>
 
     <!-- 发货 -->
@@ -79,7 +79,7 @@
     <div class="fixed">
       <van-goods-action>
         <!-- <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" />
-        <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" /> -->
+        <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" />-->
         <van-goods-action-icon
           :icon="icon"
           :text="text"
@@ -106,14 +106,14 @@
             </div>
             <div class="flex_be stepper">
               <span class="num">数量</span>
-              <div>
+              <div class="flex">
                 <span :class="[cunt==1?'disabled':'squer']" @click="reducecart(ProDetail)">-</span>
-                <span class="squer squer1">{{cunt}}</span>
+                <span class="squer squer1" style="font-size:0.2rem">{{cunt}}</span>
                 <span class="squer" @click="addcart(ProDetail)">+</span>
               </div>
             </div>
           </div>
-          <button @click="goJoinCart">加入购物车</button>
+          <button @click="goJoinCart(ProDetail.id)">加入购物车</button>
         </div>
       </van-popup>
     </div>
@@ -124,7 +124,7 @@
 // import { Toast } from "vant";
 import { mapState } from "vuex";
 import request from "@/request.js";
-import { Toast } from 'vant';
+import { Toast } from "vant";
 export default {
   data() {
     return {
@@ -146,18 +146,23 @@ export default {
     }),
   },
   created() {
-
     this.handdetail();
   },
   methods: {
     gosurepay(id) {
-      this.$router.push({
-        path: "/surepayblue",
-        // path: "/orderpay",
-        query: {
-            bid:id
+      if (!this.token) {
+        this.$router.push({
+          path: "/register",
+        });
+        return false;
+      } else {
+        this.$router.push({
+          path: "/surepayblue",
+          query: {
+            bid: id,
           },
-      });
+        });
+      }
     },
     onChange(index) {
       //轮播
@@ -181,56 +186,85 @@ export default {
       this.showpop = true;
     },
     handdetail() {
-      request
-        .getProDetail({
-          uid: this.userInfor.member_id,
-          id: this.$route.query.id,
-        })
-        .then((res) => {
-          console.log(res, "图纸详情");
-          this.ProDetail = res.data;
-        })
-        .catch(() => {
-          // this.$toast("添加失败");
-        })
-        .finally(() => {});
+      if (!this.token) {
+        request
+          .getProDetail({
+            id: this.$route.query.id,
+          })
+          .then((res) => {
+            console.log(res, "图纸详情");
+            this.ProDetail = res.data;
+          })
+          .catch(() => {
+            // this.$toast("添加失败");
+          })
+          .finally(() => {});
+      } else {
+        request
+          .getProDetail({
+            uid: this.userInfor.member_id,
+            id: this.$route.query.id,
+          })
+          .then((res) => {
+            console.log(res, "图纸详情");
+            this.ProDetail = res.data;
+          })
+          .catch(() => {
+            // this.$toast("添加失败");
+          })
+          .finally(() => {});
+      }
     },
     onClickIcon(num) {
-      request
-        .getCollect({
-          uid: this.userInfor.member_id,
-          type: 1,
-          object: num,
-        })
-        .then((res) => {
-          console.log(res);
-          this.handdetail();
-          this.$toast("收藏成功");
-          (this.text = "已收藏"), (this.icon = "like");
-        })
-        .catch((e) => {
-          console.log(e);
-          this.$toast("收藏失败");
-        })
-        .finally(() => {});
+      if (!this.token) {
+        this.$router.push({
+          path: "/register",
+        });
+        return false;
+      } else {
+        request
+          .getCollect({
+            uid: this.userInfor.member_id,
+            type: 1,
+            object: num,
+          })
+          .then((res) => {
+            console.log(res);
+            this.handdetail();
+            this.$toast("收藏成功");
+            (this.text = "已收藏"), (this.icon = "like");
+          })
+          .catch((e) => {
+            console.log(e);
+            this.$toast("收藏失败");
+          })
+          .finally(() => {});
+      }
     },
     // 立即购买
-    goJoinCart() {
+    goJoinCart(id) {
       //加入购物车
-      request
-        .getJoinCart({
-          uid: this.userInfor.member_id,
-          b_id: 2,
-          num: this.cunt,
-        })
-        .then((res) => {
-          console.log(res, "加入购物车");
-           Toast.success('添加成功')
-        })
-        .catch(() => {
-          Toast.fail('添加失败')
-        })
-        .finally(() => {});
+      if (!this.token) {
+        this.$router.push({
+          path: "/register",
+        });
+        return false;
+      } else {
+        request
+          .getJoinCart({
+            uid: this.userInfor.member_id,
+            b_id: id,
+            num: this.cunt,
+          })
+          .then((res) => {
+            console.log(res, "加入购物车");
+            Toast.success("添加成功");
+          })
+          .catch(() => {
+            Toast.fail("添加失败");
+          })
+          .finally(() => {});
+      }
     },
     reducecart(item) {
       console.log(item);
@@ -238,10 +272,34 @@ export default {
         return false;
       }
       this.cunt--;
+      request
+        .getEditCart({
+          id: item.id,
+          num: this.cunt,
+        })
+        .then((res) => {
+          console.log(res, "购物车数量加");
+        })
+        .catch(() => {
+          Toast.fail("添加失败");
+        })
+        .finally(() => {});
     },
     addcart(item) {
       console.log(item);
       this.cunt++;
+      request
+        .getEditCart({
+          id: item.id,
+          num: this.cunt,
+        })
+        .then((res) => {
+          console.log(res, "购物车数量减");
+        })
+        .catch(() => {
+          Toast.fail("添加失败");
+        })
+        .finally(() => {});
     },
   },
 };

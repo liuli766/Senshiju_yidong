@@ -13,7 +13,7 @@
     <!--  -->
     <p class="text_cen">
       注册/登录即表示同意
-      <span>《用户协议》</span>
+      <span @click="goUserxy">《用户协议》</span>
     </p>
     <div class="ohter text_cen">其他登录方式</div>
     <div class="flex_cen login_type">
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-// import { mapState } from "vuex";
+import { mapState } from "vuex";
 import request from "@/request.js";
 export default {
   data() {
@@ -36,15 +36,14 @@ export default {
       code: "",
     };
   },
-  created() {
-    request
-      .getWXInfo({})
-      .then((res) => {
-        console.log(res, "微信信息");
-      })
-      .catch(() => {})
-      .finally(() => {});
+  computed: {
+    ...mapState({
+      token: (state) => state.token,
+      userInfor: (state) => state.userInfor,
+      headimg: (state) => state.headimg,
+    }),
   },
+  created() {},
   methods: {
     wxLogin(code) {
       request
@@ -55,10 +54,19 @@ export default {
           console.log(res, "微信信息");
           if (res.code == 0) {
             this.$router.push({
-              path: "/",
-            });
-          }else{
-             this.$toast("授权失败");
+                path: "/register",
+              });
+          } else {
+            this.$toast("微信已经授权登录过了");
+             if (!this.token) {
+              this.$router.push({
+                path: "/register",
+              });
+            } else {
+              this.$router.push({
+                path: "/",
+              });
+            }
           }
         })
         .catch(() => {})
@@ -89,6 +97,11 @@ export default {
     goRegister() {
       this.$router.push({
         path: "/register",
+      });
+    },
+    goUserxy() {
+      this.$router.push({
+        path: "/userxy",
       });
     },
   },

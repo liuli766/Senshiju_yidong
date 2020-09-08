@@ -14,11 +14,13 @@
         请尽快完成付款，还剩
         <span>
           <span style="color:#FA3D29;display: inline-block; ">
-            <countdown :time="orderTime" tag="p">
+            <span v-if="rocallTime!==''">{{rocallTime}}</span>
+            <span v-else>0</span>
+            <!-- <countdown :time="orderTime" tag="p">
               <template
                 slot-scope="props"
               >{{ props.minutes }}分{{ props.seconds==0 && props.minutes==0?canelOrder(orderdetail): props.seconds}}秒</template>
-            </countdown>
+            </countdown> -->
           </span>&nbsp;&nbsp;&nbsp;&nbsp;（超时按
           <span style="color:#FA3D29">取消订单</span>处理）
         </span>
@@ -94,7 +96,7 @@
         </div>
         <div>
           <span>下单时间</span>
-          <span>{{orderdetail.add_time}} {{rocallTime}}</span>
+          <span>{{orderdetail.add_time}}</span>
         </div>
       </div>
       <div class="flex_be bottom">
@@ -157,9 +159,9 @@ export default {
         // this.creatime = starttime.slice(-5, -3);
         // this.daoTim = mydate.getMinutes;
         let tc = new Date(starttime).getTime();
-        this.creatime = starttime;
         var ts = new Date().getTime(); //当前服务器时间
-        let cm = 20 * 60 * 1000 - (ts - tc);
+        let cm = 1 * 60 * 1000 - (ts - tc);
+        console.log(cm)
         this.runBack(cm);
       })
       .catch(() => {})
@@ -189,7 +191,10 @@ export default {
           _msThis.runBack(cm);
         }, 1000);
       } else {
-        // this.changeOrderState();//调用改变订单状态接口
+        console.log(2)
+        let item=JSON.parse(localStorage.getItem('obj'))
+        this.canelOrder(item);//调用改变订单状态接口
+        
       }
     },
     go() {
@@ -199,6 +204,7 @@ export default {
     },
     // 取消订单
     canelOrder(item) {
+      localStorage.setItem('obj',JSON.stringify(item))
       let oid = item.id;
       request
         .getCancelOrder({
@@ -259,7 +265,10 @@ export default {
                 this.$toast("支付成功");
                 setTimeout(function () {
                   this.$router.push({
-                    path: "/",
+                    path: "/success",
+                    query:{
+                      price:res.data.total
+                    }
                   });
                 }, 2000);
               } else {

@@ -34,15 +34,18 @@
           <div class="reply text_cen" @click="handreply(item.comment_id)" v-else>回复</div>
         </div>
         <div class="replybox" v-if="item.child.length">
-          <div
-            v-for="(child,key) in item.child"
-            :key="key"
-            class="flex"
-            style="margin-bottom:0.15rem"
-          >
-            <span class="nicname">{{child.nickname}}:</span>
-            <div class="comm">{{child.comment}}</div>
+          <div style="max-height: 0.7rem; overflow: hidden;">
+            <div
+              v-for="(child,key) in item.child"
+              :key="key"
+              class="flex"
+              style="margin-bottom:0.15rem"
+            >
+              <span class="nicname">{{child.nickname}}:</span>
+              <div class="comm">{{child.comment}}</div>
+            </div>
           </div>
+
           <span class="allreply" @click="showPopup(item.comment_id)" @showpop="jh">
             全部{{item.child.length}}条评论
             <van-icon name="arrow" />
@@ -142,8 +145,8 @@ export default {
       showShare: false,
       link: "http://villa.jisapp.cn/shenshiju/#/",
       copylink: "",
-      type:1,
-      pulicid:''
+      type: 1,
+      pulicid: "",
     };
   },
   created() {
@@ -152,7 +155,6 @@ export default {
       "http://villa.jisapp.cn/shenshiju/#/" + this.$route.fullPath;
     console.log(this.$route);
     this.commentList();
-    this.getcommentcontent();
   },
   methods: {
     share() {
@@ -265,7 +267,7 @@ export default {
     showcontent() {
       if (!this.token) {
         this.$router.push({
-          path: "/login",
+          path: "/register",
         });
         return false;
       }
@@ -275,29 +277,36 @@ export default {
       $(".silde").css({
         bottom: 0,
       });
-      this.type=1
-      console.log(this.type)
+      this.type = 1;
+      console.log(this.type);
     },
     // 评论列表
     commentList() {
-      request
-        .getComment({
-          uid: this.userInfor.member_id,
-          aid: this.$route.query.id,
-          page: 1,
-        })
-        .then((res) => {
-          console.log(res, "文章评论列表");
-          this.allCommentList = res.data;
-        })
-        .catch(() => {})
-        .finally(() => {});
+      if (!this.token) {
+        this.$router.push({
+          path: "/register",
+        });
+        return false;
+      } else {
+        request
+          .getComment({
+            uid: this.userInfor.member_id,
+            aid: this.$route.query.id,
+            page: 1,
+          })
+          .then((res) => {
+            console.log(res, "文章评论列表");
+            this.allCommentList = res.data;
+          })
+          .catch(() => {})
+          .finally(() => {});
+      }
     },
     // 文章评论分页数据
     getcommentcontent() {
       if (!this.token) {
         this.$router.push({
-          path: "/login",
+          path: "/register",
         });
         return false;
       }
@@ -318,17 +327,17 @@ export default {
     addmment(data) {
       if (!this.token) {
         this.$router.push({
-          path: "/login",
+          path: "/register",
         });
         return false;
       }
-      let aid=''
-      if(this.type==1){
-          aid=this.$route.query.id
-      }else{
-        aid= this.pulicid
+      let aid = "";
+      if (this.type == 1) {
+        aid = this.$route.query.id;
+      } else {
+        aid = this.pulicid;
       }
-      console.log(this.pulicid)
+      console.log(this.pulicid);
       request
         .getDoComment({
           uid: this.userInfor.member_id,
@@ -339,12 +348,11 @@ export default {
         .then((res) => {
           console.log(res, "评论内容", data);
           this.$toast("发表成功");
-          if(this.type==1){
-             this.commentList();
-          }else if(this.type==2){
+          if (this.type == 1) {
+            this.commentList();
+          } else if (this.type == 2) {
             this.getcommentcontent();
           }
-         
         })
         .catch(() => {
           this.$toast("发表失败");
@@ -363,7 +371,7 @@ export default {
         })
         .then((res) => {
           if (res.code == 0) {
-            item.is_down ++;
+            item.is_down++;
             console.log(res, "点赞");
             // this.$toast("点赞成功");
           }
@@ -401,7 +409,7 @@ export default {
     handreply(id) {
       if (!this.token) {
         this.$router.push({
-          path: "/login",
+          path: "/register",
         });
         return false;
       }
@@ -411,13 +419,13 @@ export default {
       $(".silde").css({
         bottom: 0,
       });
-      this.type=2
-      console.log(this.type,id)
-      this.pulicid=id
+      this.type = 2;
+      console.log(this.type, id);
+      this.pulicid = id;
     },
     //评论详情页
     showPopup(id) {
-      console.log( this.pulicid)
+      console.log(this.pulicid);
       this.$router.push({
         path: "/commentDetail",
         query: {
@@ -541,12 +549,13 @@ export default {
     }
     .replybox {
       background: #eeeeee;
-      .h(197);
+      .h(140);
       .w(620);
       .mt(25);
       .b-radius(10);
       .padding(12, 14);
       box-sizing: border-box;
+      overflow: hidden;
       .nicname {
         font: 400 0.26rem/1 "";
         color: #4c78b3;

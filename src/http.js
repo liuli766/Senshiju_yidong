@@ -10,9 +10,9 @@ axios.defaults.baseURL = 'http://villa.jisapp.cn'; //配置接口地址
 //POST传参序列化(添加请求拦截器)
 
 axios.interceptors.request.use((config) => {
-    
+
     if (store.state.token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
-        config.headers["x-authorize-token"] =store.state.token
+        config.headers["x-authorize-token"] = store.state.token
     }
 
     //在发送请求之前做某件事
@@ -62,13 +62,14 @@ export function fetchPost(url, params) {
         axios.post(url, params)
 
             .then(response => {
-                if(response.data.code==2){
+                console.log(response)
+                if (response.data.code == 2) {
                     this.$router.push({
-                        path:'/login'
+                        path: '/login'
                     })
                 }
                 resolve(response);
-                
+
 
             }, err => {
 
@@ -95,9 +96,10 @@ export function fetchGet(url, param) {
         axios.get(url, { params: param })
 
             .then(response => {
-                if(response.data.code==2){
+                console.log(response)
+                if (response.data.code == 2) {
                     this.$router.push({
-                        path:'/login'
+                        path: '/login'
                     })
                 }
                 resolve(response)

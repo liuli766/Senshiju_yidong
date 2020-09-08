@@ -177,7 +177,7 @@ export default {
       console.log(data);
       if (!this.token) {
         this.$router.push({
-          path: "/login",
+          path: "/register",
         });
         return false;
       }

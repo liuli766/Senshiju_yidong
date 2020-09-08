@@ -119,15 +119,6 @@ export default {
   },
   created() {
     this.cartlist = this.$store.getters.addShopList;
-    request
-      .getCarts({
-        uid: this.userInfor.member_id,
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch(() => {})
-      .finally(() => {});
     this.CartInfo();
   },
   methods: {
@@ -139,20 +130,28 @@ export default {
         })
         .then((res) => {
           console.log(res, "购物车信息");
-          // let arr = JSON.parse(localStorage.getItem("arr"));
-          // console.log(JSON.parse(localStorage.getItem("arr")));
-          for (let i = 0; i < res.data.length; i++) {
-            // if (arr.length!==0) {
-            //   let item = res.data[i];
-            //   item.cheakG = false;
-            //   item.num = arr[i].num;
-            // } else {
+          if (res.code == 2) {
+            console.log(1)
+            this.$router.push({
+              path: "/login",
+            });
+            return false;
+          } else {
+            // let arr = JSON.parse(localStorage.getItem("arr"));
+            // console.log(JSON.parse(localStorage.getItem("arr")));
+            for (let i = 0; i < res.data.length; i++) {
+              // if (arr.length!==0) {
+              //   let item = res.data[i];
+              //   item.cheakG = false;
+              //   item.num = arr[i].num;
+              // } else {
               let item = res.data[i];
               item.cheakG = false;
-            // }
+              // }
+            }
+            this.cartData = res.data;
+            console.log(this.cartData);
           }
-          this.cartData = res.data;
-          console.log(this.cartData);
         })
         .catch(() => {
           // this.$toast("添加失败");

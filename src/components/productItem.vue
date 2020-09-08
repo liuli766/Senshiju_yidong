@@ -19,22 +19,6 @@
           </div>
         </div>
       </div>
-      <!-- 购物车 -->
-      <!-- <van-popup v-model="showpop" position="bottom" :style="{ height: '60%' }">
-        <div class="cartfff">
-          <div class="cartbox">
-            <div class="cartlist flex">
-              <img src="../assets/logo.png" alt />
-              <div class="red">￥598.00</div>
-            </div>
-            <div class="flex_be stepper">
-              <span class="num">数量</span>
-              <van-stepper @change="change(item.value,index)" />
-            </div>
-          </div>
-          <button @click="goJoinCart(item)">加入购物车</button>
-        </div>
-      </van-popup>-->
     </div>
   </div>
 </template>
@@ -59,32 +43,47 @@ export default {
   data() {
     return {
       showpop: false,
+      cartnum: 1,
     };
   },
   methods: {
     JoinCart(item) {
-      this.showpop = true;
-      request
-        .getJoinCart({
-          uid: this.userInfor.member_id,
-          b_id: item.id,
-          num: 1,
-        })
-        .then((res) => {
-          console.log(res, "加入购物车");
-          // Toast.success("添加成功");
-          Toast({
-            message: "添加成功",
-            icon: "success",
-          });
-        })
-        .catch(() => {
-          Toast({
-            message: "添加成功",
-            icon: "fail",
-          });
-        })
-        .finally(() => {});
+      if (!this.token) {
+        this.$router.push({
+          path: "/register",
+        });
+        return false;
+      } else {
+        this.showpop = true;
+        request
+          .getJoinCart({
+            uid: this.userInfor.member_id,
+            b_id: item.id,
+            num:this.cartnum,
+          })
+          .then((res) => {
+            console.log(res, "加入购物车");
+            if (res.code == 2) {
+              this.$router.push({
+                path: "/register",
+              });
+              return false;
+            } else {
+              // Toast.success("添加成功");
+              Toast({
+                message: "添加成功",
+                icon: "success",
+              });
+            }
+          })
+          .catch(() => {
+            Toast({
+              message: "添加成功",
+              icon: "fail",
+            });
+          })
+          .finally(() => {});
+      }
     },
     goprodutDetail(id) {
       this.$router.push({

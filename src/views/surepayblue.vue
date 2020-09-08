@@ -13,7 +13,14 @@
     <div class="addr flex_be" @click="gonewshippingAddr(orderaddress)">
       <div class="flex_be">
         <van-icon name="location-o" />
-        <span>请填写收货地址</span>
+        <span v-if="orderaddress.length==0">请填写收货地址</span>
+        <div v-else>
+          <span class="info">{{orderaddress.name}} {{orderaddress.phone}}</span>
+          <div class="flex_cen" style="font-size:0.25rem;">
+            <span class="express">快递</span>
+            {{orderaddress.province}}{{orderaddress.city}}{{orderaddress.district}}{{orderaddress.address}}
+          </div>
+        </div>
       </div>
       <van-icon name="arrow" />
     </div>
@@ -56,7 +63,7 @@
         合计：
         <span style="color；#F93420">{{total}}</span>
       </div>
-      <div @click="gopayblue" class="onsubmit">立即付款</div>
+      <div @click="gopay" class="onsubmit">立即付款</div>
     </div>
   </div>
 </template>
@@ -94,15 +101,23 @@ export default {
         bid: this.$route.query.bid,
       })
       .then((res) => {
-        this.orderaddress = res.address;
-        this.orderdetail = res.data.goods;
-        console.log(res, "图纸购买生成订单");
+        if (res.code == 2) {
+          this.$router.push({
+            path: "/login",
+          });
+          return false;
+        } else {
+          this.orderaddress = res.data.address;
+          this.orderdetail = res.data.goods;
+          this.total = res.data.total;
+          console.log(res, "图纸购买生成订单");
+        }
       })
       .catch(() => {})
       .finally(() => {});
   },
   methods: {
-    wechatPayblue() {
+    wechatPay() {
       request
         .getBluePay({
           uid: this.userInfor.member_id,
@@ -128,7 +143,10 @@ export default {
                 this.$toast("支付成功");
                 setTimeout(function () {
                   this.$router.push({
-                    path: "/",
+                    path: "/success",
+                    query:{
+                      price:res.data.total
+                    }
                   });
                 }, 2000);
               } else {
@@ -147,18 +165,18 @@ export default {
         })
         .finally(() => {});
     },
-    gopayblue() {
+    gopay() {
       if (typeof WeixinJSBridge == "undefined") {
         this.$toast("支付失败");
         if (document.addEventListener) {
           document.addEventListener(
             "WeixinJSBridgeReady",
-            this.wechatPayblue,
+            this.wechatPay,
             false
           );
         } else if (document.attachEvent) {
-          document.attachEvent("WeixinJSBridgeReady", this.wechatPayblue);
-          document.attachEvent("onWeixinJSBridgeReady", this.wechatPayblue);
+          document.attachEvent("WeixinJSBridgeReady", this.wechatPay);
+          document.attachEvent("onWeixinJSBridgeReady", this.wechatPay);
         }
       } else {
         this.wechatPay();
@@ -169,6 +187,7 @@ export default {
     },
     // 收货地址
     gonewshippingAddr(orderaddress) {
+      console.log(orderaddress);
       this.$router.push({
         path: "/newshippingAddr",
         query: {
@@ -176,6 +195,7 @@ export default {
         },
       });
     },
+    
   },
 };
 </script>
