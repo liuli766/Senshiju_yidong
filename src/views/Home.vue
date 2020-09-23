@@ -2,42 +2,56 @@
   <!-- 首页 -->
   <div class="home">
     <div id="nav" class="flex_ar">
-      <router-link to="/product">
-        <div>
-          <img src="../assets/img/nav/jftk.png" alt />
-          <span>建房图库</span>
-        </div>
-      </router-link>
-      <router-link to="/buildLibrary">
-        <div>
-          <img src="../assets/img/nav/sjtd.png" alt />
-          <span>设计团队</span>
-        </div>
-      </router-link>
-      <router-link to="/PersonalTtailor">
-        <div>
-          <img src="../assets/img/nav/srdz.png" alt />
-          <span>私人定制</span>
-        </div>
-      </router-link>
-      <router-link to="/buildEncyc">
-        <div>
-          <img src="../assets/img/nav/jfbk.png" alt />
-          <span>建房百科</span>
-        </div>
-      </router-link>
-      <router-link to="/Business">
-        <div>
-          <img src="../assets/img/nav/swhz.png" alt />
-          <span>商务合作</span>
-        </div>
-      </router-link>
-      <router-link to="/person">
-        <div>
-          <img src="../assets/img/nav/grzx.png" alt />
-          <span>个人中心</span>
-        </div>
-      </router-link>
+      <van-swipe :loop="false" :width="93.5" :show-indicators='false' :touchable='true' style="width:375px">
+        <van-swipe-item>
+          <router-link to="/product">
+            <div>
+              <img src="../assets/img/nav/jftk.png" alt />
+              <span>建房图库</span>
+            </div>
+          </router-link>
+        </van-swipe-item>
+        <van-swipe-item>
+          <router-link to="/buildLibrary">
+            <div>
+              <img src="../assets/img/nav/sjtd.png" alt />
+              <span>设计团队</span>
+            </div>
+          </router-link>
+        </van-swipe-item>
+        <van-swipe-item>
+          <router-link to="/PersonalTtailor">
+            <div>
+              <img src="../assets/img/nav/srdz.png" alt />
+              <span>私人定制</span>
+            </div>
+          </router-link>
+        </van-swipe-item>
+        <van-swipe-item>
+          <router-link to="/buildEncyc">
+            <div>
+              <img src="../assets/img/nav/jfbk.png" alt />
+              <span>建房百科</span>
+            </div>
+          </router-link>
+        </van-swipe-item>
+        <van-swipe-item>
+          <router-link to="/Business">
+            <div>
+              <img src="../assets/img/nav/swhz.png" alt />
+              <span>商务合作</span>
+            </div>
+          </router-link>
+        </van-swipe-item>
+        <van-swipe-item>
+          <router-link to="/person">
+            <div>
+              <img src="../assets/img/nav/grzx.png" alt />
+              <span>个人中心</span>
+            </div>
+          </router-link>
+        </van-swipe-item>
+      </van-swipe>
     </div>
     <!-- banner -->
     <div class="logo text_cen">
@@ -54,6 +68,12 @@
     <div class="tel">
       24小时服务电话:
       <a :href="'tel:' + phone">{{phone}}</a>
+    </div>
+     <div class="video">
+      <video  controls width="375" height="300" preload="none"></video>
+      <div class="vedoimg" @click.stop="handplay">
+        <img src="../assets/img/player.png" alt v-if="vdeoimg" />
+      </div>
     </div>
     <!-- 定制服务流程 -->
     <div class="process text_cen">
@@ -91,8 +111,18 @@
     <div class="design text_cen">
       <h3>设计范围</h3>
       <span>design range</span>
-      <img src="../assets/img/1.png" alt />
-      <div></div>
+      <div style="position: relative;">
+        <img src="../assets/img/1.png" alt />
+        <div class="quk">
+          <div></div>
+          <div style="position: absolute;right: 0;top: 0;"></div>
+          <div style="position: absolute;right: 0;top: 1.3rem;"></div>
+          <div style="position: absolute;left: 0;top: 1.3rem;"></div>
+          <div style="position: absolute;left: 0;top: 2.5rem;"></div>
+          <div style="position: absolute;right: 0;top: 2.5rem;"></div>
+          <div style="position: absolute;left: 2.5rem;width: 2.5rem;height: 2.5rem;top: 0.5rem;"></div>
+        </div>
+      </div>
     </div>
     <!-- 别墅类型 -->
     <div class="type_box">
@@ -152,16 +182,10 @@
       <h3>定制案例展示</h3>
       <span>Custom-made case show</span>
       <div class="dpic flex_be">
-        <img
-          v-for="(item,index) in dzlist"
-          :key="index"
-          alt
-          :src="link+item.cover"
-          v-show="index>0"
-        />
+        <img v-for="(item,index) in dzlist.slice(0,2)" :key="index" alt :src="item.cover" />
       </div>
-      <div class="xpic flex_ar">
-        <img v-for="(item,index) in dzlist" :key="index" alt :src="link+item.cover" />
+      <div class="xpic">
+        <img v-for="(item,index) in dzlist" :key="index" alt :src="item.cover" />
       </div>
     </div>
     <!-- footer -->
@@ -186,6 +210,7 @@ export default {
       dzlist: [],
       link: "http://villa.jisapp.cn",
       flag: false,
+      vdeoimg: true,
     };
   },
   computed: {
@@ -214,10 +239,22 @@ export default {
         .getDrawings({})
         .then((res) => {
           console.log(res, "定制图纸");
-          this.dzlist = res.data.praise;
+          this.dzlist = res.data.case;
         })
         .catch(() => {})
         .finally(() => {});
+    },
+    handplay() {
+      //单击播放暂停按钮控制视频的播放和暂停
+      // let vdeoimg = document.querySelector('.vedoimg>img')
+      let video = document.querySelector('video')
+      if (video.paused) {
+        video.play()
+        this.vdeoimg = false
+      } else {
+        video.pause()
+        this.vdeoimg = true
+      }
     },
   },
 };
@@ -234,8 +271,8 @@ export default {
     flex-direction: column;
     text-align: center;
     img {
-      .w(85);
-      .h(85);
+      .w(180);
+      .h(180);
       .mb(4);
     }
   }
@@ -388,10 +425,12 @@ export default {
   }
   .xpic {
     flex-wrap: wrap;
+    display: flex;
     img {
       .w(174.9);
       .h(122.1);
       .mt(19);
+      margin-right: 0.15rem;
     }
   }
 }
@@ -411,5 +450,37 @@ footer {
   color: @base-header-color;
   .pt(26);
   .pb(60);
+}
+.quk {
+  width: 100%;
+  height: 3.5rem;
+  // border: 1px solid red;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.quk div {
+  width: 2rem;
+  height: 1rem;
+  // border: 1px solid yellow;
+}
+.video {
+  position: relative;
+}
+.video .vedoimg {
+  height: 6rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7.5rem;
+}
+.video .vedoimg img {
+  width: 92px;
+  height: 92px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -46px;
+  margin-left: -46px;
 }
 </style>

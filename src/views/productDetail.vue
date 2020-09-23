@@ -2,25 +2,32 @@
   <!-- 商品详情页 -->
   <div class="productdetail">
     <van-swipe @change="onChange">
-      <van-swipe-item v-for="(item,k) in ProDetail.imgs" :key="k">
+      <van-swipe-item v-for="(item,k) in ProDetail.photos" :key="k">
         <img :src="item" alt />
       </van-swipe-item>
       <template #indicator>
-        <!-- <div class="custom-indicator text_cen">{{ current + 1 }}/{{ProDetail.imgs.length}}</div> -->
+        <div class="custom-indicator text_cen">{{ current + 1 }}/{{len}}</div>
       </template>
     </van-swipe>
     <!-- 价格 -->
-    <div class="price">
+    <div class="price flex_be">
       <span>¥{{ProDetail.price}}</span>
-      <span></span>
+      <span class="flex_cen flex_col" style="margin-right:0.3rem" v-if="ProDetail.is_collect==false" @click="onClickIcon(ProDetail.id)">
+        <img src="../assets/img/wjx.png" alt="" style="width:0.45rem;height:0.45rem">
+        <span style="font-size:0.19rem;color:#4F4F4F;line-height:1">收藏</span>
+      </span>
+      <span class="flex_cen flex_col" style="margin-right:0.3rem" v-if="ProDetail.is_collect==true" @click="onClickIcon(ProDetail.id)">
+        <img src="../assets/img/ysc.png" alt="" style="width:0.45rem;height:0.45rem">
+        <span style="font-size:0.19rem;color:#4F4F4F;line-height:1">已收藏</span>
+      </span>
     </div>
     <!-- 简介 -->
     <div class="sharebox">
       <p class="title">{{ProDetail.title}}</p>
-      <!-- <div class="share flex_cen">
+      <div class="share flex_cen">
         <img src="../assets/img/share.png" alt />
         <span>分享</span>
-      </div>-->
+      </div>
     </div>
 
     <!-- 发货 -->
@@ -75,11 +82,14 @@
       <span>图纸介绍</span>
       <p>{{ProDetail.intro}}</p>
     </div>
+    <div>
+      <img :src="item" v-for="(item,k) in ProDetail.imgs" :key="k" style="width:100%;height:100%;">
+    </div>
     <!-- 商品详情底部 -->
     <div class="fixed">
       <van-goods-action>
-        <!-- <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" />
-        <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" />-->
+        <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" />
+        <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" />
         <van-goods-action-icon
           :icon="icon"
           :text="text"
@@ -137,6 +147,7 @@ export default {
       ProDetail: [],
       cunt: 1, //购物车数量
       cartinfoList: [], //购物车数量
+      len:''
     };
   },
   computed: {
@@ -194,6 +205,8 @@ export default {
           .then((res) => {
             console.log(res, "图纸详情");
             this.ProDetail = res.data;
+            this.len=res.data.photos.length
+            console.log(this.len)
           })
           .catch(() => {
             // this.$toast("添加失败");
@@ -208,6 +221,8 @@ export default {
           .then((res) => {
             console.log(res, "图纸详情");
             this.ProDetail = res.data;
+            this.len=res.data.photos.length
+            console.log(this.len)
           })
           .catch(() => {
             // this.$toast("添加失败");
@@ -459,7 +474,7 @@ export default {
     border-radius: 50%;
   }
   img + img {
-    .ml(-26);
+    .ml(-10);
   }
 }
 .sharebox {

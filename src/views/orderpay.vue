@@ -30,12 +30,12 @@
         <div class="flex">
           <van-icon
             name="location-o"
-            style="margin-right:0.28rem;align-self: flex-end;margin-bottom:0.1rem"
+            style="margin-right:0.28rem;align-self: flex-end;"
           />
           <div>
             <span class="info">{{orderaddress.name}} {{orderaddress.phone}}</span>
             <div class="flex_cen" style="font-size:0.25rem;">
-              <span class="express">快递</span>
+              <span class="express" style="text-align: center;">快递</span>
               {{orderaddress.province}}{{orderaddress.city}}{{orderaddress.district}}{{orderaddress.address}}
             </div>
           </div>
@@ -160,7 +160,7 @@ export default {
         // this.daoTim = mydate.getMinutes;
         let tc = new Date(starttime).getTime();
         var ts = new Date().getTime(); //当前服务器时间
-        let cm = 1 * 60 * 1000 - (ts - tc);
+        let cm = 20 * 60 * 1000 - (ts - tc);
         console.log(cm)
         this.runBack(cm);
       })
@@ -474,6 +474,6 @@ main {
   font-size: 0.26rem;
 }
 .van-icon::before {
-  font-size: 0.24rem;
+  font-size: 0.4rem;
 }
 </style>

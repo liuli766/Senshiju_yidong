@@ -9,7 +9,7 @@
     >
       <img :src="item.cover" alt />
       <div class="padd">
-        <p>{{item.intro}}</p>
+        <p>{{item.title}}</p>
         <span class="baoyou">包邮</span>
         <div class="price">{{item.price}}</div>
         <div class="flex_be people">

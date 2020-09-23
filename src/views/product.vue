@@ -2,23 +2,70 @@
   <!-- 成品 -->
   <div class="product">
     <div class="serchbox">
-      <van-search v-model="searchContent" shape="round" background="#fff" placeholder="请输入搜索内容" @change="handserch" />
+      <van-search
+        v-model="searchContent"
+        shape="round"
+        background="#fff"
+        placeholder="请输入搜索内容"
+        @change="handserch"
+        style="overflow-x: hidden;"
+      />
     </div>
     <!--  -->
     <div class="dropdown flex_be">
       <div class="all">全部</div>
       <div class="dropdownbox">
         <van-dropdown-menu active-color="#FE9E15">
-          <van-dropdown-item v-model="value1" :options="cate1" title="风格" @change="handchange1(value1)" />
-          <van-dropdown-item v-model="value2" :options="cate2" title="面宽" @change="handchange2(value2)" />
-          <van-dropdown-item v-model="value3" :options="cate3" title="进深" @change="handchange3(value3)" />
-          <van-dropdown-item v-model="value4" :options="cate4" title="占地" @change="handchange4(value4)" />
+          <van-dropdown-item
+            v-model="value1"
+            :options="cate1"
+            title="风格"
+            @change="handchange1(value1)"
+          />
+          <van-dropdown-item
+            v-model="value2"
+            :options="cate2"
+            title="面宽"
+            @change="handchange2(value2)"
+          />
+          <van-dropdown-item
+            v-model="value3"
+            :options="cate3"
+            title="进深"
+            @change="handchange3(value3)"
+          />
+          <van-dropdown-item
+            v-model="value4"
+            :options="cate4"
+            title="占地"
+            @change="handchange4(value4)"
+          />
         </van-dropdown-menu>
         <van-dropdown-menu active-color="#FE9E15">
-          <van-dropdown-item v-model="value5" :options="cate5" title="层数" @change="handchange5(value5)" />
-          <van-dropdown-item v-model="value6" :options="cate6" title="功能" @change="handchange6(value6)" />
-          <van-dropdown-item v-model="value7" :options="cate7" title="造价" @change="handchange7(value7)" />
-          <van-dropdown-item v-model="value8" :options="cate8" title="结构" @change="handchange8(value8)" />
+          <van-dropdown-item
+            v-model="value5"
+            :options="cate5"
+            title="层数"
+            @change="handchange5(value5)"
+          />
+          <van-dropdown-item
+            v-model="value6"
+            :options="cate6"
+            title="功能"
+            @change="handchange6(value6)"
+          />
+          <van-dropdown-item
+            v-model="value7"
+            :options="cate7"
+            title="造价"
+            @change="handchange7(value7)"
+          />
+          <van-dropdown-item
+            v-model="value8"
+            :options="cate8"
+            title="结构"
+            @change="handchange8(value8)"
+          />
         </van-dropdown-menu>
       </div>
     </div>
@@ -51,9 +98,9 @@ export default {
     }),
   },
   watch: {
-    searchContent(){
-      this.handserch()
-    }
+    searchContent() {
+      this.handserch();
+    },
   },
   data() {
     return {
@@ -75,15 +122,15 @@ export default {
       cate6: [],
       cate7: [],
       cate8: [],
-      filterSelData1:'全部' , //选中的数据
-      filterSelData2:'全部' , //选中的数据
-      filterSelData3: '全部', //选中的数据
-      filterSelData4:'全部', //选中的数据
-      filterSelData5: '全部', //选中的数据
-      filterSelData6: '全部', //选中的数据
-      filterSelData7:'全部', //选中的数据
-      filterSelData8: '全部', //选中的数据
-      filterlist:'全部'
+      filterSelData1: "全部", //选中的数据
+      filterSelData2: "全部", //选中的数据
+      filterSelData3: "全部", //选中的数据
+      filterSelData4: "全部", //选中的数据
+      filterSelData5: "全部", //选中的数据
+      filterSelData6: "全部", //选中的数据
+      filterSelData7: "全部", //选中的数据
+      filterSelData8: "全部", //选中的数据
+      filterlist: "全部",
     };
   },
   created() {
@@ -93,7 +140,7 @@ export default {
       })
       .then((res) => {
         console.log(res, "分类");
-        this.filterlist=res.data.list
+        this.filterlist = res.data.list;
         this.cate1 = res.data.list[0].child;
         this.cate2 = res.data.list[1].child;
         this.cate3 = res.data.list[2].child;
@@ -141,32 +188,32 @@ export default {
   },
   methods: {
     // 搜索
-     handserch() {
+    handserch() {
       request
         .getHots({
           page: 1,
           search: this.searchContent,
         })
         .then((res) => {
-          console.log(res)
-          this.getdata()
+          console.log(res);
+          this.getdata();
         })
         .catch(() => {})
-        .finally(() => {})
+        .finally(() => {});
     },
     getdata() {
       request
         .getHots({
           page: 1,
-          style:this.filterSelData1,
-          area:this.filterSelData2,
-          face_width:this.filterSelData3,
-          depth:this.filterSelData4,
-          plies:this.filterSelData5,
-          function:this.filterSelData6,
-          structure:this.filterSelData7,
-          cost:this.filterSelData8,
-          search:this.searchContent
+          style: this.filterSelData1,
+          area: this.filterSelData2,
+          face_width: this.filterSelData3,
+          depth: this.filterSelData4,
+          plies: this.filterSelData5,
+          function: this.filterSelData6,
+          structure: this.filterSelData7,
+          cost: this.filterSelData8,
+          search: this.searchContent,
         })
         .then((res) => {
           console.log(res, "图纸展示");
@@ -176,7 +223,7 @@ export default {
         .finally(() => {});
     },
     handchange1(value) {
-      console.log(value)
+      console.log(value);
       let newArray = [];
       this.cate1.map((item) => {
         if (item.value == value) {
@@ -184,10 +231,10 @@ export default {
         }
       });
       this.filterSelData1 = newArray[0];
-      this.getdata(this.filterSelData1)
+      this.getdata(this.filterSelData1);
     },
     handchange2(value) {
-      console.log(value)
+      console.log(value);
       let newArray = [];
       this.cate2.map((item) => {
         if (item.value == value) {
@@ -195,10 +242,10 @@ export default {
         }
       });
       this.filterSelData2 = newArray[0];
-      this.getdata(this.filterSelData2)
+      this.getdata(this.filterSelData2);
     },
     handchange3(value) {
-      console.log(value)
+      console.log(value);
       let newArray = [];
       this.cate3.map((item) => {
         if (item.value == value) {
@@ -206,10 +253,10 @@ export default {
         }
       });
       this.filterSelData3 = newArray[0];
-      this.getdata(this.filterSelData3)
+      this.getdata(this.filterSelData3);
     },
     handchange4(value) {
-      console.log(value)
+      console.log(value);
       let newArray = [];
       this.cate4.map((item) => {
         if (item.value == value) {
@@ -217,10 +264,10 @@ export default {
         }
       });
       this.filterSelData4 = newArray[0];
-      this.getdata(this.filterSelData4)
+      this.getdata(this.filterSelData4);
     },
     handchange5(value) {
-      console.log(value)
+      console.log(value);
       let newArray = [];
       this.cate5.map((item) => {
         if (item.value == value) {
@@ -228,10 +275,10 @@ export default {
         }
       });
       this.filterSelData5 = newArray[0];
-      this.getdata(this.filterSelData5)
+      this.getdata(this.filterSelData5);
     },
     handchange6(value) {
-      console.log(value)
+      console.log(value);
       let newArray = [];
       this.cate6.map((item) => {
         if (item.value == value) {
@@ -239,10 +286,10 @@ export default {
         }
       });
       this.filterSelData6 = newArray[0];
-      this.getdata(this.filterSelData6)
+      this.getdata(this.filterSelData6);
     },
     handchange7(value) {
-      console.log(value)
+      console.log(value);
       let newArray = [];
       this.cate7.map((item) => {
         if (item.value == value) {
@@ -250,10 +297,10 @@ export default {
         }
       });
       this.filterSelData7 = newArray[0];
-      this.getdata(this.filterSelData7)
+      this.getdata(this.filterSelData7);
     },
     handchange8(value) {
-      console.log(value)
+      console.log(value);
       let newArray = [];
       this.cate8.map((item) => {
         if (item.value == value) {
@@ -261,7 +308,7 @@ export default {
         }
       });
       this.filterSelData8 = newArray[0];
-      this.getdata(this.filterSelData8)
+      this.getdata(this.filterSelData8);
     },
   },
 };
@@ -302,5 +349,10 @@ export default {
 .dropdown .van-dropdown-menu__bar {
   box-shadow: none;
   border-bottom: 1px dashed #aaaaaa;
+}
+.van-cell.van-cell--borderless.van-field{
+position: relative !important;
+left:50% !important;
+margin-left:-1.25rem !important;
 }
 </style>
