@@ -12,6 +12,8 @@ import { Toast } from 'vant';
 import './assets/commcss/iconfont.css'
 Vue.prototype.$toast = Toast
 Vue.use(Vant);
+import { Lazyload } from 'vant';
+Vue.use(Lazyload);
 Vue.prototype.$toast = Toast
 import axios from 'axios'
 Vue.prototype.$axios = axios;

@@ -248,6 +248,25 @@ function getOrderDetailPay(data) {
   }
   return http.fetchPost('/api/Member/order_pay', params)
 }
+function getHomeindex(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/Home/index', params)
+}
+function getHotspot(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Index/hotspot', params)
+}
+function getselectLunbo(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Index/selectLunbo', params)
+}
+
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -291,4 +310,7 @@ export default {
   getBluePay,//图纸想起生成订单下单去支付
   getOrderList,//订单列表
   getOrderDetailPay,//订单详情支付
+  getHomeindex,//首页视频数据
+  getHotspot,// 热区链接
+  getselectLunbo,//查询轮播图（首页banner、手机轮播图）
 }

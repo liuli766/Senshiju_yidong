@@ -154,7 +154,7 @@ export default {
     this.copylink =
       "http://villa.jisapp.cn/shenshiju/#/" + this.$route.fullPath;
     console.log(this.$route);
-    this.commentList();
+    // this.commentList();
   },
   methods: {
     share() {

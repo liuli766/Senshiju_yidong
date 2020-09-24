@@ -2,10 +2,16 @@
   <!-- 首页 -->
   <div class="home">
     <div id="nav" class="flex_ar">
-      <van-swipe :loop="false" :width="93.5" :show-indicators='false' :touchable='true' style="width:375px">
+      <van-swipe
+        :loop="false"
+        :width="93.5"
+        :show-indicators="false"
+        :touchable="true"
+        style="width: 375px"
+      >
         <van-swipe-item>
           <router-link to="/product">
-            <div>
+            <div class="flex_cen">
               <img src="../assets/img/nav/jftk.png" alt />
               <span>建房图库</span>
             </div>
@@ -13,7 +19,7 @@
         </van-swipe-item>
         <van-swipe-item>
           <router-link to="/buildLibrary">
-            <div>
+            <div class="flex_cen">
               <img src="../assets/img/nav/sjtd.png" alt />
               <span>设计团队</span>
             </div>
@@ -21,7 +27,7 @@
         </van-swipe-item>
         <van-swipe-item>
           <router-link to="/PersonalTtailor">
-            <div>
+            <div class="flex_cen">
               <img src="../assets/img/nav/srdz.png" alt />
               <span>私人定制</span>
             </div>
@@ -29,7 +35,7 @@
         </van-swipe-item>
         <van-swipe-item>
           <router-link to="/buildEncyc">
-            <div>
+            <div class="flex_cen">
               <img src="../assets/img/nav/jfbk.png" alt />
               <span>建房百科</span>
             </div>
@@ -37,7 +43,7 @@
         </van-swipe-item>
         <van-swipe-item>
           <router-link to="/Business">
-            <div>
+            <div class="flex_cen">
               <img src="../assets/img/nav/swhz.png" alt />
               <span>商务合作</span>
             </div>
@@ -45,7 +51,7 @@
         </van-swipe-item>
         <van-swipe-item>
           <router-link to="/person">
-            <div>
+            <div class="flex_cen">
               <img src="../assets/img/nav/grzx.png" alt />
               <span>个人中心</span>
             </div>
@@ -53,11 +59,18 @@
         </van-swipe-item>
       </van-swipe>
     </div>
+    <van-swipe :autoplay="3000">
+      <van-swipe-item v-for="(image, index) in images" :key="index">
+        <img v-lazy="image.pic_path" style="width:100%;height:100%"/>
+      </van-swipe-item>
+    </van-swipe>
     <!-- banner -->
     <div class="logo text_cen">
       <img src="../assets/img/logo.png" alt />
       <h4>专注新农村自建房别墅设计</h4>
-      <p>四川别墅之家建筑科技有限公司,专注于新农村自建房设计、乡村别墅设计、别墅室内装修设计、园林景观设计，以及施工和建材一站式服务，公司采取传统的公司经营和现代互联网相结合的方式，以创新的设计理念，服务于中国新农村和城镇建设。公司拥有专业的设计团队，结合客户的需求为出发点为您打造一个理想的家园</p>
+      <p>
+        四川别墅之家建筑科技有限公司,专注于新农村自建房设计、乡村别墅设计、别墅室内装修设计、园林景观设计，以及施工和建材一站式服务，公司采取传统的公司经营和现代互联网相结合的方式，以创新的设计理念，服务于中国新农村和城镇建设。公司拥有专业的设计团队，结合客户的需求为出发点为您打造一个理想的家园
+      </p>
     </div>
     <!--展示图片  -->
     <div class="flex showpic">
@@ -67,13 +80,20 @@
     <!-- 服务电话 -->
     <div class="tel">
       24小时服务电话:
-      <a :href="'tel:' + phone">{{phone}}</a>
+      <a :href="'tel:' + phone">{{ phone }}</a>
     </div>
-     <div class="video">
-      <video  controls width="375" height="300" preload="none"></video>
-      <div class="vedoimg" @click.stop="handplay">
+    <div class="video">
+      <video
+        :src="video.home_video"
+        controls
+        width="375"
+        height="300"
+        preload="none"
+        poster="../assets/img/vdeo.png"
+      ></video>
+      <!-- <div class="vedoimg" @click.stop="handplay">
         <img src="../assets/img/player.png" alt v-if="vdeoimg" />
-      </div>
+      </div>-->
     </div>
     <!-- 定制服务流程 -->
     <div class="process text_cen">
@@ -111,16 +131,36 @@
     <div class="design text_cen">
       <h3>设计范围</h3>
       <span>design range</span>
-      <div style="position: relative;">
+      <div style="position: relative">
         <img src="../assets/img/1.png" alt />
-        <div class="quk">
-          <div></div>
-          <div style="position: absolute;right: 0;top: 0;"></div>
-          <div style="position: absolute;right: 0;top: 1.3rem;"></div>
-          <div style="position: absolute;left: 0;top: 1.3rem;"></div>
-          <div style="position: absolute;left: 0;top: 2.5rem;"></div>
-          <div style="position: absolute;right: 0;top: 2.5rem;"></div>
-          <div style="position: absolute;left: 2.5rem;width: 2.5rem;height: 2.5rem;top: 0.5rem;"></div>
+        <div class="quk" v-if="Hotspot[0]">
+          <div><a :href="Hotspot[0].url"></a></div>
+          <div style="position: absolute; right: 0; top: 0">
+            <a :href="Hotspot[1].url"></a>
+          </div>
+          <div style="position: absolute; right: 0; top: 1.3rem">
+            <a :href="Hotspot[2].url"></a>
+          </div>
+          <div style="position: absolute; left: 0; top: 1.3rem">
+            <a :href="Hotspot[3].url"></a>
+          </div>
+          <div style="position: absolute; left: 0; top: 2.5rem">
+            <a :href="Hotspot[4].url"></a>
+          </div>
+          <div style="position: absolute; right: 0; top: 2.5rem">
+            <a :href="Hotspot[5].url"></a>
+          </div>
+          <div
+            style="
+              position: absolute;
+              left: 2.5rem;
+              width: 2.5rem;
+              height: 2.5rem;
+              top: 0.5rem;
+            "
+          >
+            <a :href="Hotspot[6].url"></a>
+          </div>
         </div>
       </div>
     </div>
@@ -131,47 +171,47 @@
         <div>
           <h6>中式别墅</h6>
           <p>CHINESE VILLA</p>
-          <p>
-            <span>中式大宅</span>，传世府邸，居高境界，源远流长
-          </p>
+          <p><span>中式大宅</span>，传世府邸，居高境界，源远流长</p>
         </div>
       </div>
       <img src="../assets/img/type1.png" alt />
     </div>
     <div class="type_box">
       <div class="flex_be type">
-        <div style="position:static;">
+        <div style="position: static">
           <h6>四合院</h6>
           <p>QUADRANGLE</p>
-          <p>
-            <span>传统合院</span>，礼遇中式院落，历史悠久
-          </p>
+          <p><span>传统合院</span>，礼遇中式院落，历史悠久</p>
         </div>
-        <img src="../assets/img/c2.png" alt style="width:3.28rem,height:3.08rem" />
+        <img
+          src="../assets/img/c2.png"
+          alt
+          style="width:3.28rem,height:3.08rem"
+        />
       </div>
       <img src="../assets/img/type2.png" alt />
     </div>
     <div class="type_box">
       <div class="flex_be type">
-        <img src="../assets/img/c3.png" alt style="width:3.57rem,height:3.36rem" />
+        <img
+          src="../assets/img/c3.png"
+          alt
+          style="width:3.57rem,height:3.36rem"
+        />
         <div>
           <h6>欧式别墅</h6>
           <p>EUROPEAN VILLAS</p>
-          <p>
-            <span>浪漫与典雅</span>，奢华与贵气同在
-          </p>
+          <p><span>浪漫与典雅</span>，奢华与贵气同在</p>
         </div>
       </div>
       <img src="../assets/img/type3.png" alt />
     </div>
     <div class="type_box">
       <div class="flex_be type">
-        <div style="position:static;">
+        <div style="position: static">
           <h6>现代别墅</h6>
           <p>MODERN VILLA</p>
-          <p>
-            <span>简而不凡</span>，时尚又大气，摩登新选择
-          </p>
+          <p><span>简而不凡</span>，时尚又大气，摩登新选择</p>
         </div>
         <img src="../assets/img/c4.png" alt />
       </div>
@@ -182,10 +222,20 @@
       <h3>定制案例展示</h3>
       <span>Custom-made case show</span>
       <div class="dpic flex_be">
-        <img v-for="(item,index) in dzlist.slice(0,2)" :key="index" alt :src="item.cover" />
+        <img
+          v-for="(item, index) in dzlist.slice(0, 2)"
+          :key="index"
+          alt
+          :src="item.cover"
+        />
       </div>
       <div class="xpic">
-        <img v-for="(item,index) in dzlist" :key="index" alt :src="item.cover" />
+        <img
+          v-for="(item, index) in dzlist"
+          :key="index"
+          alt
+          :src="item.cover"
+        />
       </div>
     </div>
     <!-- footer -->
@@ -211,6 +261,9 @@ export default {
       link: "http://villa.jisapp.cn",
       flag: false,
       vdeoimg: true,
+      video: [],
+      Hotspot: [],
+      images:[]
     };
   },
   computed: {
@@ -224,6 +277,22 @@ export default {
   },
   created() {
     this.getdata();
+    request
+      .getHotspot()
+      .then((res) => {
+        console.log(res, "热区链接");
+        this.Hotspot = res.data;
+      })
+      .catch(() => {})
+      .finally(() => {});
+    request
+      .getselectLunbo()
+      .then((res) => {
+        console.log(res, "轮播");
+        this.images=res.data.list
+      })
+      .catch(() => {})
+      .finally(() => {});
   },
   methods: {
     getdata() {
@@ -243,17 +312,26 @@ export default {
         })
         .catch(() => {})
         .finally(() => {});
+
+      // 视频数据
+      request
+        .getHomeindex()
+        .then((res) => {
+          this.video = res.data;
+        })
+        .catch(() => {})
+        .finally(() => {});
     },
     handplay() {
       //单击播放暂停按钮控制视频的播放和暂停
       // let vdeoimg = document.querySelector('.vedoimg>img')
-      let video = document.querySelector('video')
+      let video = document.querySelector("video");
       if (video.paused) {
-        video.play()
-        this.vdeoimg = false
+        video.play();
+        this.vdeoimg = false;
       } else {
-        video.pause()
-        this.vdeoimg = true
+        video.pause();
+        this.vdeoimg = true;
       }
     },
   },
@@ -265,15 +343,22 @@ export default {
 #nav {
   .mb(22);
   .mt(36);
+  // a{
+  //   width: 100%;
+  //   height: 100%;
+  // }
+  span {
+    margin-top: 0.15rem;
+  }
   div {
     .fs(14);
     display: flex;
     flex-direction: column;
     text-align: center;
     img {
-      .w(180);
-      .h(180);
-      .mb(4);
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 0.1rem;
     }
   }
 }
@@ -463,6 +548,11 @@ footer {
   width: 2rem;
   height: 1rem;
   // border: 1px solid yellow;
+}
+.quk div a {
+  width: 100%;
+  height: 100%;
+  display: inline-block;
 }
 .video {
   position: relative;

@@ -15,7 +15,7 @@
     <div v-show="navid==1 || navid==2 || navid==3 || navid==4 || navid==5 || navid==6 || navid==7">
       <div v-for="(item,k) in articleList" :key="k+0">
         <img :src="item.cover" alt @click="gobuildencycDetail(item.id)" class="buidimg" />
-        <p>{{item.content}}</p>
+        <p>{{item.title}}</p>
         <div class="flex_be eeebot">
           <span>{{item.add_time.slice(0,11)}}</span>
           <span class="flex_cen">

@@ -88,8 +88,8 @@
     <!-- 商品详情底部 -->
     <div class="fixed">
       <van-goods-action>
-        <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" />
-        <van-goods-action-icon icon="service" text="客服" color="#676767" class="size" />
+        <van-goods-action-icon icon="shop" text="店铺" color="#676767" class="size" @click="goIndex"/>
+        <a href="#"><van-goods-action-icon icon="service" text="客服" color="#676767" class="size" /></a>
         <van-goods-action-icon
           :icon="icon"
           :text="text"
@@ -160,6 +160,11 @@ export default {
     this.handdetail();
   },
   methods: {
+    goIndex(){
+        this.$router.push({
+          path:'/'
+        })
+    },
     gosurepay(id) {
       if (!this.token) {
         this.$router.push({

@@ -192,9 +192,9 @@ export default {
         }, 1000);
       } else {
         console.log(2)
-        let item=JSON.parse(localStorage.getItem('obj'))
-        this.canelOrder(item);//调用改变订单状态接口
-        
+        console.log(this.orderdetail)
+        this.canelOrder(this.orderdetail);//调用改变订单状态接口
+        // localStorage.clear('obj')
       }
     },
     go() {
@@ -204,7 +204,6 @@ export default {
     },
     // 取消订单
     canelOrder(item) {
-      localStorage.setItem('obj',JSON.stringify(item))
       let oid = item.id;
       request
         .getCancelOrder({

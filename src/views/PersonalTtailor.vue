@@ -47,7 +47,7 @@
       <h5>营业执照</h5>
       <p>您的安心，我们的放心</p>
       <div class="dpic flex_be">
-        <img :src="link+item.cover" alt v-for="(item,k) in licenselist" :key="k" />
+        <img :src="item.cover" alt v-for="(item,k) in licenselist" :key="k" />
       </div>
     </div>
     <!-- 定图展示 -->
@@ -56,7 +56,7 @@
       <p>私人定制能带来更贴心的享受</p>
       <div>
         <div class="dpic1 flex_be">
-          <img :src="link+item.cover" alt v-for="(item,k) in dzlist" :key="k" />
+          <img :src="litem.cover" alt v-for="(item,k) in dzlist" :key="k" />
         </div>
         <div class="xpic flex_be">
           <img :src="item.cover" alt v-for="(item,k) in moreList" :key="k" />
@@ -71,7 +71,7 @@
       <h5>我们的口碑您来决定</h5>
       <p>为您与客户真实的聊天记录</p>
       <div class="flex_be">
-        <img :src="link+item.cover" alt v-for="(item,k) in dzlist" :key="k" />
+        <img :src="item.cover" alt v-for="(item,k) in dzlist" :key="k" />
       </div>
       <div class="more">
         <a :href="'tel:' + phone">查看更多客户反馈请咨询客服</a>
@@ -93,7 +93,6 @@ export default {
       phone: 18883614674,
       teamList: [], //设计团队
       licenselist: [],
-      link: "http://villa.jisapp.cn",
       dzlist: [],
       picList: [],
       moreList: [],
