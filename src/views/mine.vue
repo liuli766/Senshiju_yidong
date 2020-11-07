@@ -35,7 +35,7 @@
         >
           <img :src="gird.img" alt />
           <span>{{gird.name}}</span>
-          <div v-if="k==0" :class="[orderlist.length==0?'none':'']">{{orderlist.length}}</div>
+          <div v-if="k==0" :class="[orderlist.length==0?'none':'']" >{{orderlist.length}}</div>
           <div v-if="k==1" :class="[orderlist1.length==0?'none':'']">{{orderlist1.length}}</div>
           <div v-if="k==2" :class="[orderlist2.length==0?'none':'']">{{orderlist2.length}}</div>
           <!-- <div v-if="k==3"></div> -->
@@ -110,7 +110,7 @@ export default {
           name: "图纸收藏",
         },
         {
-          img: require("../assets/img/mine/tzsc.png"),
+          img: require("../assets/img/mine/my-gwc.png"),
           name: "购物车",
         },
       ],
@@ -169,7 +169,7 @@ export default {
     handOrder(k) {
       if (!this.token) {
         this.$router.push({
-          path: "/register",
+          path: "/login",
         });
       } else {
         if (k == 0 || k == 1 || k == 2) {
@@ -181,12 +181,13 @@ export default {
           });
         }
         if (k == 3) {
-          this.$router.push({
-            path: "/afterSale",
-            query: {
-              navactivechoseid: k,
-            },
-          });
+          this.$toast('暂未开通')
+          // this.$router.push({
+          //   path: "/afterSale",
+          //   query: {
+          //     navactivechoseid: k,
+          //   },
+          // });
         }
         this.$store.commit("gonav", k);
       }

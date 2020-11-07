@@ -13,26 +13,36 @@
     <div class="addr flex_be" @click="gonewshippingAddr(orderaddress)">
       <div class="flex_be">
         <van-icon name="location-o" />
-        <span v-if="orderaddress.length==0">请填写收货地址</span>
+        <span v-if="orderaddress.length == 0" @click="gonewshippingAddr1"
+          >请填写收货地址</span
+        >
         <div v-else>
-          <span class="info">{{orderaddress.name}} {{orderaddress.phone}}</span>
-          <div class="flex_cen" style="font-size:0.25rem;">
+          <span class="info" style="margin-bottom: 0.2rem; display: block"
+            >{{ orderaddress.name }} {{ orderaddress.phone }}</span
+          >
+          <div class="flex_cen" style="font-size: 0.25rem">
             <span class="express">快递</span>
-            {{orderaddress.province}}{{orderaddress.city}}{{orderaddress.district}}{{orderaddress.address}}
+            {{ orderaddress.province }}{{ orderaddress.city
+            }}{{ orderaddress.district }}{{ orderaddress.address }}
           </div>
         </div>
       </div>
       <van-icon name="arrow" />
     </div>
     <!--  -->
-    <div style="padding-bottom: 1rem;">
+    <div style="padding-bottom: 1rem">
       <div class="itemlist flex">
         <img :src="orderdetail.cover" alt />
         <div>
-          <p>{{orderdetail.title}}</p>
-          <div class="price flex_be">
-            <span>¥{{orderdetail.price}}</span>
-            <van-stepper v-model="orderdetail.num" theme="round" button-size="22" disabled />
+          <p>{{ orderdetail.title }}</p>
+          <div class="price flex_be" style="width: 4.6rem">
+            <span>¥{{ orderdetail.price }}</span>
+            <van-stepper
+              v-model="orderdetail.num"
+              theme="round"
+              button-size="22"
+              disabled
+            />
           </div>
         </div>
       </div>
@@ -50,7 +60,7 @@
       <div class="money">
         <div class="flex_be">
           <span>商品金额</span>
-          <span>¥{{total}}</span>
+          <span>¥{{ total }}</span>
         </div>
         <div class="flex_be">
           <span>运费</span>
@@ -61,7 +71,7 @@
     <div class="btn flex_be">
       <div>
         合计：
-        <span style="color；#F93420">{{total}}</span>
+        <span style="color；#F93420">{{ total }}</span>
       </div>
       <div @click="gopay" class="onsubmit">立即付款</div>
     </div>
@@ -71,6 +81,8 @@
 <script>
 import { mapState } from "vuex";
 import request from "@/request.js";
+// import wx from "weixin-jsapi";
+// import { wexinPay } from "@/plugins/wechatPay";
 export default {
   components: {},
   computed: {
@@ -91,6 +103,8 @@ export default {
       creatime: "", // 开始时间
       daoTim: "", // 倒计时时间
       msg: "",
+      timer: null, //定时器名称
+      orderid:localStorage.getItem('orderid') //订单id
     };
   },
   created() {
@@ -101,6 +115,7 @@ export default {
         bid: this.$route.query.bid,
       })
       .then((res) => {
+        
         if (res.code == 2) {
           this.$router.push({
             path: "/login",
@@ -116,7 +131,31 @@ export default {
       .catch(() => {})
       .finally(() => {});
   },
+  mounted() {
+    // this.timer = setInterval(this.wxrequest, 300)
+  },
   methods: {
+    wxrequest(){
+       request
+      .getwxrequest({
+        out_trade_no: this.orderid,
+      })
+      .then((data) => {
+        alert(data.code==1)
+        alert(JSON.stringify(data.code==0))
+        if (data.code == 0){
+          alert(JSON.stringify(data))
+           this.$router.push({
+            path: "/success",
+            query:{
+              price:this.total
+            }
+          });
+        }
+         
+        
+      });
+    },
     wechatPay() {
       request
         .getBluePay({
@@ -125,43 +164,49 @@ export default {
           address: this.orderaddress.id,
         })
         .then((res) => {
-          let data = res.data.apiToay;
-          WeixinJSBridge.invoke(
-            "getBrandWCPayRequest",
-            {
-              appId: data.appId, //公众号名称，由商户传入
-              timeStamp: data.timeStamp, //时间戳，自1970年以来的秒数
-              nonceStr: data.nonceStr, //随机串
-              package: data.package,
-              signType: data.signType, //微信签名方式：
-              paySign: data.paySign, //微信签名
-            },
-            function (res) {
-              if (res.err_msg == "get_brand_wcpay_request:ok") {
-                // 使用以上方式判断前端返回,微信团队郑重提示：
-                //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                this.$toast("支付成功");
-                setTimeout(function () {
+          console.log(res, "支付");
+          
+        let orderid=res.data.out_trade_no
+          localStorage.setItem('orderid',orderid)
+          this.wxrequest()
+          if (res.code == 1) {
+            this.$toast(res.message);
+            
+          } else if (res.code == 0) {
+            let data = res.data.apiToay;
+            WeixinJSBridge.invoke(
+              "getBrandWCPayRequest",
+              {
+                appId: data.appId, //公众号名称，由商户传入
+                timeStamp: data.timeStamp, //时间戳，自1970年以来的秒数
+                nonceStr: data.nonceStr, //随机串
+                package: data.package,
+                signType: data.signType, //微信签名方式：
+                paySign: data.paySign, //微信签名
+                jsApiList: ["chooseWXPay"],
+              },
+              (ress) => {
+                // var vm = this;
+                if (ress.err_msg == "get_brand_wcpay_request:ok") {
+                  this.$toast("支付成功");
+                } else {
+                  this.$toast("支付失败");
                   this.$router.push({
-                    path: "/success",
-                    query:{
-                      price:res.data.total
-                    }
+                    path: "/drawingOrder",
+                    query: {
+                      navactivechoseid: 0,
+                    },
                   });
-                }, 2000);
-              } else {
-                this.$toast("支付失败");
-                setTimeout(function () {
-                  this.$router.push({
-                    path: "/orderpay",
-                  });
-                }, 2000);
+                }
               }
-            }
-          );
+            );
+          }
         })
         .catch(() => {
-          this.$toast("系统异常");
+          this.$toast("系统异常,请重新登录");
+          this.$router.push({
+            path: "/login",
+          });
         })
         .finally(() => {});
     },
@@ -195,7 +240,15 @@ export default {
         },
       });
     },
-    
+    gonewshippingAddr1() {
+      this.$router.push({
+        path: "/newshippingAddr",
+      });
+    },
+  },
+   beforeDestroy() {
+    clearInterval(this.timer)
+    this.timer = null
   },
 };
 </script>
@@ -237,7 +290,7 @@ export default {
   }
 }
 .addr {
-  .lh(156);
+  .h(156);
   background: @base-header-color;
   .margin(20, 20);
   .b-radius(10);
@@ -268,7 +321,9 @@ export default {
     .mr(19);
   }
   p {
-    .mb(61);
+    margin-bottom: 0.2rem;
+    margin-top: 0.25rem;
+    line-height: 0.40rem;
   }
   .price {
     span {

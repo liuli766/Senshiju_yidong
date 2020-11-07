@@ -1,7 +1,12 @@
 <template>
   <!-- 首页 -->
   <div class="home">
-    <div id="nav" class="flex_ar">
+    <van-swipe :autoplay="3000">
+      <van-swipe-item v-for="(image, index) in images" :key="index">
+        <img v-lazy="image.pic_path" style="width: 100%" />
+      </van-swipe-item>
+    </van-swipe>
+    <div id="nav" style="margin-bottom: 0.3rem">
       <van-swipe
         :loop="false"
         :width="93.5"
@@ -12,24 +17,24 @@
         <van-swipe-item>
           <router-link to="/product">
             <div class="flex_cen">
-              <img src="../assets/img/nav/jftk.png" alt />
-              <span>建房图库</span>
+              <img src="../assets/img/nav/jftk.jpg" alt />
+              <span class="font16">建房图库</span>
             </div>
           </router-link>
         </van-swipe-item>
         <van-swipe-item>
           <router-link to="/buildLibrary">
             <div class="flex_cen">
-              <img src="../assets/img/nav/sjtd.png" alt />
-              <span>设计团队</span>
+              <img src="../assets/img/nav/sjtd.jpg" alt />
+              <span class="font16">设计团队</span>
             </div>
           </router-link>
         </van-swipe-item>
         <van-swipe-item>
           <router-link to="/PersonalTtailor">
             <div class="flex_cen">
-              <img src="../assets/img/nav/srdz.png" alt />
-              <span>私人定制</span>
+              <img src="../assets/img/nav/srdz.jpg" alt />
+              <span class="font16">私人定制</span>
             </div>
           </router-link>
         </van-swipe-item>
@@ -37,7 +42,7 @@
           <router-link to="/buildEncyc">
             <div class="flex_cen">
               <img src="../assets/img/nav/jfbk.png" alt />
-              <span>建房百科</span>
+              <span class="font16">建房百科</span>
             </div>
           </router-link>
         </van-swipe-item>
@@ -45,7 +50,7 @@
           <router-link to="/Business">
             <div class="flex_cen">
               <img src="../assets/img/nav/swhz.png" alt />
-              <span>商务合作</span>
+              <span class="font16">商务合作</span>
             </div>
           </router-link>
         </van-swipe-item>
@@ -53,30 +58,38 @@
           <router-link to="/person">
             <div class="flex_cen">
               <img src="../assets/img/nav/grzx.png" alt />
-              <span>个人中心</span>
+              <span class="font16">个人中心</span>
             </div>
           </router-link>
         </van-swipe-item>
       </van-swipe>
+      <div
+        style="
+          margin-top: 0.82rem;
+          font-size: 0.3rem;
+          line-height: 0.2rem;
+          color: #313131;
+          width: auto;
+          text-align: left;
+        "
+      >
+        专题推荐
+      </div>
     </div>
-    <van-swipe :autoplay="3000">
-      <van-swipe-item v-for="(image, index) in images" :key="index">
-        <img v-lazy="image.pic_path" style="width:100%;height:100%"/>
-      </van-swipe-item>
-    </van-swipe>
+    <div class="flex special_box">
+      <div v-for="(item, v) in 5" :key="v" class="special" @click="GoDisplay(item)">
+        现代简约别墅设计图纸大全
+      </div>
+    </div>
+    <div class="flex flex_col flex_cen">
+      <img src="../assets/img/more.png" alt="" class="more_img" />
+      <span style="font-size: 0.2rem; line-height: 0.2rem; color: #363636;margin-bottom:0.32rem"
+        >查看更多</span
+      >
+    </div>
     <!-- banner -->
-    <div class="logo text_cen">
-      <img src="../assets/img/logo.png" alt />
-      <h4>专注新农村自建房别墅设计</h4>
-      <p>
-        四川别墅之家建筑科技有限公司,专注于新农村自建房设计、乡村别墅设计、别墅室内装修设计、园林景观设计，以及施工和建材一站式服务，公司采取传统的公司经营和现代互联网相结合的方式，以创新的设计理念，服务于中国新农村和城镇建设。公司拥有专业的设计团队，结合客户的需求为出发点为您打造一个理想的家园
-      </p>
-    </div>
+    <img src="../assets/img/gai1.png" alt="" style="width: 100%" />
     <!--展示图片  -->
-    <div class="flex showpic">
-      <img src="../assets/img/b1.png" alt />
-      <img src="../assets/img/b2.png" alt />
-    </div>
     <!-- 服务电话 -->
     <div class="tel">
       24小时服务电话:
@@ -84,6 +97,7 @@
     </div>
     <div class="video">
       <video
+        class="vedio"
         :src="video.home_video"
         controls
         width="375"
@@ -96,7 +110,8 @@
       </div>-->
     </div>
     <!-- 定制服务流程 -->
-    <div class="process text_cen">
+    <img src="../assets/img/hh1.jpg" alt="" style="width: 100%" />
+    <!-- <div class="process text_cen">
       <h3>定制设计服务流程</h3>
       <span>Custom service process</span>
       <div class="flex_be">
@@ -126,7 +141,7 @@
         </div>
       </div>
       <div class="sanjiao"></div>
-    </div>
+    </div> -->
     <!-- 设计范围 -->
     <div class="design text_cen">
       <h3>设计范围</h3>
@@ -165,7 +180,7 @@
       </div>
     </div>
     <!-- 别墅类型 -->
-    <div class="type_box">
+    <!-- <div class="type_box">
       <div class="flex_be type">
         <img src="../assets/img/c1.png" alt />
         <div>
@@ -216,7 +231,8 @@
         <img src="../assets/img/c4.png" alt />
       </div>
       <img src="../assets/img/type4.png" alt />
-    </div>
+    </div> -->
+    <img src="../assets/img/bigbanner.jpg" alt="" style="width: 100%" />
     <!-- 定制案列展示 -->
     <div class="show text_cen">
       <h3>定制案例展示</h3>
@@ -238,12 +254,25 @@
         />
       </div>
     </div>
+    <img src="../assets/img/sjtd.jpg" class="img" alt style="width: 100%" />
+
     <!-- footer -->
     <footer class="text_cen">
-      <img src="../assets/img/logo.png" alt />
-      <h4>匠心如一，百年坚守</h4>
-      <p>Ingenuity as one, hundred years of perseverance</p>
+      <img src="../assets/img/jx.png" alt style="width: 100%" />
+      <!-- <h4>匠心如一，百年坚守</h4>
+      <p>Ingenuity as one, hundred years of perseverance</p> -->
     </footer>
+    <div style="padding: 0 0.2rem; margin-bottom: 2rem">
+      <div style="text-align: center; margin-bottom: 0.3rem" class="flex_cen">
+        <img
+          src="../assets/img/baokuan.png"
+          alt=""
+          style="margin-right: 0.1rem; width: 0.5rem"
+        />
+        <span style="font-size: 0.36rem; font-weight: bold">热门爆款商品</span>
+      </div>
+      <productitem :productitem="Blist" />
+    </div>
     <tabbar :tabid="0" />
   </div>
 </template>
@@ -252,6 +281,7 @@
 import { mapState } from "vuex";
 import request from "@/request.js";
 import tabbar from "@/components/tabBar.vue";
+import productitem from "@/components/productItem.vue";
 export default {
   name: "Home",
   data() {
@@ -263,7 +293,8 @@ export default {
       vdeoimg: true,
       video: [],
       Hotspot: [],
-      images:[]
+      images: [],
+      Blist: [],
     };
   },
   computed: {
@@ -274,6 +305,7 @@ export default {
   },
   components: {
     tabbar,
+    productitem,
   },
   created() {
     this.getdata();
@@ -286,13 +318,24 @@ export default {
       .catch(() => {})
       .finally(() => {});
     request
-      .getselectLunbo()
+      .getselectLunbo({
+        type: 3,
+      })
       .then((res) => {
         console.log(res, "轮播");
-        this.images=res.data.list
+        this.images = res.data.list;
       })
       .catch(() => {})
       .finally(() => {});
+
+    request
+      .getBao({
+        page: 1,
+      })
+      .then((res) => {
+        console.log(res, "爆款");
+        this.Blist = res.data;
+      });
   },
   methods: {
     getdata() {
@@ -334,19 +377,29 @@ export default {
         this.vdeoimg = true;
       }
     },
+    GoDisplay(){
+      this.$router.push({
+        path:'/Display'
+      })
+    }
   },
 };
 </script>
 <style lang="less" scoped>
 @import "../styles/index.less";
 @import "../styles/variable.less";
+.home {
+  background-color: #fff;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  overflow: auto;
+}
 #nav {
-  .mb(22);
-  .mt(36);
-  // a{
-  //   width: 100%;
-  //   height: 100%;
-  // }
+  background: #fff;
+  padding: 0.9rem 0 0.25rem 0.54rem;
+  box-shadow: 0 3px 3px #e7e7e7;
+  overflow: hidden;
   span {
     margin-top: 0.15rem;
   }
@@ -355,15 +408,15 @@ export default {
     display: flex;
     flex-direction: column;
     text-align: center;
+    width: 1rem;
     img {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1rem;
+      height: 1rem;
       border-radius: 0.1rem;
     }
   }
 }
 .logo {
-  background: url("../assets/img/homebg.png");
   color: @base-header-color;
   .pb(40);
   img {
@@ -512,16 +565,18 @@ export default {
     flex-wrap: wrap;
     display: flex;
     img {
-      .w(174.9);
+      width: 1.76rem;
       .h(122.1);
       .mt(19);
       margin-right: 0.15rem;
     }
+    img:nth-of-type(4n) {
+      margin-right: 0;
+    }
   }
 }
 footer {
-  .mb(108);
-  background: url("../assets/img/homebg.png");
+  // .mb(108);
   h4 {
     .fs(46);
     .mt(38);
@@ -534,7 +589,7 @@ footer {
   font-family: SimHei;
   color: @base-header-color;
   .pt(26);
-  .pb(60);
+  .pb(50);
 }
 .quk {
   width: 100%;
@@ -572,5 +627,46 @@ footer {
   left: 50%;
   margin-top: -46px;
   margin-left: -46px;
+}
+.vedio {
+  width: 100%;
+  height: 100%;
+}
+.font16 {
+  font-size: 0.2rem;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+}
+.img {
+  margin: 0.22rem 0;
+}
+.special_box {
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 0.25rem;
+}
+.special {
+  font-size: 0.22rem;
+  color: #2a7dbe;
+  border-bottom: 1px solid #2a7dbe;
+  width: 40%;
+  padding-bottom: 0.06rem;
+  height: 0.7rem;
+  display: flex;
+  align-items: flex-end;
+}
+.more_img {
+  width: 0.26rem;
+  height: 0.26rem;
+  margin-bottom: 0.3rem;
+   animation:move 0.8s infinite alternate;
+}
+@keyframes move{
+  0%{
+    transform: translateY(0px);
+  }
+  100%{
+    transform: translateY(10px);
+  }
 }
 </style>

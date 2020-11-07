@@ -17,18 +17,20 @@
 
         <div class="code flex_be">
           <van-field
-            v-model="code"
+            v-model="code1"
             name="pattern"
             clearable
             placeholder="请输入验证码"
-            :rules="[{ pattern:pattern1, message: '请输入正确内容' }]"
+            :rules="[{ pattern: pattern1, message: '请输入正确内容' }]"
           />
-          <span v-if="tmeValue==60" @click="getauth">获取验证码</span>
+          <span v-if="tmeValue == 60" @click="getauth">获取验证码</span>
           <span v-else>{{ tmeValue }} s 后获取</span>
         </div>
 
         <div>
-          <van-button block class="button" native-type="submit">登录</van-button>
+          <van-button block class="button" native-type="submit"
+            >登录</van-button
+          >
         </div>
       </van-form>
       <p class="agreement text_cen">注册/登录即表示同意</p>
@@ -46,12 +48,18 @@ export default {
   data() {
     return {
       tel: "",
-      code: "",
+      code1: "", //验证码
       pattern: /\d{11}/,
       pattern1: /\d{4}/,
       tmeValue: 60, //获取验证码时间
       flag: 0,
+      code:''//code码
     };
+  },
+  watch: {
+    code1() {
+      this.code1 = this.code1.trim().slice(0, 6);
+    },
   },
   methods: {
     getauth() {
@@ -63,10 +71,10 @@ export default {
           })
           .then((res) => {
             if (res.code == 0) {
-            console.log(res, "短信");
+              console.log(res, "短信");
 
-            this.$toast("发送成功");
-            that.time();
+              this.$toast("发送成功");
+              that.time();
             } else {
               this.$toast("发送失败");
             }
@@ -78,6 +86,40 @@ export default {
       } else {
         this.$toast("手机号格式不正确");
       }
+    },
+    wxLogin(code) {
+      request
+        .getWXInfo({
+          code: code,
+        })
+        .then((res) => {
+          console.log(res, "微信信息");
+          this.$toast("微信授权成功"); 
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
+    getCode() {
+      // 非静默授权，第一次有弹框
+      const code = this.getUrlParam("code"); // 截取路径中的code，如果没有就去微信授权，如果已经获取到了就直接传code给后台获取openId
+      const local = window.location.href;
+      console.log(code);
+
+      if (code == null || code === "") {
+        window.location.href =
+          "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe960929de0880424&redirect_uri=" +
+          encodeURIComponent(local) +
+          "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
+      } else {
+        this.wxLogin(code); //把code传给后台获取用户信息
+        this.code = code;
+      }
+    },
+    getUrlParam: function (name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      if (r != null) return unescape(r[2]);
+      return null;
     },
     time() {
       //倒计时
@@ -94,21 +136,34 @@ export default {
       }
     },
     onSubmit(values) {
+      let openid = localStorage.getItem('oppid')
       request
         .loginByMsg({
           phone_num: this.tel,
-          msg_code: this.code,
+          msg_code: this.code1,
+          openid: openid || ''
         })
         .then((res) => {
-          console.log(res)
+          console.log(res);
           if (res.code == 0) {
-          this.$store.commit("settoken", res.data);
-          localStorage.setItem("istoken", res.data.token);
-          console.log(localStorage.getItem('istoken'))
-          this.$toast("登录成功");
-          this.$router.push({
-            path: "/",
-          });
+            this.$store.commit("settoken", res.data);
+            localStorage.setItem("istoken", res.data.token);
+            console.log(localStorage.getItem("istoken"));
+            this.$toast("登录成功");
+            var url = location.search; //获取url中"?"符后的字符串
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+              var str = url.substr(1);
+             var strs = str.split("&");
+              for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = strs[i].split("=")[1];
+              }
+            }
+
+            this.wxLogin(theRequest);
+            this.$router.push({
+              path: "/",
+            });
           } else {
             this.$toast("验证码错误");
           }

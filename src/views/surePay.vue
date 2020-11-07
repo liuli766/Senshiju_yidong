@@ -13,9 +13,9 @@
     <div class="addr flex_be" @click="gonewshippingAddr(orderaddress)">
       <div class="flex_be">
         <van-icon name="location-o" />
-        <span v-if="orderaddress.length==0">请填写收货地址</span>
+        <span v-if="orderaddress.length==0" @click="gonewshippingAddr1">请填写收货地址</span>
         <div v-else>
-          <span class="info">{{orderaddress.name}} {{orderaddress.phone}}</span>
+          <span class="info" style="margin-bottom:0.2rem;display:block">{{orderaddress.name}} {{orderaddress.phone}}</span>
           <div class="flex_cen" style="font-size:0.25rem;">
             <span class="express">快递</span>
             {{orderaddress.province}}{{orderaddress.city}}{{orderaddress.district}}{{orderaddress.address}}
@@ -122,6 +122,7 @@ export default {
         })
         .then((res) => {
           let data = res.data.apiToay;
+          let vm = this
           WeixinJSBridge.invoke(
             "getBrandWCPayRequest",
             {
@@ -133,12 +134,13 @@ export default {
               paySign: data.paySign, //微信签名
             },
             function (res) {
+              
               if (res.err_msg == "get_brand_wcpay_request:ok") {
                 // 使用以上方式判断前端返回,微信团队郑重提示：
                 //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                this.$toast("支付成功");
+                vm.$toast("支付成功");
                 setTimeout(function () {
-                  this.$router.push({
+                  vm.$router.push({
                     path: "/success",
                     query:{
                       price:res.data.total
@@ -146,14 +148,15 @@ export default {
                   });
                 }, 2000);
               } else {
-                this.$toast("支付失败");
+                vm.$toast("支付失败");
                 setTimeout(function () {
-                  this.$router.push({
+                  
+                  vm.$router.push({
                     path: "/orderpay",
                   });
                 }, 2000);
               }
-            }
+            },
           );
         })
         .catch(() => {
@@ -162,25 +165,26 @@ export default {
         .finally(() => {});
     },
     gopay() {
+      let vm = this
       if (typeof WeixinJSBridge == "undefined") {
-        this.$toast("支付失败");
+        vm.$toast("支付失败");
         if (document.addEventListener) {
           document.addEventListener(
             "WeixinJSBridgeReady",
-            this.wechatPay,
+            vm.wechatPay,
             false
           );
         } else if (document.attachEvent) {
-          document.attachEvent("WeixinJSBridgeReady", this.wechatPay);
-          document.attachEvent("onWeixinJSBridgeReady", this.wechatPay);
+          document.attachEvent("WeixinJSBridgeReady", vm.wechatPay);
+          document.attachEvent("onWeixinJSBridgeReady", vm.wechatPay);
         }
       } else {
-        this.wechatPay();
+        vm.wechatPay();
       }
     },
     go() {
       this.$router.push({
-        path:'/orderpay'
+        path:'/cart'
       });
     },
     // 收货地址
@@ -192,6 +196,11 @@ export default {
         },
       });
     },
+    gonewshippingAddr1(){
+      this.$router.push({
+        path: "/newshippingAddr",
+      });
+    }
   },
 };
 </script>
@@ -233,10 +242,11 @@ export default {
   }
 }
 .addr {
-  .lh(156);
+  // .lh(156);
   background: @base-header-color;
   .margin(20, 20);
   .b-radius(10);
+  padding: 0.3rem;
   .van-icon {
     .mr(47);
   }

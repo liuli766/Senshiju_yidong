@@ -24,6 +24,15 @@
         <img src="../assets/img/qq.png" alt />
       </div>-->
     </div>
+    <button
+      class="bottom"
+      type="primary"
+      open-type="getPhoneNumber"
+      @getphonenumber="getPhoneNumber"
+      v-if="phonenumber"
+    >
+      绑定手机号
+    </button>
   </div>
 </template>
 
@@ -34,6 +43,7 @@ export default {
   data() {
     return {
       code: "",
+      phonenumber: false,
     };
   },
   computed: {
@@ -43,7 +53,15 @@ export default {
       headimg: (state) => state.headimg,
     }),
   },
-  created() {},
+  created() {
+    // 非静默授权，第一次有弹框
+    const code = this.getUrlParam("code"); // 截取路径中的code，如果没有就去微信授权，如果已经获取到了就直接传code给后台获取openId
+    // const local = window.location.href;
+    console.log("bbb", code);
+    if (code) {
+      this.wxLogin(code); //把code传给后台获取用户信息
+    }
+  },
   methods: {
     wxLogin(code) {
       request
@@ -51,20 +69,24 @@ export default {
           code: code,
         })
         .then((res) => {
-          console.log(res, "微信信息");
           if (res.code == 0) {
-            this.$router.push({
-                path: "/register",
-              });
-          } else {
-            this.$toast("微信已经授权登录过了");
-             if (!this.token) {
-              this.$router.push({
-                path: "/register",
-              });
-            } else {
+            console.log(res, "微信信息");
+            let phoneNum = res.data.phone_num;
+            let oppenid = res.data.openid;
+            localStorage.setItem("oppid", oppenid);
+            this.$store.commit("settoken", res.data);
+            localStorage.setItem("istoken", res.data.token);
+            console.log(localStorage.getItem("istoken"));
+
+            this.$toast("微信授权成功");
+            console.log("aaa", phoneNum);
+            if (phoneNum) {
               this.$router.push({
                 path: "/",
+              });
+            } else if (phoneNum == "") {
+              this.$router.push({
+                path: "/register",
               });
             }
           }
@@ -83,16 +105,22 @@ export default {
           "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe960929de0880424&redirect_uri=" +
           encodeURIComponent(local) +
           "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
-      } else {
-        this.wxLogin(code); //把code传给后台获取用户信息
-        this.code = code;
       }
+      //  else {
+      //   this.wxLogin(code); //把code传给后台获取用户信息
+      //   this.code = code;
+      // }
     },
     getUrlParam: function (name) {
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
       var r = window.location.search.substr(1).match(reg);
       if (r != null) return unescape(r[2]);
       return null;
+    },
+    getPhoneNumber(e) {
+      console.log(e.detail.errMsg);
+      console.log(e.detail.iv);
+      console.log(e.detail.encryptedData);
     },
     goRegister() {
       this.$router.push({

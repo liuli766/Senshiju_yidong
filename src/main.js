@@ -10,6 +10,7 @@ import 'vant/lib/index.css';
 import Vant from 'vant';
 import { Toast } from 'vant';
 import './assets/commcss/iconfont.css'
+import './styles/iphonex.less'
 Vue.prototype.$toast = Toast
 Vue.use(Vant);
 import { Lazyload } from 'vant';

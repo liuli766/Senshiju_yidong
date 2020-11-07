@@ -89,7 +89,8 @@ VueRouter.prototype.push = function push (location) {
     component: (resolve) => require(['@/views/logisticsInfo.vue'], resolve)
   },
   { //成品
-    path: '/product',
+    // path: '/product/:style/:area/:face_width/:depth/:plies/:function/:structure/:cost',
+    path:'/product',
     meta: {
       title: '成品'
     },
@@ -220,6 +221,13 @@ VueRouter.prototype.push = function push (location) {
       title: '确认支付'
     },
     component: (resolve) => require(['@/views/surepayblue.vue'], resolve)
+  },
+  { // 售后
+    path: '/Display',
+    meta: {
+      title: '建房百科专题'
+    },
+    component: (resolve) => require(['@/views/Display.vue'], resolve)
   }
 ]
 

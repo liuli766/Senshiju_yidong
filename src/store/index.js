@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+// import request from "@/request.js";
+// import { Toast } from "vant";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -74,6 +75,7 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+
     datanum(state, num) {
       console.log(state.cartList)
       for (let i = 0; i < state.cartList.length; i++) {
@@ -138,6 +140,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
+   
     //加入购物车
     addToCart({ commit }, product) {
       commit('addCart', {

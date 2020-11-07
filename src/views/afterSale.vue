@@ -16,7 +16,7 @@
         <span class="tuikuan">退款</span>
       </div>
     </div>
-    <div class="main" v-else>暂无数据</div>
+    <div class="main" v-else>暂未开通</div>
   </div>
 </template>
 

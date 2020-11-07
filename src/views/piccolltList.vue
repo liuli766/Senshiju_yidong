@@ -13,7 +13,7 @@
         <p>{{item.title}}</p>
         <div class="flex_be colltbtn">
           <span style="color:#666">{{item.add_time}}</span>
-          <span class="text_cen"  @click.stop="qxcollect(item.collect_id)">已收藏</span>
+          <span class="text_cen"  @click.stop="qxcollect(item.object_id)">已收藏</span>
         </div>
       </div>
     </div>
@@ -73,6 +73,7 @@ created() {
         .getCancelcollect({
           uid: this.userInfor.member_id,
           c_id: idx,
+          type:2
         })
         .then((res) => {
           this.collect(2)

@@ -53,6 +53,7 @@ export default {
     seachdata() {
       this.handserch();
     },
+    
   },
   created() {
     this.navactivechoseid = this.$route.query.navactivechoseid;
@@ -142,6 +143,7 @@ export default {
   width: 100%;
   .mb(100);
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .nav_bar {

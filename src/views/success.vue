@@ -22,7 +22,7 @@ export default {
     },
     goon(){ //继续购物
       this.$router.push({
-        path:'/product'
+        path:'/'
       })
     },
     order(){

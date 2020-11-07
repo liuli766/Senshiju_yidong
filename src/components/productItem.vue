@@ -106,15 +106,19 @@ export default {
     .pr(14);
     .pl(14);
     .pb(18);
+    margin-top: 0.15rem;
   }
   .productitemlist {
+    // box-shadow: 2px 2px 2px #eee;
+    // border-radius: 6px;
+    overflow: hidden;
     background: #fff;
     .w(347);
     .mt(14);
   }
   img {
-    .w(347);
-    .h(359);
+    .w(346);
+    .h(242);
   }
   p {
     color: #161616;

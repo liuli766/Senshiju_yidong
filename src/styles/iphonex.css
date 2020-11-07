@@ -1,0 +1,28 @@
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+  .compatibility {
+    padding-bottom: 34px;
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    color: #333;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    height: 1.08rem;
+    border-top: 1px solid #cacaca;
+  }
+}
+@media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) {
+  .compatibility {
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    color: #333;
+    bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    height: 1.08rem;
+    border-top: 1px solid #cacaca;
+    padding-bottom: 34px;
+  }
+}

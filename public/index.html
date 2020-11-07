@@ -5,9 +5,23 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+  <!-- <meta content="viewport-fit=cover,width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport"/> -->
+  <meta name= "viewport" content= "viewport-fit= cover,width= device-width,initial-scale=1.0,minimum-scale=' 1.0, maximum-scale= 1.0, user-scalable=no">
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   <title><%= htmlWebpackPlugin.options.title %></title>
+  <script src="http://code.jquery.com/jquery-2.1.1-rc2.min.js"></script>
+  <style>
+    /* body{
+      min-height: 100%;
+      padding-bottom: env(safe-area-inset-bottom);
+    } */
+    /*iphonex适配样式*/
+    /* @supports(bottom: env(safe-area-inset-bottom)){
+      div{
+        margin-bottom:env(safe-area-inset-bottom) ;
+      }
+    } */
+  </style>
 </head>
 
 <body>
@@ -35,5 +49,5 @@
   //   lastTouchEnd = now;
   // }, false);
 </script>
-<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<script src="http://res2.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
 </html>

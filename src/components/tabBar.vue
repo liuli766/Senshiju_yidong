@@ -1,15 +1,19 @@
 <template>
   <!-- 底部菜单栏-->
   <div class="tabbar">
-    <nav class="flex_ar">
+    <nav class="flex_ar compatibility" :style="isIphoneX ? 'margin-bottom:0.68rem' : 'margin-bottom:0rem'">
       <div
-        v-for="(item,index) in tabbar"
+        v-for="(item, index) in tabbar"
         :key="index"
         class="flex_col flex_ar"
-        :class="{tab_active:tabid===index}"
+        :class="{ tab_active: tabid === index }"
       >
         <span class="iconfont ico" :class="item.icon"></span>
-        <span @click="tabChoes(index,item)" :class="{tab_active:tabid===index}">{{item.tabname}}</span>
+        <span
+          @click="tabChoes(index, item)"
+          :class="{ tab_active: tabid === index }"
+          >{{ item.tabname }}</span
+        >
       </div>
     </nav>
   </div>
@@ -29,7 +33,8 @@ export default {
         { icon: "icon-shouye", tabname: "首页", url: "/" },
         {
           tabname: "成品",
-          url: "/product",
+          // url: "/product/全部/全部/全部/全部/全部/全部/全部/全部",
+          url:'/product',
           icon: "icon-chengpin",
         },
         {
@@ -43,8 +48,11 @@ export default {
           icon: "icon-dibudaohanglan-",
         },
       ],
-      // tabid:0
+      isIphoneX:''
     };
+  },
+  created() {
+
   },
   methods: {
     tabChoes(i, item) {
@@ -58,6 +66,10 @@ export default {
 <style lang="less" scoped>
 @import "../styles/index.less";
 @import "../styles/variable.less";
+
+.iphonexshow {
+  display: block !important;
+}
 nav {
   position: fixed;
   width: 100%;

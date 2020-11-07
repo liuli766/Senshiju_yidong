@@ -1,53 +1,67 @@
 <template>
   <!-- 建房百科 详情页-->
   <div class="buildencyc">
-    <h6>{{picDetail.title}}</h6>
+    <h6>{{ picDetail.title }}</h6>
     <img :src="picDetail.cover" class="img1" alt />
-    <p class="p1" v-html="picDetail.content" style="height:auto"></p>
-    <div class="rate" v-for="(item,k) in allCommentList" :key="k">
+    <p class="p1" v-html="picDetail.content" style="height: auto"></p>
+    <a id="d3"></a>
+    <div class="rate" v-for="(item, k) in allCommentList" :key="k">
       <div class="flex_be">
         <div class="userinfo flex_cen">
           <img :src="item.photo" alt />
-          <span>{{item.nickname}}</span>
+          <span>{{ item.nickname }}</span>
         </div>
         <div>
           <span class="up" @click="handUp(item)">
             <img src="../assets/img/up.png" alt />
-            {{item.is_up}}
+            {{ item.is_up }}
           </span>
           <span class="up" @click="handDown(item)">
             <img src="../assets/img/down.png" alt />
-            {{item.is_down}}
+            {{ item.is_down }}
           </span>
         </div>
       </div>
       <div class="comment">
-        <p>{{item.comment}}</p>
+        <p>{{ item.comment }}</p>
         <div>
           <!-- <span>{{item.TimeY}}</span> -->
-          <span>{{item.comment_time}}</span>
+          <span>{{ item.comment_time }}</span>
           <div
             class="reply text_cen"
             @click="handreply(item.comment_id)"
-            v-if="item.child.length!==0"
-          >{{item.child.length}}回复</div>
-          <div class="reply text_cen" @click="handreply(item.comment_id)" v-else>回复</div>
+            v-if="item.child.length !== 0"
+          >
+            {{ item.child.length }}回复
+          </div>
+          <div
+            class="reply text_cen"
+            @click="handreply(item.comment_id)"
+            v-else
+          >
+            回复
+          </div>
         </div>
         <div class="replybox" v-if="item.child.length">
-          <div style="max-height: 0.7rem; overflow: hidden;">
+          <div style="max-height: 0.7rem; overflow: hidden">
             <div
-              v-for="(child,key) in item.child"
+              v-for="(child, key) in item.child"
               :key="key"
               class="flex"
-              style="margin-bottom:0.15rem"
+              style="margin-bottom: 0.15rem"
             >
-              <span class="nicname">{{child.nickname}}:</span>
-              <div class="comm">{{child.comment}}</div>
+              <span class="nicname">{{ child.nickname }}:</span>
+              <div class="comm">{{ child.comment }}</div>
             </div>
           </div>
 
-          <span class="allreply" @click="showPopup(item.comment_id)" @showpop="jh">
-            全部{{item.child.length}}条评论
+          <span
+            class="allreply"
+            @click="showPopup(item.comment_id)"
+            @showpop="jh"
+            style="display: flex; align-items: center"
+          >
+            全部{{ item.child.length }}条评论
             <van-icon name="arrow" />
           </span>
         </div>
@@ -57,71 +71,74 @@
 
     <footer v-if="falsepanl">
       <div class="flex_cen">
-        <div class="writeraate" @click="showcontent">写评论...</div>
+        <div class="writeraate" @click="showcontent"><van-icon name="edit" style="font-size:0.38rem" /><span>写评论...</span></div>
         <div class="flex_be footicon">
-          <div class="xx">
-            <img src="../assets/img/xx.png" alt />
-            <div v-if="allCommentList.length!==0">{{allCommentList.length}}</div>
-            <div v-else style="display:none"></div>
-          </div>
+          <a href="#d3" >
+            <div class="xx">
+              <img src="../assets/img/xx.png" alt style=" margin-right: 0.45rem;"/>
+              <div v-if="allCommentList.length !== 0">
+                {{ allCommentList.length }}
+              </div>
+              <div v-else style="display: none"></div>
+            </div>
+          </a>
+
           <img
             src="../assets/img/wjx.png"
             alt
             @click="Collect(picDetail.id)"
-            v-if="picDetail.is_collect==false"
+            v-if="picDetail.is_collect == false"
           />
           <img
             src="../assets/img/ysc.png"
             alt
-            @click="Collect(picDetail.id)"
-            style="width: 0.6rem;height: 0.6rem;"
-            v-if="picDetail.is_collect==true"
+            @click="qxcollect(picDetail.id)"
+            style="width: 0.6rem; height: 0.6rem"
+            v-if="picDetail.is_collect == true"
           />
-          <img src="../assets/img/fx.png" alt @click="share" />
+          <!-- <img src="../assets/img/fx.png" alt @click="getDK" /> -->
         </div>
       </div>
     </footer>
     <div class="silde">
       <articontent v-show="showpanl" @submit="addmment" @canel="canelmmit" />
     </div>
-    <van-popup v-model="showShare" position="bottom" :style="{ height: '20%' }" class="sharebox">
+    <!-- <van-popup v-model="showShare" position="bottom" :style="{ height: '20%' }" class="sharebox">
       <div class="share">
         <h6>分享到</h6>
         <div class="flex_ar">
-          <div class="flex_cen flex_col" @click="frinedbox">
+          <div id="weixin" class="flex_cen flex_col" @click="getJSSDK">
             <img src="../assets/img/pyq.png" alt />
             <span>朋友圈</span>
           </div>
-          <div class="flex_cen flex_col" @click="frined">
+          <div class="flex_cen flex_col" @click="get3">
             <img src="../assets/img/wxhy.png" alt />
             <span>微信好友</span>
           </div>
-          <div class="flex_cen flex_col" @click="frined">
+          <div class="flex_cen flex_col" @click="get2">
             <img src="../assets/img/qqhy.png" alt />
             <span>QQ好友</span>
           </div>
-          <div class="flex_cen flex_col" @click="frinedbox">
+          <div class="flex_cen flex_col" @click="get1">
             <img src="../assets/img/qqkj.png" alt />
             <span>QQ空间</span>
           </div>
-          <div class="flex_cen flex_col" @click="copy($event,copylink)">
+          <div class="flex_cen flex_col" @click="copy($event, copylink)">
             <img src="../assets/img/fzlj.png" alt />
             <span>复制链接</span>
           </div>
         </div>
       </div>
-    </van-popup>
+    </van-popup> -->
   </div>
 </template>
 
 <script>
 import articontent from "@/components/articContent.vue";
-// import replay from "@/components/replay.vue";
 import wx from "weixin-jsapi";
 import $ from "jquery";
 import { mapState } from "vuex";
 import request from "@/request.js";
-// import share from "@/components/sharPage.vue";
 import Clipboard from "clipboard";
 export default {
   components: {
@@ -154,48 +171,59 @@ export default {
     this.copylink =
       "http://villa.jisapp.cn/shenshiju/#/" + this.$route.fullPath;
     console.log(this.$route);
-    // this.commentList();
+    this.commentList();
+    // this.getDK()
   },
   methods: {
+    getDK() {
+      this.$toast("请点击“...”分享");
+      request
+        .getShare({
+          url: this.$route.fullPath,
+        })
+        .then((res) => {
+          console.log(res, "分享");
+          if (res.code == 0) {
+            let appId = res.data.appId;
+            let nonceStr = res.data.nonceStr;
+            let signature = res.data.signature;
+            let timestamp = res.data.timestamp;
+            wx.config({
+              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+              appId: appId, // 必填，公众号的唯一标识
+              timestamp: timestamp, // 必填，生成签名的时间戳
+              nonceStr: nonceStr, // 必填，生成签名的随机串
+              signature: signature, // 必填，签名，见附录1
+              jsApiList: [
+                "updateAppMessageShareData",
+                "updateTimelineShareData",
+              ],
+            });
+            wx.ready(() => {
+              let that = this;
+              let shareData = {
+                title: that.ProDetail.title,
+                desc: that.ProDetail.title,
+                link: location.href, //必须是js安全域名下的地址(分享出去的没有图片显示请检查这里的link参数)
+                imgUrl: that.ProDetail.cover, //随意地址的图片都行，最好是jpg的，经测试无图片大小约束
+                success: function () {
+                  console.log(1);
+                },
+                cancel: function () {
+                  console.log(2);
+                },
+              };
+              console.log(window.wechatImg);
+              wx.updateTimelineShareData(shareData); //分享到QQ空间
+              wx.updateAppMessageShareData(shareData); //分享给手机QQ
+            });
+          }
+        })
+        .catch(() => {})
+        .finally(() => {});
+    },
     share() {
       this.showShare = true;
-    },
-    frined() {
-      console.log(1);
-      wx.ready(function () {
-        //需在用户可能点击分享按钮前就先调用
-        wx.updateAppMessageShareData({
-          title: this.$router.currentRoute.meta.title, // 分享标题
-          desc: this.picDetail.title, // 分享描述
-          link: `${this.link}${this.$route.fullPath}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: this.picDetail.cover, // 分享图标
-          success: function () {
-            // 设置成功
-            this.$toast("分享成功");
-          },
-          cancel: function () {
-            this.$toast("取消分享");
-          },
-        });
-      });
-    },
-    frinedbox() {
-      console.log(2);
-      wx.ready(function () {
-        //需在用户可能点击分享按钮前就先调用
-        wx.updateTimelineShareData({
-          title: this.$router.currentRoute.meta.title, // 分享标题
-          link: `${this.link}${this.$route.fullPath}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: this.picDetail.cover, // 分享图标
-          success: function () {
-            // 设置成功
-            this.$toast("分享成功");
-          },
-          cancel: function () {
-            this.$toast("取消分享");
-          },
-        });
-      });
     },
     copy(e, text) {
       var clipboard = new Clipboard(e.target, { text: () => text });
@@ -241,7 +269,7 @@ export default {
       if (!this.token) {
         console.log(1);
         this.$router.push({
-          path: "/register",
+          path: "/login",
         });
         return false;
       } else {
@@ -264,10 +292,28 @@ export default {
           .finally(() => {});
       }
     },
+    //取消收藏
+    qxcollect(idx) {
+      request
+        .getCancelcollect({
+          uid: this.userInfor.member_id,
+          c_id: idx,
+          type: 2,
+        })
+        .then((res) => {
+          this.handdetail();
+          console.log(res, "取消收藏");
+          this.$toast("取消成功");
+        })
+        .catch(() => {
+          this.$toast("取消失败");
+        })
+        .finally(() => {});
+    },
     showcontent() {
       if (!this.token) {
         this.$router.push({
-          path: "/register",
+          path: "/login",
         });
         return false;
       }
@@ -284,7 +330,7 @@ export default {
     commentList() {
       if (!this.token) {
         this.$router.push({
-          path: "/register",
+          path: "/login",
         });
         return false;
       } else {
@@ -306,7 +352,7 @@ export default {
     getcommentcontent() {
       if (!this.token) {
         this.$router.push({
-          path: "/register",
+          path: "/login",
         });
         return false;
       }
@@ -327,7 +373,7 @@ export default {
     addmment(data) {
       if (!this.token) {
         this.$router.push({
-          path: "/register",
+          path: "/login",
         });
         return false;
       }
@@ -409,7 +455,7 @@ export default {
     handreply(id) {
       if (!this.token) {
         this.$router.push({
-          path: "/register",
+          path: "/login",
         });
         return false;
       }
@@ -478,26 +524,51 @@ export default {
     }
   }
   .footicon {
-    .w(250);
     img {
       .w(42);
       .h(42);
+     
     }
   }
   h6 {
-    .fs(35);
-
-    .lh(52);
+    font-size: 0.36rem;
+    letter-spacing: 3px;
+    line-height: 0.52rem;
+    color: #191919;
+    padding-bottom: 0.27rem;
+    border-bottom: 1px solid #5f5f5f;
   }
   .img1 {
     width: 100%;
-    .h(682);
+    height:100%;
   }
   .p1 {
     .fs(24);
     .lh(41);
-    text-indent: 0.4rem;
+    // text-indent: 0.4rem;
     text-align: justify;
+    /deep/ img {
+      width: 96%;
+      height: 100%;
+    }
+    /deep/ video {
+      width: 100%;
+      height: 100%;
+      margin: 0.2rem 0;
+    }
+    /deep/ audio {
+      width: 100%;
+      height: 100%;
+      margin: 0.2rem 0;
+    }
+    /deep/ p {
+      font-size: 0.24rem;
+      letter-spacing: 1px;
+      line-height: 0.41rem;
+      color: #191919;
+      font-family: "Sim Sun";
+      text-align: justify;
+    }
   }
   .p2 {
     .fs(26);
@@ -593,6 +664,9 @@ footer {
     .ml(35);
   }
   .writeraate {
+    margin-left: 0.1rem;
+    flex: 1;
+    margin-right: 0.28rem;
     .h(59);
     background: #dcdcdc;
     color: #707070;
@@ -600,10 +674,11 @@ footer {
     .lh(59);
     .w(283);
     .b-radius(30);
-    .mr(140);
     .pl(18);
     box-sizing: border-box;
     font-family: SimSun;
+    display: flex;
+    align-items: center;
   }
 }
 .share,

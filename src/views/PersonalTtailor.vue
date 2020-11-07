@@ -3,8 +3,8 @@
   <div class="personalttailor">
     <img src="../assets/img/srdz.png" class="img" alt />
     <!-- 简介 -->
-    <div class="intro flex">
-      <img src="../assets/img/sh1.png" alt />
+    <!-- <div class="intro flex">
+        <img src="../assets/img/sh1.png" alt />
       <div>
         <p>更懂您的别墅生活</p>
         <p>村墅人家</p>
@@ -19,8 +19,9 @@
     </div>
     <p class="text">
       <span>野村人家</span>是四川别墅之家建筑科技有限公司旗下品牌，创建于2015年08月。专注于新农村自建房设计、别墅设计和别墅室内装修设计、园林景观设计及施工一站式服务，集合行业顶尖设计资源致力于打造全国优秀别墅设计公司和私宅设计，服务于中国新农村的建设和城镇化的进程。
-    </p>
+    </p> -->
     <!-- 设计团队支持 -->
+    <img src="../assets/img/personbanner.jpg" alt="" style="width:100%;height:100%">
     <div class="support text_cen">
       <h5>设计团队支持</h5>
       <p>更加专业，更加精细化，满足高品质的设计需求</p>
@@ -35,42 +36,43 @@
       </div>
       <!--  -->
       <div class="black text_cen">
-        <img src="../assets/img/sh2.png" alt />
-        <div class="block" style="background: rgba(255,255,255,.1);">
+        <img src="../assets/img/sh2.jpg" alt />
+        <!-- <div class="block" style="background: rgba(255,255,255,.1);">
           <p>来自湖南设计院团队，中国十大建院之一</p>
           <p>10年以上设计的经验，已累计为20000+个家庭建筑家居</p>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- 营业执照 -->
-    <div class="business text_cen">
+    <!-- <div class="business text_cen">
       <h5>营业执照</h5>
       <p>您的安心，我们的放心</p>
       <div class="dpic flex_be">
         <img :src="item.cover" alt v-for="(item,k) in licenselist" :key="k" />
       </div>
-    </div>
+    </div> -->
+    <img src="../assets/img/yingyzz.png" alt="" style="width:100%;height:100%">
     <!-- 定图展示 -->
     <div class="show text_cen">
       <h5>定制图纸展示</h5>
       <p>私人定制能带来更贴心的享受</p>
       <div>
-        <div class="dpic1 flex_be">
-          <img :src="litem.cover" alt v-for="(item,k) in dzlist" :key="k" />
-        </div>
+        <!-- <div class="dpic1 flex_be">
+          <img :src="item.cover" alt v-for="(item,k) in dzlist" :key="k" />
+        </div> -->
         <div class="xpic flex_be">
           <img :src="item.cover" alt v-for="(item,k) in moreList" :key="k" />
         </div>
       </div>
       
-      <div  v-if="moreList.length<=picList.length">没有更多了</div>
+      <div  v-if="picList.length<=moreList.length">没有更多了</div>
       <div class="more" @click="more" v-else>查看更多</div>
     </div>
     <!-- 口碑您来决定 -->
     <div class="mouth text_cen">
       <h5>我们的口碑您来决定</h5>
       <p>为您与客户真实的聊天记录</p>
-      <div class="flex_be">
+      <div class="koubei " style="flex-wrap: wrap;">
         <img :src="item.cover" alt v-for="(item,k) in dzlist" :key="k" />
       </div>
       <div class="more">
@@ -96,6 +98,7 @@ export default {
       dzlist: [],
       picList: [],
       moreList: [],
+      idx:3
     };
   },
   created() {
@@ -110,10 +113,11 @@ export default {
       .catch(() => {})
       .finally(() => {});
     this.getdata();
-    this.getTail();
+    // this.getTail();
   },
   methods: {
     more() {
+      this.idx++
       let list = [...this.moreList]
       this.moreList = [...list, ...this.picList.slice(this.idx++, this.idx + 1)]
     },
@@ -149,7 +153,13 @@ export default {
         .then((res) => {
           console.log(res, "营业执照");
           this.licenselist = res.data.license;
-          this.dzlist = res.data.praise;
+          this.dzlist = res.data.praise.slice(0.6).reverse();
+          this.picList = res.data.case;
+          if (this.picList < 4) {
+            this.moreList = this.picList;
+          } else {
+            this.moreList = this.picList.slice(0, 4);
+          }
         })
         .catch(() => {})
         .finally(() => {});
@@ -182,7 +192,7 @@ export default {
   .mt(40);
   img {
     width: 60%;
-    .h(216);
+    .h(416);
     .mr(26);
   }
   > div {
@@ -193,13 +203,12 @@ export default {
     height: 1px;
     background: #000;
     .margin(9,0);
-    // .ml(100);
   }
   p {
-    .fs(12);
+    .fs(24);
     color: #4b4b4b;
-    // transform: scale(0.7);
-    .w(600);
+    // .w(600);
+    .lh(36);
   }
 }
 .text {
@@ -240,7 +249,7 @@ export default {
     position: relative;
     img {
       .w(178);
-      .h(228.8);
+      .h(250);
     }
   }
   .item + .item {
@@ -259,15 +268,16 @@ export default {
     left: 0;
     span:nth-of-type(1) {
       .fs(16);
-      transform: scale(0.7);
+      // transform: scale(0.7);
       display: block;
       line-height: 1;
     }
     span:nth-of-type(2) {
       .fs(10);
-      transform: scale(0.7);
+      // transform: scale(0.7);
       display: block;
       line-height: 1;
+      margin-top: 0.1rem;
     }
   }
   .black {
@@ -300,15 +310,23 @@ export default {
   img {
     .w(360);
     .h(250);
+    margin-bottom: 0.3rem;
+  }
+  .dpic1{
+    flex-wrap: wrap;
   }
   .xpic {
     justify-content: flex-start;
+    flex-wrap: wrap;
     img {
       .w(174);
       .h(122);
       .mt(20);
       .mb(20);
-      .mr(15);
+      .mr(18);
+    }
+    img:nth-of-type(4n){
+      margin-right: 0
     }
   }
   .more {
@@ -339,16 +357,27 @@ export default {
   flex-wrap: wrap;
 }
 .dpic img {
-  .w(284);
-  .h(430);
+  width: 100%;
+  height: 100%;
 }
-.dpic img:nth-of-type(3) {
-  .w(730);
-}
-.dpic img:nth-of-type(1) {
-  .ml(50);
-}
-.dpic img:nth-of-type(2) {
-  .mr(50);
+// .dpic img:nth-of-type(3) {
+//   .w(730);
+// }
+// .dpic img:nth-of-type(1) {
+//   .ml(50);
+// }
+// .dpic img:nth-of-type(2) {
+//   .mr(50);
+// }
+.koubei{
+  display: flex;
+  >img{
+    width: 32%;
+    margin-right: 0.15rem;
+    margin-bottom: 0.15rem;
+  }
+  img:nth-of-type(3n){
+    margin-right: 0;
+  }
 }
 </style>

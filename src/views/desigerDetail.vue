@@ -5,7 +5,7 @@
     <div class="headimg flex">
       <img :src="detailList.cover" alt />
       <div class="headr flex_col">
-        <div class="flex">
+        <div class="flex" style="flex-wrap: wrap;">
           <div class="flex_cen">
             <div class="name">{{detailList.name}}</div>
             <div class="small_font">{{detailList.position}}</div>
@@ -65,9 +65,9 @@ export default {
   .pb(47);
 }
 .small_font {
-  .fs(8);
-  //   transform: scale(0.7);
-  .ml(9);
+  .fs(24);
+  .mr(30);
+  margin-bottom: 0.15rem;
 }
 .headimg {
   .ml(27);
@@ -80,7 +80,7 @@ export default {
   .shool {
     .fs(22);
     .lh(25);
-    .mt(33);
+    .mt(10);
   }
   img {
     .w(116);
@@ -90,14 +90,16 @@ export default {
   .name {
     .fs(28);
     color: #323232;
+    margin-bottom: 0.15rem;
+    margin-right: 0.3rem;
   }
 }
 .text {
   background: #fafafa;
   .pt(43);
   .pb(43);
-  .pr(7);
-  .pl(17);
+  .pr(27);
+  .pl(27);
   .fs(22);
   .lh(40);
   color: #595858;

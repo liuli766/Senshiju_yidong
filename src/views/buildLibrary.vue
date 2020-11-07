@@ -1,7 +1,7 @@
 <template>
   <!-- 设计团队-->
   <div class="buildLibrary">
-    <img src="../assets/img/sjtd.png" class="img" alt />
+    <img src="../assets/img/sjtd.jpg" class="img" alt />
     <!-- 村墅人家设计团队村墅人家设计团队 -->
     <div class="text_cen designer">
       <h4>村墅人家设计团队</h4>

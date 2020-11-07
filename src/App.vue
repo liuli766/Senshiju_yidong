@@ -14,9 +14,7 @@ export default {
     }),
   },
   created() {
-    // this.getCode();
-    console.log(this.token)
-    console.log(this.userInfor)
+
   },
   methods: {
     wxLogin(code) {
@@ -64,6 +62,6 @@ export default {
 </script>
 <style>
 .van-toast__icon {
-    font-size: 0.8rem !important;
+  font-size: 0.8rem !important;
 }
 </style>

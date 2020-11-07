@@ -93,7 +93,7 @@ function getCate(data) {
   let params = {
     ...data
   }
-  return http.fetchPost('/api/Common/cates', params)
+  return http.fetchGet('/api/Common/cates', params)
 }
 function getHots(data) {
   let params = {
@@ -266,7 +266,24 @@ function getselectLunbo(data) {
   }
   return http.fetchPost('/api/Index/selectLunbo', params)
 }
-
+function getShare(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/Home/share', params)
+}
+function getBao(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Index/hot_cake', params)
+}
+function getwxrequest(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Pay/orderquery', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -313,4 +330,7 @@ export default {
   getHomeindex,//首页视频数据
   getHotspot,// 热区链接
   getselectLunbo,//查询轮播图（首页banner、手机轮播图）
+  getShare,//分享
+  getBao,//爆款
+  getwxrequest,//微信订单查询
 }

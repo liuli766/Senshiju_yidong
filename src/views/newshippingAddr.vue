@@ -16,7 +16,7 @@
     <!--  -->
     <div class="p">
       <textarea
-        placeholder="请输入或粘贴地址文本，自动识别姓名 电话和地址，如： 张三，18112345678，浙江省杭州市余杭区五常街道乐佳 国际3号"
+        placeholder="请输入或粘贴地址文本，自动识别姓名 电话和地址，如：陕西省西安市雁塔区丈八沟街道高新四路高新大都荟710061 刘国良 13593464918 "
         v-model="content"
       ></textarea>
     </div>
@@ -51,7 +51,7 @@
         </van-popup>
       </div>
       <van-divider :style="{ color: '#1989fa', borderColor: '#eee', padding: '0' }"></van-divider>
-      <van-field v-model="addr" type="tel" label="详细地址" clearable placeholder="请输入街道地址" />
+      <van-field v-model="addr" type="text" label="详细地址" clearable placeholder="请输入街道地址" />
       <div class="flex_be swich">
         <span>设为默认地址</span>
         <van-switch v-model="checked" active-color="#07c160" inactive-color="#EEEEEE" />
@@ -76,7 +76,7 @@ export default {
       name: "",
       tel: "",
       addr: "",
-      checked: false,
+      checked: true,
       value: "",
       showArea: false,
       areaList: areaList, // 数据格式见 Area 组件文档
@@ -93,7 +93,8 @@ export default {
   },
   created() {
     console.log(this.$route.query.item)
-    if (this.$route.query.item !== undefined) {
+    if (this.$route.query.item.length!==0&&this.$route.query.item !== undefined) {
+       console.log(this.$route.query.item.length!=0)
       let item = this.$route.query.item;
       this.name = item.name;
       this.tel = item.tel;
@@ -139,6 +140,7 @@ export default {
         .then((res) => {
           console.log(res, "添加收货地址");
           this.$toast("保存成功");
+          this.$router.go(-1)
         })
         .catch(() => {
           this.$toast("保存失败");
@@ -162,6 +164,8 @@ export default {
         })
         .then((res) => {
           console.log(res,'修改')
+          this.$toast("修改成功");
+          this.$router.go(-1)
         })
         .catch(() => {
           this.$toast("修改失败");
@@ -182,6 +186,7 @@ export default {
           this.addr = "";
           this.checked = false;
           this.delbtn = false;
+          this.$router.go(-1)
         })
         .catch(() => {
           this.$toast("删除失败");
@@ -192,7 +197,9 @@ export default {
       this.content = "";
     },
     intelligence() {
+      
       let smartParse = this.smartParse(this.content);
+      console.log(smartParse)
       if (smartParse.phone == undefined) {
         smartParse.phone = "";
       }
@@ -216,6 +223,13 @@ export default {
       }
       if (smartParse.zipCode == undefined) {
         smartParse.zipCode = "";
+      }
+      if(smartParse.province==undefined){
+        smartParse.province = "";
+      }
+      if(smartParse.city==undefined || smartParse.county==undefined){
+          smartParse.city=''
+          smartParse.county=''
       }
       this.name = smartParse.name;
       this.tel = smartParse.phone;
@@ -294,6 +308,7 @@ export default {
     text-align: justify;
     color: #c7c7c7;
     .lh(38);
+    box-sizing: border-box;
   }
 }
 .cotbtn {

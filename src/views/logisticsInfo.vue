@@ -1,37 +1,30 @@
 <template>
   <!-- 物流信息 -->
   <div class="logisticsInfo">
-    <div class="nav_bar flex">
-      <van-icon name="arrow-left" @click="onClickLeft" />
-      <span>物流信息</span>
-    </div>
-    <!--  -->
     <div class="flex_col company">
       <!-- <span>承运公司： 申通快递</span> -->
-      <span>运单编号： {{this.$route.query.ordernum}}</span>
+      <div class="fuzhi">
+        <span>订单编号： {{ this.$route.query.ordernum }}</span>
+        <span class="copy" @click="copy($event,ordernum)">复制</span>
+      </div>
+      <div class="fuzhi" style="margin-top:0.46rem">
+        <span>快递单号： {{ this.$route.query.kuaidi }}</span>
+        <span class="copy" @click="copy($event,kuaidi)">复制</span>
+      </div>
     </div>
-    <!-- 物流记录-->
-    <!-- <main>
-      <ul>
-        <li class="flex">
-          <i class="node_icon">....</i>
-          <div>
-            <span class="txt">[湖南蓝山县公司]已签收，签收人是【通村寸入库代签次日到】</span>
-            <span class="time">2020-07-15 16:31:10</span>
-          </div>
-        </li>
-      </ul>
-    </main>-->
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 // import request from "@/request.js";
+import Clipboard from "clipboard";
 export default {
   data() {
     return {
       orderlist: [],
+      ordernum:'',
+      kuaidi:''
     };
   },
   computed: {
@@ -40,7 +33,23 @@ export default {
       userInfor: (state) => state.userInfor,
     }),
   },
+  created() {
+    this.ordernum=this.$route.query.ordernum
+    this.kuaidi =this.$route.query.kuaidi
+  },
   methods: {
+    copy(e, text) {
+      var clipboard = new Clipboard(e.target, { text: () => text });
+      clipboard.on("success", () => {
+        this.$toast("复制成功");
+        // 释放内存
+        clipboard.destroy();
+      });
+      clipboard.on("error", () => {
+        this.$toast("复制失败");
+        clipboard.destroy();
+      });
+    },
     onClickLeft() {
       this.$router.push({
         path: `drawingOrder?navactivechoseid=0`,
@@ -54,6 +63,24 @@ export default {
 <style lang="less" scoped>
 @import "../styles/index.less";
 @import "../styles/variable.less";
+.fuzhi {
+  display: flex;
+  align-items: center;
+  margin-top: 1.35rem;
+  justify-content: space-between;
+}
+.copy {
+  font-size: 0.27rem;
+  color: #1153a4;
+  font-family: "Adobe Heiti Std";
+  border: 1px solid #1153a4;
+  display: inline-block;
+  width: 0.72rem;
+  height:0.36rem;
+  text-align: center;
+  line-height: 0.36rem;
+  border-radius: 0.06rem;
+}
 .nav_bar {
   .van-icon {
     .fs(30);
@@ -72,10 +99,6 @@ export default {
   .padding(0, 30);
   .pb(45);
   border-bottom: 0.08rem solid #f1f1f1;
-  span:nth-of-type(1) {
-    .mt(77);
-    .mb(20);
-  }
 }
 main {
   .padding(39, 30);

@@ -126,6 +126,11 @@ export default {
   components: {
     // CountDown,
   },
+  // watch:{
+  //   orderdetail(){
+  //     this.canelOrder(this.orderdetail)
+  //   }
+  // },
   data() {
     return {
       img: require("../assets/logo.png"),
@@ -204,20 +209,22 @@ export default {
     },
     // 取消订单
     canelOrder(item) {
+     
       let oid = item.id;
       request
-        .getCancelOrder({
-          oid,
-        })
-        .then((res) => {
-          console.log(res);
-          Toast.success("取消成功");
-          this.go();
-        })
-        .catch(() => {
-          Toast.fail("取消失败");
-        })
-        .finally(() => {});
+      .getCancelOrder({
+        oid,
+      })
+      .then((res) => {
+        console.log(res);
+        Toast.success("取消成功");
+        this.go();
+      })
+      .catch(() => {
+        Toast.fail("取消失败");
+      })
+      .finally(() => {});
+     
     },
     copy(e, text) {
       var clipboard = new Clipboard(e.target, { text: () => text });

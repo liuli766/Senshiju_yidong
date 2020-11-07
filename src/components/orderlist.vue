@@ -68,7 +68,8 @@ export default {
   data() {
     return {};
   },
-  watch: {},
+  watch: {
+  },
   created() {
     console.log(this.orderli);
   },
@@ -102,13 +103,18 @@ export default {
         });
       } else if (navid === 1) {
         this.$router.push({
-          path: "/stayGoods",
+          path: "/productDetail",
+          query:{
+            id:item.b_id  
+          }
         });
       } else if (navid === 2) {
+        console.log(item,'物流信息')
         this.$router.push({
           path: "/logisticsInfo",
           query:{
-            ordernum:item.order_num
+            ordernum:item.order_num,
+            kuaidi:item.logistics_code
           }
         });
       }
