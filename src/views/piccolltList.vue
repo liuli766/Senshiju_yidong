@@ -6,14 +6,22 @@
       <span>文章的收藏</span>
     </div>
     <!--  -->
-    <div  class="list flex"  v-if="articleList.length==0">没有收藏的文章</div>
-    <div class="list flex" v-for="(item,k) in articleList" :key="k" @click="gopicdetail(item)" v-else>
+    <div class="list flex" v-if="articleList.length == 0">没有收藏的文章</div>
+    <div
+      class="list flex"
+      v-for="(item, k) in articleList"
+      :key="k"
+      @click="gopicdetail(item)"
+      v-else
+    >
       <img :src="item.cover" alt />
       <div>
-        <p>{{item.title}}</p>
+        <p>{{ item.title }}</p>
         <div class="flex_be colltbtn">
-          <span style="color:#666">{{item.add_time}}</span>
-          <span class="text_cen"  @click.stop="qxcollect(item.object_id)">已收藏</span>
+          <span style="color: #666">{{ item.add_time }}</span>
+          <span class="text_cen" @click.stop="qxcollect(item.object_id)"
+            >已收藏</span
+          >
         </div>
       </div>
     </div>
@@ -31,24 +39,24 @@ export default {
       headimg: (state) => state.headimg,
     }),
   },
-data() {
-  return {
-    articleList:[]
-  }
-},
-created() {
-  this.collect(2)
-},
+  data() {
+    return {
+      articleList: [],
+    };
+  },
+  created() {
+    this.collect(2);
+  },
   methods: {
     gopicdetail(item) {
       //跳转产品详情
-      let idname = item.object_id
+      let idname = item.object_id;
       this.$router.push({
-        path: '/buildencycDetail',
+        path: "/buildencycDetail",
         query: {
           id: idname,
         },
-      })
+      });
     },
     go() {
       this.$router.go(-1);
@@ -61,29 +69,29 @@ created() {
           type: num,
         })
         .then((res) => {
-          console.log(res)
-            this.articleList = res.data;        
+          console.log(res);
+          this.articleList = res.data;
         })
         .catch(() => {})
         .finally(() => {});
     },
-     //取消收藏
+    //取消收藏
     qxcollect(idx) {
       request
         .getCancelcollect({
           uid: this.userInfor.member_id,
           c_id: idx,
-          type:2
+          type: 2,
         })
         .then((res) => {
-          this.collect(2)
-          console.log(res,'取消收藏')
+          this.collect(2);
+          console.log(res, "取消收藏");
           this.$toast("取消成功");
         })
         .catch(() => {
           this.$toast("取消失败");
         })
-        .finally(() => {})
+        .finally(() => {});
     },
   },
 };

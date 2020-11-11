@@ -5,30 +5,30 @@
     <div class="headimg flex">
       <img :src="detailList.cover" alt />
       <div class="headr flex_col">
-        <div class="flex" style="flex-wrap: wrap;">
+        <div class="flex" style="flex-wrap: wrap">
           <div class="flex_cen">
-            <div class="name">{{detailList.name}}</div>
-            <div class="small_font">{{detailList.position}}</div>
+            <div class="name">{{ detailList.name }}</div>
+            <div class="small_font">{{ detailList.position }}</div>
           </div>
           <div class="flex_cen small_font">
-            <!-- <van-icon name="star-o" size="0.2rem" style="margin-right:0.05rem" /> -->
             <span>评价星级:</span>
             <van-rate v-model="detailList.star_level" size="0.2rem" />
           </div>
-          <div class="small_font flex_cen">从业年限：{{detailList.job_year}}</div>
+          <div class="small_font flex_cen">
+            从业年限：{{ detailList.job_year }}
+          </div>
         </div>
-        <div class="shool">毕业院校：{{detailList.school}}</div>
+        <div class="shool">毕业院校：{{ detailList.school }}</div>
       </div>
     </div>
     <!--  -->
-    <p class="text">{{detailList.intro}}</p>
+    <p class="text">{{ detailList.intro }}</p>
     <!-- 代表作品 -->
     <div class="works text_cen">
       <h6>代表作品</h6>
       <div class="border">
-        <img v-for="(item,k) in detailList.works" :key="k" :src="item" alt />
+        <img v-for="(item, k) in detailList.works" :key="k" :src="item" alt />
       </div>
-      <!-- <div class="btn">立即预约</div> -->
     </div>
   </div>
 </template>

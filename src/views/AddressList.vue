@@ -62,7 +62,6 @@ export default {
       });
     },
     onEdit(item, index) {
-      //   Toast("编辑地址:" + index);
       console.log(item);
       this.$router.push({
         path: "/newshippingAddr",

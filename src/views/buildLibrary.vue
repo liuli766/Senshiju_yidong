@@ -11,26 +11,31 @@
     </div>
     <!-- 设计师介绍 -->
     <main>
-      <div class="flex info" v-for="(item,k) in teamList" :key="k">
+      <div class="flex info" v-for="(item, k) in teamList" :key="k">
         <img :src="item.cover" alt />
         <div class="rbox flex flex_col flex_b">
           <div>
             <div class="top flex_be">
               <div class="rname flex">
-                <span>{{item.name}}</span>
-                <span>{{item.position}}</span>
+                <span>{{ item.name }}</span>
+                <span>{{ item.position }}</span>
               </div>
               <div class="ldetail flex" @click="handdetai(item.id)">
                 <span>查看详情</span>
                 <span class="span flex_cen">···</span>
               </div>
             </div>
-            <p class="two-wrap">{{item.intro}}</p>
+            <p class="two-wrap">{{ item.intro }}</p>
           </div>
           <div>
             <span class="jx">作品精选</span>
             <div class="piclist flex_ar">
-              <img :src="child" alt v-for="(child,idx) in item.works" :key="idx" />
+              <img
+                :src="child"
+                alt
+                v-for="(child, idx) in item.works"
+                :key="idx"
+              />
             </div>
           </div>
         </div>

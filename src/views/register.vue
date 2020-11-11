@@ -53,7 +53,7 @@ export default {
       pattern1: /\d{4}/,
       tmeValue: 60, //获取验证码时间
       flag: 0,
-      code:''//code码
+      code: "", //code码
     };
   },
   watch: {
@@ -94,7 +94,7 @@ export default {
         })
         .then((res) => {
           console.log(res, "微信信息");
-          this.$toast("微信授权成功"); 
+          this.$toast("微信授权成功");
         })
         .catch(() => {})
         .finally(() => {});
@@ -136,12 +136,12 @@ export default {
       }
     },
     onSubmit(values) {
-      let openid = localStorage.getItem('oppid')
+      let openid = localStorage.getItem("oppid");
       request
         .loginByMsg({
           phone_num: this.tel,
           msg_code: this.code1,
-          openid: openid || ''
+          openid: openid || "",
         })
         .then((res) => {
           console.log(res);
@@ -154,7 +154,7 @@ export default {
             var theRequest = new Object();
             if (url.indexOf("?") != -1) {
               var str = url.substr(1);
-             var strs = str.split("&");
+              var strs = str.split("&");
               for (var i = 0; i < strs.length; i++) {
                 theRequest[strs[i].split("=")[0]] = strs[i].split("=")[1];
               }

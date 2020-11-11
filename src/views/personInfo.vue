@@ -11,8 +11,7 @@
         <span>头像</span>
         <div class="flex_cen">
           <div class="fl_center adatar">
-            <!-- <form action method="POST" enctype="multipart/form-data" id="form1"> -->
-            <img :src="headimg?headimg:userInfor.photo" alt class="photo" />
+            <img :src="headimg ? headimg : userInfor.photo" alt class="photo" />
             <input
               type="file"
               id="file"
@@ -28,7 +27,7 @@
       <div class="flex_be nikename">
         <span>昵称</span>
         <div>
-          <span style="margin-right:0.15rem">
+          <span style="margin-right: 0.15rem">
             <input type="text" name id :value="userInfor.nickname" />
           </span>
           <van-icon name="arrow" />
@@ -37,7 +36,7 @@
       <div class="flex_be modify">
         <span>修改手机号</span>
         <div>
-          <span style="margin-right:0.15rem;">
+          <span style="margin-right: 0.15rem">
             已绑定：
             <input type="text" name id :value="userInfor.phone_num" />
           </span>
@@ -71,7 +70,7 @@ export default {
   },
   created() {
     console.log(this.userInfor);
-    if(!this.token){
+    if (!this.token) {
       this.$router.push({
         path: "/login",
       });
@@ -99,16 +98,15 @@ export default {
         processData: false,
       }).then((res) => {
         console.log(res);
-        if(res.code==0){
-          this.adatar=res.data
-        this.$toast("上传成功");
-        localStorage.setItem('headImg', res.data)
-         let img = localStorage.getItem('headImg')
-         this.$store.commit('uploadimg', img)
-        }else{
+        if (res.code == 0) {
+          this.adatar = res.data;
+          this.$toast("上传成功");
+          localStorage.setItem("headImg", res.data);
+          let img = localStorage.getItem("headImg");
+          this.$store.commit("uploadimg", img);
+        } else {
           this.$toast("上传失败");
         }
-        
       });
     },
     // 修改个人资料
@@ -131,8 +129,7 @@ export default {
       const local = window.location.origin;
       this.$store.commit("cleartoken");
       this.$toast("退出成功");
-      window.location.href = local+"/shenshiju/#/mine"
-
+      window.location.href = local + "/shenshiju/#/mine";
     },
     go() {
       this.$router.go(-1);

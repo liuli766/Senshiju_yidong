@@ -2,78 +2,60 @@
   <!-- 私人定制 -->
   <div class="personalttailor">
     <img src="../assets/img/srdz.png" class="img" alt />
-    <!-- 简介 -->
-    <!-- <div class="intro flex">
-        <img src="../assets/img/sh1.png" alt />
-      <div>
-        <p>更懂您的别墅生活</p>
-        <p>村墅人家</p>
-        <p>让您体验“真正的别墅生活”</p>
-        <p>更贴心的服务</p>
-        <div class="line"></div>
-        <p>Better understand your villa life</p>
-        <p>Villagers</p>
-        <p>Let you experience "real villa life"</p>
-        <p>More intimate service</p>
-      </div>
-    </div>
-    <p class="text">
-      <span>野村人家</span>是四川别墅之家建筑科技有限公司旗下品牌，创建于2015年08月。专注于新农村自建房设计、别墅设计和别墅室内装修设计、园林景观设计及施工一站式服务，集合行业顶尖设计资源致力于打造全国优秀别墅设计公司和私宅设计，服务于中国新农村的建设和城镇化的进程。
-    </p> -->
     <!-- 设计团队支持 -->
-    <img src="../assets/img/personbanner.jpg" alt="" style="width:100%;height:100%">
+    <img
+      src="../assets/img/personbanner.jpg"
+      alt=""
+      style="width: 100%; height: 100%"
+    />
     <div class="support text_cen">
       <h5>设计团队支持</h5>
       <p>更加专业，更加精细化，满足高品质的设计需求</p>
       <div class="flex">
-        <div class="item" v-for="(item,index) in teamList" :key="index" @click="handdtail(item.id)">
+        <div
+          class="item"
+          v-for="(item, index) in teamList"
+          :key="index"
+          @click="handdtail(item.id)"
+        >
           <img :src="item.cover" alt />
           <div class="block">
-            <span>{{item.name}}</span>
-            <span>{{item.position}}</span>
+            <span>{{ item.name }}</span>
+            <span>{{ item.position }}</span>
           </div>
         </div>
       </div>
       <!--  -->
       <div class="black text_cen">
         <img src="../assets/img/sh2.jpg" alt />
-        <!-- <div class="block" style="background: rgba(255,255,255,.1);">
-          <p>来自湖南设计院团队，中国十大建院之一</p>
-          <p>10年以上设计的经验，已累计为20000+个家庭建筑家居</p>
-        </div> -->
       </div>
     </div>
     <!-- 营业执照 -->
-    <!-- <div class="business text_cen">
-      <h5>营业执照</h5>
-      <p>您的安心，我们的放心</p>
-      <div class="dpic flex_be">
-        <img :src="item.cover" alt v-for="(item,k) in licenselist" :key="k" />
-      </div>
-    </div> -->
-    <img src="../assets/img/yingyzz.png" alt="" style="width:100%;height:100%">
+
+    <img
+      src="../assets/img/yingyzz.png"
+      alt=""
+      style="width: 100%; height: 100%"
+    />
     <!-- 定图展示 -->
     <div class="show text_cen">
       <h5>定制图纸展示</h5>
       <p>私人定制能带来更贴心的享受</p>
       <div>
-        <!-- <div class="dpic1 flex_be">
-          <img :src="item.cover" alt v-for="(item,k) in dzlist" :key="k" />
-        </div> -->
         <div class="xpic flex_be">
-          <img :src="item.cover" alt v-for="(item,k) in moreList" :key="k" />
+          <img :src="item.cover" alt v-for="(item, k) in moreList" :key="k" />
         </div>
       </div>
-      
-      <div  v-if="picList.length<=moreList.length">没有更多了</div>
+
+      <div v-if="picList.length <= moreList.length">没有更多了</div>
       <div class="more" @click="more" v-else>查看更多</div>
     </div>
     <!-- 口碑您来决定 -->
     <div class="mouth text_cen">
       <h5>我们的口碑您来决定</h5>
       <p>为您与客户真实的聊天记录</p>
-      <div class="koubei " style="flex-wrap: wrap;">
-        <img :src="item.cover" alt v-for="(item,k) in dzlist" :key="k" />
+      <div class="koubei" style="flex-wrap: wrap">
+        <img :src="item.cover" alt v-for="(item, k) in dzlist" :key="k" />
       </div>
       <div class="more">
         <a :href="'tel:' + phone">查看更多客户反馈请咨询客服</a>
@@ -98,7 +80,7 @@ export default {
       dzlist: [],
       picList: [],
       moreList: [],
-      idx:3
+      idx: 3,
     };
   },
   created() {
@@ -117,9 +99,12 @@ export default {
   },
   methods: {
     more() {
-      this.idx++
-      let list = [...this.moreList]
-      this.moreList = [...list, ...this.picList.slice(this.idx++, this.idx + 1)]
+      this.idx++;
+      let list = [...this.moreList];
+      this.moreList = [
+        ...list,
+        ...this.picList.slice(this.idx++, this.idx + 1),
+      ];
     },
     getTail() {
       // 定制图纸
@@ -312,7 +297,7 @@ export default {
     .h(250);
     margin-bottom: 0.3rem;
   }
-  .dpic1{
+  .dpic1 {
     flex-wrap: wrap;
   }
   .xpic {
@@ -325,8 +310,8 @@ export default {
       .mb(20);
       .mr(18);
     }
-    img:nth-of-type(4n){
-      margin-right: 0
+    img:nth-of-type(4n) {
+      margin-right: 0;
     }
   }
   .more {
@@ -369,14 +354,14 @@ export default {
 // .dpic img:nth-of-type(2) {
 //   .mr(50);
 // }
-.koubei{
+.koubei {
   display: flex;
-  >img{
+  > img {
     width: 32%;
     margin-right: 0.15rem;
     margin-bottom: 0.15rem;
   }
-  img:nth-of-type(3n){
+  img:nth-of-type(3n) {
     margin-right: 0;
   }
 }

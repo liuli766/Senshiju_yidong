@@ -252,7 +252,6 @@ main {
   width: 0.98rem !important;
 }
 .form .van-field__control {
-  /* width: 5.16rem; */
   height: 0.64rem;
   border-radius: 0.1rem;
   padding-left: 0.15rem;

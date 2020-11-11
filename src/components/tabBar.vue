@@ -1,7 +1,10 @@
 <template>
   <!-- 底部菜单栏-->
   <div class="tabbar">
-    <nav class="flex_ar compatibility" :style="isIphoneX ? 'margin-bottom:0.68rem' : 'margin-bottom:0rem'">
+    <nav
+      class="flex_ar compatibility"
+      :style="isIphoneX ? 'margin-bottom:0.68rem' : 'margin-bottom:0rem'"
+    >
       <div
         v-for="(item, index) in tabbar"
         :key="index"
@@ -33,8 +36,7 @@ export default {
         { icon: "icon-shouye", tabname: "首页", url: "/" },
         {
           tabname: "成品",
-          // url: "/product/全部/全部/全部/全部/全部/全部/全部/全部",
-          url:'/product',
+          url: "/product",
           icon: "icon-chengpin",
         },
         {
@@ -48,15 +50,12 @@ export default {
           icon: "icon-dibudaohanglan-",
         },
       ],
-      isIphoneX:''
+      isIphoneX: "",
     };
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     tabChoes(i, item) {
-      // this.tabid=i
       this.$router.push({ path: item.url });
     },
   },

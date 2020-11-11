@@ -5,11 +5,11 @@
       <!-- <span>承运公司： 申通快递</span> -->
       <div class="fuzhi">
         <span>订单编号： {{ this.$route.query.ordernum }}</span>
-        <span class="copy" @click="copy($event,ordernum)">复制</span>
+        <span class="copy" @click="copy($event, ordernum)">复制</span>
       </div>
-      <div class="fuzhi" style="margin-top:0.46rem">
+      <div class="fuzhi" style="margin-top: 0.46rem">
         <span>快递单号： {{ this.$route.query.kuaidi }}</span>
-        <span class="copy" @click="copy($event,kuaidi)">复制</span>
+        <span class="copy" @click="copy($event, kuaidi)">复制</span>
       </div>
     </div>
   </div>
@@ -17,14 +17,13 @@
 
 <script>
 import { mapState } from "vuex";
-// import request from "@/request.js";
 import Clipboard from "clipboard";
 export default {
   data() {
     return {
       orderlist: [],
-      ordernum:'',
-      kuaidi:''
+      ordernum: "",
+      kuaidi: "",
     };
   },
   computed: {
@@ -34,8 +33,8 @@ export default {
     }),
   },
   created() {
-    this.ordernum=this.$route.query.ordernum
-    this.kuaidi =this.$route.query.kuaidi
+    this.ordernum = this.$route.query.ordernum;
+    this.kuaidi = this.$route.query.kuaidi;
   },
   methods: {
     copy(e, text) {
@@ -54,7 +53,6 @@ export default {
       this.$router.push({
         path: `drawingOrder?navactivechoseid=0`,
       });
-      // this.$store.commit("gonav", 2);
     },
   },
 };
@@ -76,7 +74,7 @@ export default {
   border: 1px solid #1153a4;
   display: inline-block;
   width: 0.72rem;
-  height:0.36rem;
+  height: 0.36rem;
   text-align: center;
   line-height: 0.36rem;
   border-radius: 0.06rem;

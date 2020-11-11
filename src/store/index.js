@@ -18,7 +18,7 @@ export default new Vuex.Store({
     add: [],  //添加到购物车的商品（已选商品）
     allCheck: false,
     payObject: null,
-    orderTime:20*60*1000
+    orderTime: 20 * 60 * 1000
   },
 
   getters: {
@@ -140,7 +140,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-   
+
     //加入购物车
     addToCart({ commit }, product) {
       commit('addCart', {

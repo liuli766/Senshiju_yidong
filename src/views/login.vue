@@ -20,9 +20,6 @@
       <div class="weixin flex_cen" @click="getCode">
         <img src="../assets/img/wx.png" alt />
       </div>
-      <!-- <div class="qq flex_cen">
-        <img src="../assets/img/qq.png" alt />
-      </div>-->
     </div>
     <button
       class="bottom"
@@ -56,7 +53,6 @@ export default {
   created() {
     // 非静默授权，第一次有弹框
     const code = this.getUrlParam("code"); // 截取路径中的code，如果没有就去微信授权，如果已经获取到了就直接传code给后台获取openId
-    // const local = window.location.href;
     console.log("bbb", code);
     if (code) {
       this.wxLogin(code); //把code传给后台获取用户信息
@@ -106,10 +102,6 @@ export default {
           encodeURIComponent(local) +
           "&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect";
       }
-      //  else {
-      //   this.wxLogin(code); //把code传给后台获取用户信息
-      //   this.code = code;
-      // }
     },
     getUrlParam: function (name) {
       var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

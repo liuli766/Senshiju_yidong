@@ -25,7 +25,6 @@
       <div class="comment">
         <p>{{ item.comment }}</p>
         <div>
-          <!-- <span>{{item.TimeY}}</span> -->
           <span>{{ item.comment_time }}</span>
           <div
             class="reply text_cen"
@@ -69,13 +68,21 @@
       </div>
     </div>
 
-    <footer v-if="falsepanl">
+    <footer>
       <div class="flex_cen">
-        <div class="writeraate" @click="showcontent"><van-icon name="edit" style="font-size:0.38rem" /><span>写评论...</span></div>
+        <div class="writeraate" @click="showcontent">
+          <van-icon name="edit" style="font-size: 0.38rem" /><span
+            >写评论...</span
+          >
+        </div>
         <div class="flex_be footicon">
-          <a href="#d3" >
+          <a href="#d3">
             <div class="xx">
-              <img src="../assets/img/xx.png" alt style=" margin-right: 0.45rem;"/>
+              <img
+                src="../assets/img/xx.png"
+                alt
+                style="margin-right: 0.45rem"
+              />
               <div v-if="allCommentList.length !== 0">
                 {{ allCommentList.length }}
               </div>
@@ -96,40 +103,12 @@
             style="width: 0.6rem; height: 0.6rem"
             v-if="picDetail.is_collect == true"
           />
-          <!-- <img src="../assets/img/fx.png" alt @click="getDK" /> -->
         </div>
       </div>
     </footer>
-    <div class="silde">
-      <articontent v-show="showpanl" @submit="addmment" @canel="canelmmit" />
-    </div>
-    <!-- <van-popup v-model="showShare" position="bottom" :style="{ height: '20%' }" class="sharebox">
-      <div class="share">
-        <h6>分享到</h6>
-        <div class="flex_ar">
-          <div id="weixin" class="flex_cen flex_col" @click="getJSSDK">
-            <img src="../assets/img/pyq.png" alt />
-            <span>朋友圈</span>
-          </div>
-          <div class="flex_cen flex_col" @click="get3">
-            <img src="../assets/img/wxhy.png" alt />
-            <span>微信好友</span>
-          </div>
-          <div class="flex_cen flex_col" @click="get2">
-            <img src="../assets/img/qqhy.png" alt />
-            <span>QQ好友</span>
-          </div>
-          <div class="flex_cen flex_col" @click="get1">
-            <img src="../assets/img/qqkj.png" alt />
-            <span>QQ空间</span>
-          </div>
-          <div class="flex_cen flex_col" @click="copy($event, copylink)">
-            <img src="../assets/img/fzlj.png" alt />
-            <span>复制链接</span>
-          </div>
-        </div>
-      </div>
-    </van-popup> -->
+    <van-popup v-model="show_comment" position="bottom" :style="{ height: '20%' }">
+          <articontent  @submit="addmment" @canel="canelmmit" />
+    </van-popup>
   </div>
 </template>
 
@@ -143,7 +122,6 @@ import Clipboard from "clipboard";
 export default {
   components: {
     articontent,
-    // share,
   },
   computed: {
     ...mapState({
@@ -153,8 +131,6 @@ export default {
   },
   data() {
     return {
-      showpanl: false, //评论版
-      falsepanl: true,
       show: false,
       picDetail: [], //图纸详情内容
       allCommentList: [], //评论列表
@@ -164,6 +140,7 @@ export default {
       copylink: "",
       type: 1,
       pulicid: "",
+      show_comment:false
     };
   },
   created() {
@@ -172,7 +149,6 @@ export default {
       "http://villa.jisapp.cn/shenshiju/#/" + this.$route.fullPath;
     console.log(this.$route);
     this.commentList();
-    // this.getDK()
   },
   methods: {
     getDK() {
@@ -318,8 +294,7 @@ export default {
         return false;
       }
       //底部评论样式
-      this.falsepanl = false;
-      this.showpanl = true;
+       this.show_comment=true
       $(".silde").css({
         bottom: 0,
       });
@@ -404,8 +379,7 @@ export default {
           this.$toast("发表失败");
         })
         .finally(() => {});
-      this.showpanl = false;
-      this.falsepanl = true;
+      this.show_comment=false
     },
     // 评论踩
     handDown(item) {
@@ -449,8 +423,7 @@ export default {
     },
     //监听到了取消评论
     canelmmit() {
-      this.showpanl = false;
-      this.falsepanl = true;
+      this.show_comment = false;
     },
     handreply(id) {
       if (!this.token) {
@@ -460,8 +433,7 @@ export default {
         return false;
       }
       //底部评论样式
-      this.falsepanl = false;
-      this.showpanl = true;
+      this.show_comment=true
       $(".silde").css({
         bottom: 0,
       });
@@ -527,7 +499,6 @@ export default {
     img {
       .w(42);
       .h(42);
-     
     }
   }
   h6 {
@@ -540,7 +511,7 @@ export default {
   }
   .img1 {
     width: 100%;
-    height:100%;
+    height: 100%;
   }
   .p1 {
     .fs(24);

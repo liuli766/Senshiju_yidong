@@ -7,26 +7,24 @@
       <van-icon name="arrow" />
     </div>
     <main>
-      <!-- <p>
-        请尽快完成付款，还剩
-        <span>
-          <span style="color:#FA3D29;display: inline-block; ">
-            <countdown :time="20*60*1000"  tag="p" >
-              <template slot-scope="props">{{ props.minutes }}分{{ props.seconds==0 && props.minutes==0?canelOrder(orderdetail): props.seconds}}秒</template>
-            </countdown>
-          </span>&nbsp;&nbsp;&nbsp;&nbsp;（超时按
-          <span style="color:#FA3D29">取消订单</span>处理）
-        </span>
-      </p> -->
-      <!--  -->
       <div class="flex_be addr" @click="gonewshippingAddr(orderaddress)">
         <div class="flex">
-          <van-icon name="location-o" style="margin-right:0.28rem;align-self: flex-end; margin-bottom:0.1rem" />
+          <van-icon
+            name="location-o"
+            style="
+              margin-right: 0.28rem;
+              align-self: flex-end;
+              margin-bottom: 0.1rem;
+            "
+          />
           <div>
-            <span class="info">{{orderaddress.name}} {{orderaddress.phone}}</span>
-            <div class="flex_cen" style="font-size:0.25rem;">
+            <span class="info"
+              >{{ orderaddress.name }} {{ orderaddress.phone }}</span
+            >
+            <div class="flex_cen" style="font-size: 0.25rem">
               <span class="express">快递</span>
-              {{orderaddress.province}}{{orderaddress.city}}{{orderaddress.district}}{{orderaddress.address}}
+              {{ orderaddress.province }}{{ orderaddress.city
+              }}{{ orderaddress.district }}{{ orderaddress.address }}
             </div>
           </div>
         </div>
@@ -36,10 +34,6 @@
       <div class="item">
         <div class="flex_be ser">
           <span>优选别墅图纸</span>
-          <!-- <span>
-            联系客服
-            <van-icon name="chat-o" />
-          </span> -->
         </div>
         <van-card
           :num="orderdetail.num"
@@ -52,7 +46,7 @@
       <div class="number">
         <div class="flex_be fs26">
           <span>商品金额</span>
-          <span>¥{{orderdetail.price}}</span>
+          <span>¥{{ orderdetail.price }}</span>
         </div>
         <div class="flex_be fs26">
           <span>优惠方式</span>
@@ -64,20 +58,20 @@
         </div>
         <div class="flex_be fs26">
           <span>订单总价</span>
-           <span>¥{{orderdetail.num*orderdetail.price}}</span>
+          <span>¥{{ orderdetail.num * orderdetail.price }}</span>
         </div>
         <div class="flex_be bordert">
           <span>实际付款</span>
-          <span>¥{{orderdetail.num*orderdetail.price}}</span>
+          <span>¥{{ orderdetail.num * orderdetail.price }}</span>
         </div>
       </div>
       <div class="order_number fs26">
         <div class="flex_be">
           <div>
             <span>订单编号</span>
-            <span class="tag-read">{{orderdetail.order_num}}</span>
+            <span class="tag-read">{{ orderdetail.order_num }}</span>
           </div>
-          <span class="copy text_cen" @click="copy($event,aorder)">复制</span>
+          <span class="copy text_cen" @click="copy($event, aorder)">复制</span>
         </div>
         <div>
           <span>下单时间</span>
@@ -123,7 +117,7 @@ export default {
       .finally(() => {});
   },
   methods: {
-     // 取消订单
+    // 取消订单
     canelOrder(item) {
       let oid = item.id;
       request
@@ -135,7 +129,7 @@ export default {
           this.$toast({
             message: "取消成功",
           });
-          this.onClickLeft()
+          this.onClickLeft();
         })
         .catch(() => {
           this.$toast({
@@ -154,9 +148,8 @@ export default {
     },
     onClickLeft() {
       this.$router.push({
-        path:`drawingOrder?navactivechoseid=1`
-      })
-      // this.$store.commit('gonav',1)
+        path: `drawingOrder?navactivechoseid=1`,
+      });
     },
     copy(e, text) {
       var clipboard = new Clipboard(e.target, { text: () => text });
@@ -169,8 +162,8 @@ export default {
         this.$toast("复制失败");
         clipboard.destroy();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

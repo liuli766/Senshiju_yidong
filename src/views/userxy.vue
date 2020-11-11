@@ -35,9 +35,9 @@ export default {
 </script>
 
 <style scoped lang="less">
-article{
+article {
   padding: 0.38rem 0.7rem 0.7rem 0.7rem;
   color: #323232;
-  font: 300 0.24rem/0.33rem '';
+  font: 300 0.24rem/0.33rem "";
 }
 </style>

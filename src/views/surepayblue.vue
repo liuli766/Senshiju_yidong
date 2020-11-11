@@ -104,7 +104,7 @@ export default {
       daoTim: "", // 倒计时时间
       msg: "",
       timer: null, //定时器名称
-      orderid:localStorage.getItem('orderid') //订单id
+      orderid: localStorage.getItem("orderid"), //订单id
     };
   },
   created() {
@@ -115,7 +115,6 @@ export default {
         bid: this.$route.query.bid,
       })
       .then((res) => {
-        
         if (res.code == 2) {
           this.$router.push({
             path: "/login",
@@ -131,30 +130,25 @@ export default {
       .catch(() => {})
       .finally(() => {});
   },
-  mounted() {
-    // this.timer = setInterval(this.wxrequest, 300)
-  },
   methods: {
-    wxrequest(){
-       request
-      .getwxrequest({
-        out_trade_no: this.orderid,
-      })
-      .then((data) => {
-        alert(data.code==1)
-        alert(JSON.stringify(data.code==0))
-        if (data.code == 0){
-          alert(JSON.stringify(data))
-           this.$router.push({
-            path: "/success",
-            query:{
-              price:this.total
-            }
-          });
-        }
-         
-        
-      });
+    wxrequest() {
+      request
+        .getwxrequest({
+          out_trade_no: this.orderid,
+        })
+        .then((data) => {
+          alert(data.code == 1);
+          alert(JSON.stringify(data.code == 0));
+          if (data.code == 0) {
+            alert(JSON.stringify(data));
+            this.$router.push({
+              path: "/success",
+              query: {
+                price: this.total,
+              },
+            });
+          }
+        });
     },
     wechatPay() {
       request
@@ -165,13 +159,12 @@ export default {
         })
         .then((res) => {
           console.log(res, "支付");
-          
-        let orderid=res.data.out_trade_no
-          localStorage.setItem('orderid',orderid)
-          this.wxrequest()
+
+          let orderid = res.data.out_trade_no;
+          localStorage.setItem("orderid", orderid);
+          this.wxrequest();
           if (res.code == 1) {
             this.$toast(res.message);
-            
           } else if (res.code == 0) {
             let data = res.data.apiToay;
             WeixinJSBridge.invoke(
@@ -246,9 +239,9 @@ export default {
       });
     },
   },
-   beforeDestroy() {
-    clearInterval(this.timer)
-    this.timer = null
+  beforeDestroy() {
+    clearInterval(this.timer);
+    this.timer = null;
   },
 };
 </script>
@@ -323,7 +316,7 @@ export default {
   p {
     margin-bottom: 0.2rem;
     margin-top: 0.25rem;
-    line-height: 0.40rem;
+    line-height: 0.4rem;
   }
   .price {
     span {

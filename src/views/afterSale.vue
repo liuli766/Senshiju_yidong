@@ -4,12 +4,12 @@
       <van-icon name="arrow-left" @click="go" />
       <span>售后</span>
     </div>
-    <div class="main" v-if="orderlist.length!==0">
+    <div class="main" v-if="orderlist.length !== 0">
       <div class="flex">
-        <img :src="item.cover"  alt />
+        <img :src="item.cover" alt />
         <div class="right">
-          <p>{{item.title}}</p>
-          <span>{{item.num}}</span>
+          <p>{{ item.title }}</p>
+          <span>{{ item.num }}</span>
         </div>
       </div>
       <div class="tuikuanbox">

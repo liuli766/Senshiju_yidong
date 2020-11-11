@@ -9,29 +9,27 @@
     </div>
     <!--  -->
     <div class="display_two comm_12">
-      <img src="../assets/img/display.png" alt="" />
+      <img :src="SpecialInfoList.cover" alt="" />
       <div class="display_two_box">
-        <h5>标题</h5>
-        <p class="comm_one">
-          10万以下两层自建房大全提供2018年新款农村两层自建房设计图
-          造价10万元内，带外观效果图，含中式两层自建房图，欧式两层自建
-        </p>
+        <h5>{{ SpecialInfoList.title }}</h5>
+        <p class="comm_one" v-html="SpecialInfoList.intro"></p>
         <div class="display_up comm_one">
-          <span class="upup">99748人点赞</span>
+          <span class="upup">{{ SpecialInfoList.like_num }}人点赞</span>
           <img src="../assets/img/up.png" alt="" />
         </div>
       </div>
     </div>
     <!--  -->
-    <div>
+    <div  v-for="(item, k) in Display_List"
+      :key="k">
       <div class="display_three">
-        <div class="display_self_tit">一层10万自建房</div>
+        <div class="display_self_tit">{{item.title}}</div>
         <div class="display_self_yell">European recommen</div>
       </div>
       <div class="display_self_box">
-        <div class="display_self_con" v-for="(item, v) in 5" :key="v">
-          <img src="../assets/img/display.png" alt="" />
-          <p>新农村自建二层楼房户型设计图 简单大气</p>
+        <div class="display_self_con" v-for="(c, v) in item.child" :key="v">
+          <img :src="c.cover" alt="" />
+          <p> {{ c.title }}</p>
         </div>
       </div>
     </div>
@@ -42,26 +40,25 @@
         <div class="display_list_box">
           <h5>专业:专做别墅18年</h5>
           <p>
-            我们是国内唯一专注自建房设计的公司，集合行业顶尖资源客户 满意率100%
+            我们是国内唯一专注自建房设计的公司，集合行业顶尖资源客户满意率100%
           </p>
+          <p>我们坚信只有只有专注才能做的最好</p>
         </div>
       </div>
       <div class="display_list" style="background: #facd89">
         <img src="../assets/img/12.png" alt="" />
         <div class="display_list_box">
-          <h5>专业:专做别墅18年</h5>
-          <p>
-            我们是国内唯一专注自建房设计的公司，集合行业顶尖资源客户 满意率100%
-          </p>
+          <h5>放心：品牌运作 服务更好</h5>
+          <p>打造别墅设计第一品牌，服务全国34省级行政区，重视口碑和客户体验</p>
+          <p>售后一流，让自建房更简单</p>
         </div>
       </div>
       <div class="display_list" style="background: #f8b551">
         <img src="../assets/img/13.png" alt="" />
         <div class="display_list_box">
-          <h5>专业:专做别墅18年</h5>
-          <p>
-            我们是国内唯一专注自建房设计的公司，集合行业顶尖资源客户 满意率100%
-          </p>
+          <h5>省钱：模式创新，价格更亲民</h5>
+          <p>依托互联网高效、快捷、低成本的优势，颠覆传统设计公司一年不开张</p>
+          <p>开张吃半年模式，拒绝暴利，让老百姓设计的起</p>
         </div>
       </div>
     </div>
@@ -69,11 +66,53 @@
     <div class="as14">
       <img src="../assets/img/14.png" alt="" />
     </div>
+    <img :src="qrcode" alt="" class="serves_img" />
+    <!--  -->
+    <div>
+      <div class="display_three">
+        <div class="display_self_tit">热门爆款商品</div>
+        <div class="display_self_yell">European recommen</div>
+      </div>
+      <div class="display_self_box">
+        <div class="display_self_con" v-for="(item, v) in hot_list" :key="v">
+          <img :src="item.cover" alt="" />
+          <p>{{item.title}}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+import request from '@/request.js'
+export default {
+  data() {
+    return {
+       Display_List: [], //专题数据
+      SpecialInfoList: [], //专题信息
+      qrcode:'',
+      hot_list:[],//爆款
+    }
+  },
+  created() {
+      request.getLists().then((res) => {
+      console.log(res, '专题数据')
+      this.Display_List = res.data
+    })
+    request.getSpecialInfo().then((res) => {
+      console.log(res, '专题信息')
+      this.SpecialInfoList = res.data
+    })
+    request.getHomeData().then((res) => {
+      console.log(res, '手机首页')
+      this.qrcode = res.data.set.qr_code
+    })
+    request.getBao().then((res) => {
+      console.log(res, '爆款')
+      this.hot_list=res.data
+    })
+  },
+};
 </script>
 
 <style scoped>
@@ -149,9 +188,6 @@ export default {};
   width: 3rem;
   height: 3.2rem;
 }
-.display_self_con:nth-last-of-type(2n) {
-  margin-left: 0.5rem;
-}
 .display_self_con > img {
   width: 100%;
   height: 2.08rem;
@@ -169,6 +205,7 @@ export default {};
   flex-wrap: wrap;
   margin: 0 0.5rem;
   margin-bottom: 0.54rem;
+  justify-content: space-between;
 }
 .display_list {
   display: flex;
@@ -204,5 +241,10 @@ export default {};
 .as14 > img {
   width: 100%;
   height: 100%;
+}
+.serves_img {
+  width: 3.64rem;
+  height: 3.64rem;
+  margin-bottom: 0.36rem;
 }
 </style>

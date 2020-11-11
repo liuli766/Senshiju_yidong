@@ -8,7 +8,7 @@
         background="#fff"
         placeholder="请输入搜索内容"
         @change="handserch"
-        style="overflow-x: hidden;"
+        style="overflow-x: hidden"
       />
     </div>
     <!--  -->
@@ -70,11 +70,11 @@
       </div>
     </div>
     <!-- 产品列表 -->
-    <div class="list" v-if="productItemList.length!==0">
+    <div class="list" v-if="productItemList.length !== 0">
       <productitem :productitem="productItemList" />
     </div>
     <div class="list" v-else>
-      <p style="text-align: center;padding-top:0.3rem">无相关产品</p>
+      <p style="text-align: center; padding-top: 0.3rem">无相关产品</p>
     </div>
     <!--  -->
     <tabbar :tabid="1" />
@@ -131,7 +131,7 @@ export default {
       filterSelData7: "全部", //选中的数据
       filterSelData8: "全部", //选中的数据
       filterlist: "全部",
-      newtouter:[]
+      newtouter: [],
     };
   },
   created() {
@@ -185,16 +185,16 @@ export default {
       })
       .catch(() => {})
       .finally(() => {});
-      console.log(this.$route.query)
-      this.filterSelData1=this.$route.query.style
-      this.filterSelData2=this.$route.query.area
-      this.filterSelData3=this.$route.query.face_width
-      this.filterSelData4=this.$route.query.depth
-      this.filterSelData5=this.$route.query.plies
-      this.filterSelData6=this.$route.query.function
-      this.filterSelData7=this.$route.query.structure
-      this.filterSelData8=this.$route.query.cost
-    this.getdata()
+    console.log(this.$route.query);
+    this.filterSelData1 = this.$route.query.style;
+    this.filterSelData2 = this.$route.query.area;
+    this.filterSelData3 = this.$route.query.face_width;
+    this.filterSelData4 = this.$route.query.depth;
+    this.filterSelData5 = this.$route.query.plies;
+    this.filterSelData6 = this.$route.query.function;
+    this.filterSelData7 = this.$route.query.structure;
+    this.filterSelData8 = this.$route.query.cost;
+    this.getdata();
   },
   methods: {
     // 搜索
@@ -241,12 +241,12 @@ export default {
         }
       });
       this.filterSelData1 = newArray[0];
-      console.log(this.filterSelData1)
+      console.log(this.filterSelData1);
       this.getdata(this.filterSelData1);
       this.$router.push({
-        path:'/product',
-        query:{
-           style: this.filterSelData1,
+        path: "/product",
+        query: {
+          style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
           depth: this.filterSelData4,
@@ -254,10 +254,9 @@ export default {
           function: this.filterSelData6,
           structure: this.filterSelData7,
           cost: this.filterSelData8,
-        }
-      })
-       this.getdata(this.$route.query.style);
-
+        },
+      });
+      this.getdata(this.$route.query.style);
     },
     handchange2(value) {
       console.log(value);
@@ -270,9 +269,9 @@ export default {
       this.filterSelData2 = newArray[0];
       this.getdata(this.filterSelData2);
       this.$router.push({
-        path:'/product',
-        query:{
-           style: this.filterSelData1,
+        path: "/product",
+        query: {
+          style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
           depth: this.filterSelData4,
@@ -280,10 +279,10 @@ export default {
           function: this.filterSelData6,
           structure: this.filterSelData7,
           cost: this.filterSelData8,
-        }
-      })
+        },
+      });
       this.getdata(this.$route.query.area);
-  },
+    },
     handchange3(value) {
       console.log(value);
       let newArray = [];
@@ -295,9 +294,9 @@ export default {
       this.filterSelData3 = newArray[0];
       this.getdata(this.filterSelData3);
       this.$router.push({
-        path:'/product',
-        query:{
-           style: this.filterSelData1,
+        path: "/product",
+        query: {
+          style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
           depth: this.filterSelData4,
@@ -305,10 +304,10 @@ export default {
           function: this.filterSelData6,
           structure: this.filterSelData7,
           cost: this.filterSelData8,
-        }
-      })
+        },
+      });
       this.getdata(this.$route.query.face_width);
-  },
+    },
     handchange4(value) {
       console.log(value);
       let newArray = [];
@@ -319,9 +318,9 @@ export default {
       });
       this.filterSelData4 = newArray[0];
       this.$router.push({
-        path:'/product',
-        query:{
-           style: this.filterSelData1,
+        path: "/product",
+        query: {
+          style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
           depth: this.filterSelData4,
@@ -329,10 +328,10 @@ export default {
           function: this.filterSelData6,
           structure: this.filterSelData7,
           cost: this.filterSelData8,
-        }
-      })
+        },
+      });
       this.getdata(this.$route.query.depth);
-  },
+    },
     handchange5(value) {
       console.log(value);
       let newArray = [];
@@ -344,9 +343,9 @@ export default {
       this.filterSelData5 = newArray[0];
       this.getdata(this.filterSelData5);
       this.$router.push({
-        path:'/product',
-        query:{
-           style: this.filterSelData1,
+        path: "/product",
+        query: {
+          style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
           depth: this.filterSelData4,
@@ -354,10 +353,10 @@ export default {
           function: this.filterSelData6,
           structure: this.filterSelData7,
           cost: this.filterSelData8,
-        }
-      })
+        },
+      });
       this.getdata(this.$route.query.plies);
-  },
+    },
     handchange6(value) {
       console.log(value);
       let newArray = [];
@@ -369,9 +368,9 @@ export default {
       this.filterSelData6 = newArray[0];
       this.getdata(this.filterSelData6);
       this.$router.push({
-        path:'/product',
-        query:{
-           style: this.filterSelData1,
+        path: "/product",
+        query: {
+          style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
           depth: this.filterSelData4,
@@ -379,10 +378,10 @@ export default {
           function: this.filterSelData6,
           structure: this.filterSelData7,
           cost: this.filterSelData8,
-        }
-      })
+        },
+      });
       this.getdata(this.$route.query.function);
- },
+    },
     handchange7(value) {
       console.log(value);
       let newArray = [];
@@ -394,9 +393,9 @@ export default {
       this.filterSelData7 = newArray[0];
       this.getdata(this.filterSelData7);
       this.$router.push({
-        path:'/product',
-        query:{
-           style: this.filterSelData1,
+        path: "/product",
+        query: {
+          style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
           depth: this.filterSelData4,
@@ -404,10 +403,10 @@ export default {
           function: this.filterSelData6,
           structure: this.filterSelData7,
           cost: this.filterSelData8,
-        }
-      })
-      this.getdata(this.$route.query.structure);
         },
+      });
+      this.getdata(this.$route.query.structure);
+    },
     handchange8(value) {
       console.log(value);
       let newArray = [];
@@ -419,9 +418,9 @@ export default {
       this.filterSelData8 = newArray[0];
       this.getdata(this.filterSelData8);
       this.$router.push({
-        path:'/product',
-        query:{
-           style: this.filterSelData1,
+        path: "/product",
+        query: {
+          style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
           depth: this.filterSelData4,
@@ -429,8 +428,8 @@ export default {
           function: this.filterSelData6,
           structure: this.filterSelData7,
           cost: this.filterSelData8,
-        }
-      })
+        },
+      });
       this.getdata(this.$route.query.cost);
     },
   },
@@ -473,9 +472,9 @@ export default {
   box-shadow: none;
   border-bottom: 1px dashed #aaaaaa;
 }
-.van-cell.van-cell--borderless.van-field{
-position: relative !important;
-left:50% !important;
-margin-left:-1.25rem !important;
+.van-cell.van-cell--borderless.van-field {
+  position: relative !important;
+  left: 50% !important;
+  margin-left: -1.25rem !important;
 }
 </style>

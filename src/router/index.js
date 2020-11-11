@@ -5,10 +5,10 @@ import Home from '../views/Home.vue'
 Vue.use(VueRouter)
 // 解决导航组件重复点击报错， 更改原型上的push方法，进行了catch处理
 const routerPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push (location) {
+VueRouter.prototype.push = function push(location) {
   return routerPush.call(this, location).catch(error => error)
 }
-  const routes = [
+const routes = [
   { //首页
     path: '/',
     name: 'Home',
@@ -90,7 +90,7 @@ VueRouter.prototype.push = function push (location) {
   },
   { //成品
     // path: '/product/:style/:area/:face_width/:depth/:plies/:function/:structure/:cost',
-    path:'/product',
+    path: '/product',
     meta: {
       title: '成品'
     },
@@ -159,7 +159,7 @@ VueRouter.prototype.push = function push (location) {
     },
     component: (resolve) => require(['@/views/cart.vue'], resolve)
   },
-  { 
+  {
     path: '/userxy',
     meta: {
       title: '用户协议'
@@ -208,26 +208,33 @@ VueRouter.prototype.push = function push (location) {
     },
     component: (resolve) => require(['@/views/afterSale.vue'], resolve)
   },
-  { // 售后
+  { // 支付成功
     path: '/success',
     meta: {
       title: '支付成功'
     },
     component: (resolve) => require(['@/views/success.vue'], resolve)
   },
-  { // 售后
+  { // 确认支付
     path: '/surepayblue',
     meta: {
       title: '确认支付'
     },
     component: (resolve) => require(['@/views/surepayblue.vue'], resolve)
   },
-  { // 售后
+  { // 建房百科专题
     path: '/Display',
     meta: {
       title: '建房百科专题'
     },
     component: (resolve) => require(['@/views/Display.vue'], resolve)
+  },
+  { // 视屏详情
+    path: '/videoDetail',
+    meta: {
+      title: '建房百科详情'
+    },
+    component: (resolve) => require(['@/views/videoDetail.vue'], resolve)
   }
 ]
 

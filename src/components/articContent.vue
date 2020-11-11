@@ -1,27 +1,27 @@
 <template>
   <!-- 文本框 -->
-  <div>
+  <div style="margin:0.15rem">
     <div class="commentBox">
-      <van-field
-        v-model="commentText"
-        rows="2"
-        autosize
-        type="textarea"
-        placeholder="请输入评论"
-        show-word-limit
-      />
-      <div class="btn">
-        <button @click="addComment">发表</button>
-        <button @click="canelCommit">取消</button>
+        <van-field
+          v-model="commentText"
+          rows="2"
+          autosize
+          type="textarea"
+          placeholder="请输入评论"
+          show-word-limit
+        />
+        <div class="btn">
+          <button @click="addComment">发表</button>
+          <button @click="canelCommit">取消</button>
+        </div>
       </div>
-    </div>
   </div>
 </template>
 
 <script>
 export default {
-  data: function() {
-    return { commentText: "" };
+  data: function () {
+    return { commentText: "",};
   },
   methods: {
     addComment() {
@@ -29,12 +29,13 @@ export default {
         this.$emit("submit", this.commentText);
         this.commentText = "";
       }
+       this.$toast("不能发送空白信息");
     },
     canelCommit() {
       this.$emit("canel");
       this.commentText = "";
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -47,7 +48,7 @@ export default {
     .w(676);
     .fs(28);
     color: #333;
-    .b-radius(15);
+    .b-radius(8);
   }
   button {
     background: #ff9936;
@@ -56,15 +57,15 @@ export default {
     border: 0;
     .w(100);
     .lh(50);
-    .b-radius(15);
+    .b-radius(10);
     .mt(10);
   }
   button:nth-of-type(1) {
     .mr(30);
   }
-  .btn{
-      margin-right:0.8rem;
-      text-align: right;
+  .btn {
+    margin-right: 0.8rem;
+    text-align: right;
   }
 }
 </style>

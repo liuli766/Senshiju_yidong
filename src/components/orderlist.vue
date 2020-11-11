@@ -1,41 +1,46 @@
 <template>
   <!--付款，发货，收货 -->
   <div class="orderlist">
-    <main v-if="orderli.length!==0">
-      <div @click="godetail(item,navid)" v-for="(item,k) in orderli" :key="k">
+    <main v-if="orderli.length !== 0">
+      <div @click="godetail(item, navid)" v-for="(item, k) in orderli" :key="k">
         <div class="tagname flex_be">
-          <span>{{item.add_time}}</span>
-          <span v-show="navactivechoseid==0" style="color:#FD3723">待付款</span>
-          <span v-show="navactivechoseid==1" style="color:#FD3723">待发货</span>
-          <span v-show="navactivechoseid==2" style="color:#FD3723">待收货</span>
+          <span>{{ item.add_time }}</span>
+          <span v-show="navactivechoseid == 0" style="color: #fd3723"
+            >待付款</span
+          >
+          <span v-show="navactivechoseid == 1" style="color: #fd3723"
+            >待发货</span
+          >
+          <span v-show="navactivechoseid == 2" style="color: #fd3723"
+            >待收货</span
+          >
         </div>
         <div class="flex">
           <img :src="item.cover" alt />
           <div class="right">
-            <p>{{item.title}}</p>
+            <p>{{ item.title }}</p>
             <div class="text_r">
               <van-icon name="cross" />
-              <span>{{item.num}}</span>
+              <span>{{ item.num }}</span>
             </div>
-            <div>{{item.price}}</div>
+            <div>{{ item.price }}</div>
           </div>
         </div>
-        <div class="text_r price_pay" v-if="navactivechoseid==0">共{{item.num}}件 待付款:¥{{item.price}}</div>
-        <div
-          class="text_r price_pay"
-          v-else-if="navactivechoseid==1"
-        >共{{item.num}}件 待发货:¥{{item.price}}</div>
-        <div
-          class="text_r price_pay"
-          v-else-if="navactivechoseid==2"
-        >共{{item.num}}件 待收货:¥{{item.price}}</div>
-        <div class="bor_red" v-if="navactivechoseid==0">
+        <div class="text_r price_pay" v-if="navactivechoseid == 0">
+          共{{ item.num }}件 待付款:¥{{ item.price }}
+        </div>
+        <div class="text_r price_pay" v-else-if="navactivechoseid == 1">
+          共{{ item.num }}件 待发货:¥{{ item.price }}
+        </div>
+        <div class="text_r price_pay" v-else-if="navactivechoseid == 2">
+          共{{ item.num }}件 待收货:¥{{ item.price }}
+        </div>
+        <div class="bor_red" v-if="navactivechoseid == 0">
           <span class="text_cen" @click.stop="canelOrder(item)">取消订单</span>
           <span class="text_cen" @click="gopay">立即支付</span>
         </div>
-        <div class="bor_red" v-if="navactivechoseid==1">
-        </div>
-        <div class="bor_red" v-if="navactivechoseid==2">
+        <div class="bor_red" v-if="navactivechoseid == 1"></div>
+        <div class="bor_red" v-if="navactivechoseid == 2">
           <span class="text_cen" @click="goLogistics">查看物流</span>
         </div>
       </div>
@@ -47,7 +52,7 @@
 <script>
 import { mapState } from "vuex";
 import request from "@/request.js";
-import { Toast } from 'vant';
+import { Toast } from "vant";
 export default {
   computed: mapState({
     navactivechoseid: (state) => state.navactivechoseid,
@@ -63,13 +68,12 @@ export default {
     navid: {
       type: Number,
       default: 0,
-    }
+    },
   },
   data() {
     return {};
   },
-  watch: {
-  },
+  watch: {},
   created() {
     console.log(this.orderli);
   },
@@ -84,15 +88,15 @@ export default {
         .then((res) => {
           console.log(res);
           this.$parent.myorder();
-          Toast.success('取消成功')
+          Toast.success("取消成功");
         })
         .catch(() => {
-          Toast.fail('取消失败')
+          Toast.fail("取消失败");
         })
         .finally(() => {});
     },
     godetail(item, navid) {
-      console.log(navid)
+      console.log(navid);
       //跳转详情
       if (navid === 0) {
         this.$router.push({
@@ -104,18 +108,18 @@ export default {
       } else if (navid === 1) {
         this.$router.push({
           path: "/productDetail",
-          query:{
-            id:item.b_id  
-          }
+          query: {
+            id: item.b_id,
+          },
         });
       } else if (navid === 2) {
-        console.log(item,'物流信息')
+        console.log(item, "物流信息");
         this.$router.push({
           path: "/logisticsInfo",
-          query:{
-            ordernum:item.order_num,
-            kuaidi:item.logistics_code
-          }
+          query: {
+            ordernum: item.order_num,
+            kuaidi: item.logistics_code,
+          },
         });
       }
     },
@@ -208,14 +212,13 @@ main {
   text-align: center;
 }
 @keyframes one-in {
-    from {
-        padding-top: 100px;
-        height: 0%;
-    }
-    to {
-        padding-top: 0px;
-        height: 100%;
-    }
+  from {
+    padding-top: 100px;
+    height: 0%;
+  }
+  to {
+    padding-top: 0px;
+    height: 100%;
+  }
 }
-
 </style>

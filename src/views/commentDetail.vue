@@ -12,48 +12,47 @@
       <div class="flex_be">
         <div class="userinfo flex_cen">
           <img :src="CommentDetail.photo" alt />
-          <span>{{CommentDetail.nickname}}</span>
+          <span>{{ CommentDetail.nickname }}</span>
         </div>
         <div>
           <span class="up">
             <img src="../assets/img/up.png" @click="handUp" alt />
-            {{CommentDetail.is_up}}
+            {{ CommentDetail.is_up }}
           </span>
           <span class="up">
             <img src="../assets/img/down.png" @click="handDown" alt />
-            {{CommentDetail.is_down}}
+            {{ CommentDetail.is_down }}
           </span>
         </div>
       </div>
-      <p>{{CommentDetail.comment}}</p>
-      <div class="time">
-        <!-- <span>{{CommentDetail.comment_time.slice(0,5)}} &nbsp; &nbsp; {{CommentDetail.comment_time.slice(-5)}}</span> -->
-      </div>
+      <p>{{ CommentDetail.comment }}</p>
+      <div class="time"></div>
     </div>
 
     <!-- 他人回复 -->
     <div class="otheruser">
-      <p class="allreply">全部回复 &nbsp; &nbsp; {{CommentDetail.num}}</p>
-      <div class="mainuser" v-for="(item,k) in CommentDetail.child" :key="k">
+      <p class="allreply">全部回复 &nbsp; &nbsp; {{ CommentDetail.num }}</p>
+      <div class="mainuser" v-for="(item, k) in CommentDetail.child" :key="k">
         <div class="flex_be">
           <div class="userinfo flex_cen">
             <img :src="item.photo" alt />
-            <span>{{item.nickname}}</span>
+            <span>{{ item.nickname }}</span>
           </div>
           <div>
             <span class="up">
               <img src="../assets/img/up.png" alt @click="handUp(item)" />
-              {{item.is_up}}
+              {{ item.is_up }}
             </span>
             <span class="up">
               <img src="../assets/img/down.png" alt @click="handDown(item)" />
-              {{item.is_down}}
+              {{ item.is_down }}
             </span>
           </div>
         </div>
-        <p>{{item.comment}}</p>
+        <p>{{ item.comment }}</p>
         <div class="time">
-          <span>05-26 &nbsp; &nbsp; 10:30</span>&nbsp; &nbsp; &nbsp;
+          <span>{{ item.comment_time }}</span
+          >&nbsp; &nbsp; &nbsp;
           <span @click="handreplay">回复</span>
         </div>
       </div>
@@ -86,7 +85,7 @@ export default {
       downNum: 0,
       upNum: 0,
       allCommentList: [], //评论列表
-      CommentDetail:[] //评论详情
+      CommentDetail: [], //评论详情
     };
   },
   computed: {
@@ -96,10 +95,9 @@ export default {
     }),
   },
   created() {
-    console.log(this.$route.query)
+    console.log(this.$route.query);
     this.commentList();
-    this.getPageComment()
-    
+    this.getPageComment();
   },
   methods: {
     // 评论列表
@@ -126,7 +124,7 @@ export default {
         })
         .then((res) => {
           console.log(res, "文章评论详情");
-          this.CommentDetail=res.data
+          this.CommentDetail = res.data;
         })
         .catch(() => {})
         .finally(() => {});
@@ -141,15 +139,10 @@ export default {
         })
         .then((res) => {
           if (res.code == 0) {
-            item.is_down ++;
+            item.is_down++;
             console.log(res, "点赞");
-            // this.$toast("点赞成功");
           }
-        })
-        .catch(() => {
-          // this.$toast("点赞失败");
-        })
-        .finally(() => {});
+        });
     },
     // 评论顶
     handUp(item) {
@@ -161,15 +154,11 @@ export default {
         })
         .then((res) => {
           if (res.code == 0) {
-            item.is_up ++;
+            item.is_up++;
             console.log(res, "点赞");
             this.$toast("点赞成功");
           }
-        })
-        .catch(() => {
-          // this.$toast("点赞失败");
-        })
-        .finally(() => {});
+        });
     },
 
     //   监听到了添加评论
@@ -191,7 +180,7 @@ export default {
         .then((res) => {
           console.log(res, "评论内容", data);
           this.$toast("发表成功");
-          this.getPageComment()
+          this.getPageComment();
         })
         .catch(() => {
           this.$toast("发表失败");

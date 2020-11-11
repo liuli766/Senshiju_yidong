@@ -11,7 +11,6 @@
     </van-swipe>
     <!-- 价格 -->
     <div class="price flex_be">
-      <!-- <span>¥{{ ProDetail.price }}</span> -->
       <div>
         <span style="font-size: 0.28rem; letter-spacing: 3px; color: #707070"
           >全款预售
@@ -167,7 +166,6 @@
           color="#676767"
           class="size"
           @click="goIndex"
-         
         />
         <van-goods-action-icon
           icon="service"
@@ -175,7 +173,6 @@
           color="#676767"
           class="size"
           @click="KeFu"
-          
         />
         <van-goods-action-icon
           v-if="ProDetail.is_collect == true"
@@ -184,7 +181,6 @@
           color="#676767"
           class="size"
           @click="qxcollect(ProDetail.id)"
-           
         />
         <van-goods-action-icon
           v-if="ProDetail.is_collect == false"
@@ -193,7 +189,6 @@
           color="#676767"
           class="size"
           @click="onClickIcon(ProDetail.id)"
-         
         />
         <van-goods-action-button
           type="warning"
@@ -667,7 +662,12 @@ export default {
 }
 .danger {
   color: #fff;
-  background-image: linear-gradient(2deg, #b525ff 0%, #a61dff 48%, #9515fe 100%);
+  background-image: linear-gradient(
+    2deg,
+    #b525ff 0%,
+    #a61dff 48%,
+    #9515fe 100%
+  );
 }
 .cont {
   .padding(20, 20);
@@ -812,22 +812,21 @@ export default {
   width: 100%;
   height: 100%;
 }
-
 </style>
 <style >
-.van-icon-shop::before{
+.van-icon-shop::before {
   font-size: 0.4rem;
   color: #000;
 }
-.van-icon-service::before{
+.van-icon-service::before {
   font-size: 0.4rem;
   color: #000;
 }
-.van-icon-like-o::before{
+.van-icon-like-o::before {
   font-size: 0.4rem;
   color: #000;
 }
-.van-icon-like::before{
+.van-icon-like::before {
   font-size: 0.4rem;
   color: #000;
 }

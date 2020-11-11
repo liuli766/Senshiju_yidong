@@ -2,18 +2,18 @@
   <!-- 产品列表 -->
   <div class="productitem flex flex_b">
     <div
-      v-for="(item,k) in productitem"
+      v-for="(item, k) in productitem"
       :key="k"
       class="productitemlist"
       @click.prevent="goprodutDetail(item.id)"
     >
       <img :src="item.cover" alt />
       <div class="padd">
-        <p>{{item.title}}</p>
+        <p>{{ item.title }}</p>
         <span class="baoyou">包邮</span>
-        <div class="price">{{item.price}}</div>
+        <div class="price">{{ item.price }}</div>
         <div class="flex_be people">
-          <span>{{item.moods}}人付款</span>
+          <span>{{ item.moods }}人付款</span>
           <div class="flex_cen" @click.stop="JoinCart(item)">
             <van-icon name="shopping-cart-o" />
           </div>
@@ -59,7 +59,7 @@ export default {
           .getJoinCart({
             uid: this.userInfor.member_id,
             b_id: item.id,
-            num:this.cartnum,
+            num: this.cartnum,
           })
           .then((res) => {
             console.log(res, "加入购物车");
@@ -109,8 +109,6 @@ export default {
     margin-top: 0.15rem;
   }
   .productitemlist {
-    // box-shadow: 2px 2px 2px #eee;
-    // border-radius: 6px;
     overflow: hidden;
     background: #fff;
     .w(347);

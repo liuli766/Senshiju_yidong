@@ -16,7 +16,11 @@
       </div>
       <div>
         <img class="cl" src="../assets/img/shezhi.png" alt v-show="showfoot2" />
-        <span class="gg" style="width:0.25rem;height:0.25rem" v-show="showfoot1">
+        <span
+          class="gg"
+          style="width: 0.25rem; height: 0.25rem"
+          v-show="showfoot1"
+        >
           <van-icon name="success" />
         </span>
         <span @click="admin">管理</span>
@@ -25,21 +29,26 @@
     <!-- 购物车条数 -->
 
     <div class="cart_box">
-      <div v-if="cartData.length==0" style="padding-left:0.3rem">购物车空空如也</div>
-      <div class="itemlist flex" v-for="(item,k) in cartData" :key="k" v-else>
-        <span @click="cartCheck(item,k)" :class="[item.cheakG==true?'gg':'ggh']">
+      <div v-if="cartData.length == 0" style="padding-left: 0.3rem">
+        购物车空空如也
+      </div>
+      <div class="itemlist flex" v-for="(item, k) in cartData" :key="k" v-else>
+        <span
+          @click="cartCheck(item, k)"
+          :class="[item.cheakG == true ? 'gg' : 'ggh']"
+        >
           <!-- :class="{gg:item.cheakG=='true'}"-->
           <van-icon name="success" />
         </span>
         <img :src="item.cover" alt />
         <div>
-          <p>{{item.title}}</p>
+          <p>{{ item.title }}</p>
           <div class="price flex_be">
-            <span>￥{{item.price*item.num}}</span>
+            <span>￥{{ item.price * item.num }}</span>
             <div class="nun flex_ar">
-              <span @click="reducecart(item,k)">-</span>
-              <span>{{cartData[k].num}}</span>
-              <span @click="addcart(item,k)">+</span>
+              <span @click="reducecart(item, k)">-</span>
+              <span>{{ cartData[k].num }}</span>
+              <span @click="addcart(item, k)">+</span>
             </div>
           </div>
         </div>
@@ -56,10 +65,10 @@
         <span>全选</span>
       </div>
       <div class="flex flex_col price">
-        <span>¥{{totalPrice}}</span>
+        <span>¥{{ totalPrice }}</span>
         <span>含运费</span>
       </div>
-      <div class="jiesuan" @click="goOrderpay">结算（{{totalNum}}）</div>
+      <div class="jiesuan" @click="goOrderpay">结算（{{ totalNum }}）</div>
     </footer>
     <footer class="flex flex_be" v-show="showfoot1">
       <div class="ggcheck">
@@ -69,7 +78,9 @@
         <span class="ggh" v-else @click="handleChecked"></span>
         <span>全选</span>
       </div>
-      <div class="flex flex_col price price1" @click="Allcollect">移入收藏夹</div>
+      <div class="flex flex_col price price1" @click="Allcollect">
+        移入收藏夹
+      </div>
       <div class="jiesuan jiesuan1" @click="Alldelate">删除</div>
     </footer>
   </div>
@@ -131,31 +142,21 @@ export default {
         .then((res) => {
           console.log(res, "购物车信息");
           if (res.code == 2) {
-            console.log(1)
+            console.log(1);
             this.$router.push({
               path: "/login",
             });
             return false;
           } else {
-            // let arr = JSON.parse(localStorage.getItem("arr"));
-            // console.log(JSON.parse(localStorage.getItem("arr")));
             for (let i = 0; i < res.data.length; i++) {
-              // if (arr.length!==0) {
-              //   let item = res.data[i];
-              //   item.cheakG = false;
-              //   item.num = arr[i].num;
-              // } else {
               let item = res.data[i];
               item.cheakG = false;
-              // }
             }
             this.cartData = res.data;
             console.log(this.cartData);
           }
         })
-        .catch(() => {
-          // this.$toast("添加失败");
-        })
+        .catch(() => {})
         .finally(() => {});
     },
     goBuy() {
@@ -344,7 +345,7 @@ export default {
     },
     go() {
       this.$router.push({
-        path:'/mine'
+        path: "/mine",
       });
     },
   },

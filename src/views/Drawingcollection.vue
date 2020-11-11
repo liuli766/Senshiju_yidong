@@ -6,14 +6,22 @@
       <span>图纸的收藏</span>
     </div>
     <!--  -->
-    <div  class="list flex"  v-if="articleList.length==0">没有收藏的图纸</div>
-    <div class="list flex" v-for="(item,k) in articleList" :key="k" @click="goartic(item)" v-else>
+    <div class="list flex" v-if="articleList.length == 0">没有收藏的图纸</div>
+    <div
+      class="list flex"
+      v-for="(item, k) in articleList"
+      :key="k"
+      @click="goartic(item)"
+      v-else
+    >
       <img :src="item.cover" alt />
       <div>
-        <p>{{item.title}}</p>
+        <p>{{ item.title }}</p>
         <div class="flex_be colltbtn">
-          <span>￥{{item.cost}}</span>
-          <span class="text_cen"  @click.stop="qxcollect(item.object_id)">已收藏</span>
+          <span>￥{{ item.cost }}</span>
+          <span class="text_cen" @click.stop="qxcollect(item.object_id)"
+            >已收藏</span
+          >
         </div>
       </div>
     </div>
@@ -31,14 +39,14 @@ export default {
       headimg: (state) => state.headimg,
     }),
   },
-data() {
-  return {
-    articleList:[]
-  }
-},
-created() {
-  this.collect(1)
-},
+  data() {
+    return {
+      articleList: [],
+    };
+  },
+  created() {
+    this.collect(1);
+  },
   methods: {
     go() {
       this.$router.go(-1);
@@ -51,39 +59,39 @@ created() {
           type: num,
         })
         .then((res) => {
-            this.articleList = res.data;      
-            console.log(res)  
+          this.articleList = res.data;
+          console.log(res);
         })
         .catch(() => {})
         .finally(() => {});
     },
-     goartic(item) {
-       console.log(item)
+    goartic(item) {
+      console.log(item);
       //跳转文章详情
       this.$router.push({
-        path: '/productDetail',
+        path: "/productDetail",
         query: {
-          id:item.object_id
+          id: item.object_id,
         },
-      })
+      });
     },
-     //取消收藏
+    //取消收藏
     qxcollect(idx) {
       request
         .getCancelcollect({
           uid: this.userInfor.member_id,
           c_id: idx,
-          type:1
+          type: 1,
         })
         .then((res) => {
-          this.collect(1)
-          console.log(res,'取消收藏')
+          this.collect(1);
+          console.log(res, "取消收藏");
           this.$toast("取消成功");
         })
         .catch(() => {
           this.$toast("取消失败");
         })
-        .finally(() => {})
+        .finally(() => {});
     },
   },
 };

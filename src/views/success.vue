@@ -4,8 +4,8 @@
       <van-icon name="arrow-left" @click="go" />
       <span>支付成功</span>
     </div>
-    <img src="../assets/img/suc.png" alt />
-    <div class="price">￥{{this.$route.query.price}}</div>
+    <img src="../assets/img/suc.png" alt class="success_img"/>
+    <div class="price">￥{{ this.$route.query.price }}</div>
     <div class="suc">支付成功</div>
     <div>
       <span class="goon" @click="goon">继续购物</span>
@@ -20,16 +20,17 @@ export default {
     go() {
       this.$router.go(-1);
     },
-    goon(){ //继续购物
+    goon() {
+      //继续购物
       this.$router.push({
-        path:'/'
-      })
+        path: "/",
+      });
     },
-    order(){
+    order() {
       this.$router.push({
-         path:`drawingOrder?navactivechoseid=1`
-      })
-    }
+        path: `drawingOrder?navactivechoseid=1`,
+      });
+    },
   },
 };
 </script>
@@ -55,7 +56,8 @@ img {
   width: 100%;
   height: 100%;
 }
-.goon, .order{
+.goon,
+.order {
   width: 3.38rem;
   height: 0.69rem;
   border: 3px solid #fd3723;
@@ -63,19 +65,23 @@ img {
   display: inline-block;
   line-height: 0.69rem;
 }
-.order{
-  border-color: #AAAAAA;
+.order {
+  border-color: #aaaaaa;
   margin-left: 0.16rem;
 }
-.suc{
-  font: 400 0.26rem/1 '';
-  color: #A3A2A2;
+.suc {
+  font: 400 0.26rem/1 "";
+  color: #a3a2a2;
   margin-bottom: 0.48rem;
 }
-.price{
-  font: 400 0.5rem/1 '';
-  color: #FD3723;
+.price {
+  font: 400 0.5rem/1 "";
+  color: #fd3723;
   margin-bottom: 0.34rem;
   margin-top: 0.64rem;
+}
+.success_img{
+  width: 100%;
+  height: 100%;
 }
 </style>

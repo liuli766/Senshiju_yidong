@@ -284,6 +284,24 @@ function getwxrequest(data) {
   }
   return http.fetchPost('/api/Pay/orderquery', params)
 }
+function getSpecials(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/api/Index/specials', params)
+}
+function getLists(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/Special/lists', params)
+}
+function getSpecialInfo(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/Special/info', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -333,4 +351,7 @@ export default {
   getShare,//分享
   getBao,//爆款
   getwxrequest,//微信订单查询
+  getSpecials,//首页建房专题
+  getLists,//专题数据
+  getSpecialInfo,//专题信息
 }

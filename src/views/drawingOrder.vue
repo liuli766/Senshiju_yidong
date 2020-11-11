@@ -47,7 +47,6 @@ export default {
   },
   watch: {
     orderlist2() {
-    //  return this.navactivechoseid
       this.swichChose(this.navactivechoseid);
     },
     seachdata() {

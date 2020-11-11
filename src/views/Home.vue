@@ -77,14 +77,27 @@
       </div>
     </div>
     <div class="flex special_box">
-      <div v-for="(item, v) in 5" :key="v" class="special" @click="GoDisplay(item)">
-        现代简约别墅设计图纸大全
+      <div
+        v-for="(item, v) in specialsList"
+        v-show="v < num"
+        :key="v"
+        class="special"
+        @click="GoDisplay(item)"
+      >
+        {{ item.title }}
       </div>
     </div>
     <div class="flex flex_col flex_cen">
       <img src="../assets/img/more.png" alt="" class="more_img" />
-      <span style="font-size: 0.2rem; line-height: 0.2rem; color: #363636;margin-bottom:0.32rem"
-        >查看更多</span
+      <span
+        style="
+          font-size: 0.2rem;
+          line-height: 0.2rem;
+          color: #363636;
+          margin-bottom: 0.32rem;
+        "
+        @click="showMore"
+        >{{txt}}</span
       >
     </div>
     <!-- banner -->
@@ -105,43 +118,9 @@
         preload="none"
         poster="../assets/img/vdeo.png"
       ></video>
-      <!-- <div class="vedoimg" @click.stop="handplay">
-        <img src="../assets/img/player.png" alt v-if="vdeoimg" />
-      </div>-->
     </div>
     <!-- 定制服务流程 -->
     <img src="../assets/img/hh1.jpg" alt="" style="width: 100%" />
-    <!-- <div class="process text_cen">
-      <h3>定制设计服务流程</h3>
-      <span>Custom service process</span>
-      <div class="flex_be">
-        <div class="bg_color flex_cen flex_col">
-          <span>1</span>
-          <span>设计前 沟通</span>
-        </div>
-        <div class="bg_color flex_cen flex_col">
-          <span>2</span>
-          <span>平面图 设计</span>
-        </div>
-        <div class="bg_color flex_cen flex_col">
-          <span>3</span>
-          <span>效果图 设计</span>
-        </div>
-        <div class="bg_color flex_cen flex_col">
-          <span>4</span>
-          <span>施工图 设计</span>
-        </div>
-        <div class="bg_color flex_cen flex_col">
-          <span>5</span>
-          <span>审单 发货</span>
-        </div>
-        <div class="bg_color flex_cen flex_col">
-          <span>6</span>
-          <span>施工 指导</span>
-        </div>
-      </div>
-      <div class="sanjiao"></div>
-    </div> -->
     <!-- 设计范围 -->
     <div class="design text_cen">
       <h3>设计范围</h3>
@@ -179,59 +158,7 @@
         </div>
       </div>
     </div>
-    <!-- 别墅类型 -->
-    <!-- <div class="type_box">
-      <div class="flex_be type">
-        <img src="../assets/img/c1.png" alt />
-        <div>
-          <h6>中式别墅</h6>
-          <p>CHINESE VILLA</p>
-          <p><span>中式大宅</span>，传世府邸，居高境界，源远流长</p>
-        </div>
-      </div>
-      <img src="../assets/img/type1.png" alt />
-    </div>
-    <div class="type_box">
-      <div class="flex_be type">
-        <div style="position: static">
-          <h6>四合院</h6>
-          <p>QUADRANGLE</p>
-          <p><span>传统合院</span>，礼遇中式院落，历史悠久</p>
-        </div>
-        <img
-          src="../assets/img/c2.png"
-          alt
-          style="width:3.28rem,height:3.08rem"
-        />
-      </div>
-      <img src="../assets/img/type2.png" alt />
-    </div>
-    <div class="type_box">
-      <div class="flex_be type">
-        <img
-          src="../assets/img/c3.png"
-          alt
-          style="width:3.57rem,height:3.36rem"
-        />
-        <div>
-          <h6>欧式别墅</h6>
-          <p>EUROPEAN VILLAS</p>
-          <p><span>浪漫与典雅</span>，奢华与贵气同在</p>
-        </div>
-      </div>
-      <img src="../assets/img/type3.png" alt />
-    </div>
-    <div class="type_box">
-      <div class="flex_be type">
-        <div style="position: static">
-          <h6>现代别墅</h6>
-          <p>MODERN VILLA</p>
-          <p><span>简而不凡</span>，时尚又大气，摩登新选择</p>
-        </div>
-        <img src="../assets/img/c4.png" alt />
-      </div>
-      <img src="../assets/img/type4.png" alt />
-    </div> -->
+
     <img src="../assets/img/bigbanner.jpg" alt="" style="width: 100%" />
     <!-- 定制案列展示 -->
     <div class="show text_cen">
@@ -259,8 +186,6 @@
     <!-- footer -->
     <footer class="text_cen">
       <img src="../assets/img/jx.png" alt style="width: 100%" />
-      <!-- <h4>匠心如一，百年坚守</h4>
-      <p>Ingenuity as one, hundred years of perseverance</p> -->
     </footer>
     <div style="padding: 0 0.2rem; margin-bottom: 2rem">
       <div style="text-align: center; margin-bottom: 0.3rem" class="flex_cen">
@@ -295,6 +220,10 @@ export default {
       Hotspot: [],
       images: [],
       Blist: [],
+      specialsList: [], //建房专题
+      num: 6,
+      isShow: true,
+       txt: '查看更多',
     };
   },
   computed: {
@@ -336,6 +265,11 @@ export default {
         console.log(res, "爆款");
         this.Blist = res.data;
       });
+    // 首页建房专题
+    request.getSpecials().then((res) => {
+      console.log(res, "首页建房专题");
+      this.specialsList = res.data;
+    });
   },
   methods: {
     getdata() {
@@ -377,11 +311,16 @@ export default {
         this.vdeoimg = true;
       }
     },
-    GoDisplay(){
+    GoDisplay() {
       this.$router.push({
-        path:'/Display'
-      })
-    }
+        path: "/Display",
+      });
+    },
+    showMore() {
+      this.isShow = !this.isShow;
+      this.num = this.isShow ? 6 : this.specialsList.length;
+      this.txt = this.isShow ? "查看更多" : "收起";
+    },
   },
 };
 </script>
@@ -659,13 +598,13 @@ footer {
   width: 0.26rem;
   height: 0.26rem;
   margin-bottom: 0.3rem;
-   animation:move 0.8s infinite alternate;
+  animation: move 0.8s infinite alternate;
 }
-@keyframes move{
-  0%{
+@keyframes move {
+  0% {
     transform: translateY(0px);
   }
-  100%{
+  100% {
     transform: translateY(10px);
   }
 }

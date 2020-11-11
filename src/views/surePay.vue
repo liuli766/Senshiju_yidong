@@ -13,26 +13,36 @@
     <div class="addr flex_be" @click="gonewshippingAddr(orderaddress)">
       <div class="flex_be">
         <van-icon name="location-o" />
-        <span v-if="orderaddress.length==0" @click="gonewshippingAddr1">请填写收货地址</span>
+        <span v-if="orderaddress.length == 0" @click="gonewshippingAddr1"
+          >请填写收货地址</span
+        >
         <div v-else>
-          <span class="info" style="margin-bottom:0.2rem;display:block">{{orderaddress.name}} {{orderaddress.phone}}</span>
-          <div class="flex_cen" style="font-size:0.25rem;">
+          <span class="info" style="margin-bottom: 0.2rem; display: block"
+            >{{ orderaddress.name }} {{ orderaddress.phone }}</span
+          >
+          <div class="flex_cen" style="font-size: 0.25rem">
             <span class="express">快递</span>
-            {{orderaddress.province}}{{orderaddress.city}}{{orderaddress.district}}{{orderaddress.address}}
+            {{ orderaddress.province }}{{ orderaddress.city
+            }}{{ orderaddress.district }}{{ orderaddress.address }}
           </div>
         </div>
       </div>
       <van-icon name="arrow" />
     </div>
     <!--  -->
-    <div style="padding-bottom: 1rem;">
-      <div class="itemlist flex" v-for="(item,k) in orderdetail" :key="k">
+    <div style="padding-bottom: 1rem">
+      <div class="itemlist flex" v-for="(item, k) in orderdetail" :key="k">
         <img :src="item.cover" alt />
         <div>
-          <p>{{item.title}}</p>
+          <p>{{ item.title }}</p>
           <div class="price flex_be">
-            <span>¥{{item.price}}</span>
-            <van-stepper v-model="item.num" theme="round" button-size="22" disabled />
+            <span>¥{{ item.price }}</span>
+            <van-stepper
+              v-model="item.num"
+              theme="round"
+              button-size="22"
+              disabled
+            />
           </div>
         </div>
       </div>
@@ -52,7 +62,7 @@
       <div class="money">
         <div class="flex_be">
           <span>商品金额</span>
-          <span>¥{{total}}</span>
+          <span>¥{{ total }}</span>
         </div>
         <div class="flex_be">
           <span>运费</span>
@@ -60,11 +70,11 @@
         </div>
       </div>
     </div>
-    
+
     <div class="btn flex_be">
       <div>
         合计：
-        <span style="color；#F93420">{{total}}</span>
+        <span style="color；#F93420">{{ total }}</span>
       </div>
       <div @click="onSubmit" class="onsubmit">立即付款</div>
     </div>
@@ -76,7 +86,6 @@ import { mapState } from "vuex";
 import request from "@/request.js";
 
 export default {
-  
   computed: {
     ...mapState({
       token: (state) => state.token,
@@ -122,7 +131,7 @@ export default {
         })
         .then((res) => {
           let data = res.data.apiToay;
-          let vm = this
+          let vm = this;
           WeixinJSBridge.invoke(
             "getBrandWCPayRequest",
             {
@@ -134,7 +143,6 @@ export default {
               paySign: data.paySign, //微信签名
             },
             function (res) {
-              
               if (res.err_msg == "get_brand_wcpay_request:ok") {
                 // 使用以上方式判断前端返回,微信团队郑重提示：
                 //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
@@ -142,21 +150,20 @@ export default {
                 setTimeout(function () {
                   vm.$router.push({
                     path: "/success",
-                    query:{
-                      price:res.data.total
-                    }
+                    query: {
+                      price: res.data.total,
+                    },
                   });
                 }, 2000);
               } else {
                 vm.$toast("支付失败");
                 setTimeout(function () {
-                  
                   vm.$router.push({
                     path: "/orderpay",
                   });
                 }, 2000);
               }
-            },
+            }
           );
         })
         .catch(() => {
@@ -165,15 +172,11 @@ export default {
         .finally(() => {});
     },
     gopay() {
-      let vm = this
+      let vm = this;
       if (typeof WeixinJSBridge == "undefined") {
         vm.$toast("支付失败");
         if (document.addEventListener) {
-          document.addEventListener(
-            "WeixinJSBridgeReady",
-            vm.wechatPay,
-            false
-          );
+          document.addEventListener("WeixinJSBridgeReady", vm.wechatPay, false);
         } else if (document.attachEvent) {
           document.attachEvent("WeixinJSBridgeReady", vm.wechatPay);
           document.attachEvent("onWeixinJSBridgeReady", vm.wechatPay);
@@ -184,7 +187,7 @@ export default {
     },
     go() {
       this.$router.push({
-        path:'/cart'
+        path: "/cart",
       });
     },
     // 收货地址
@@ -196,11 +199,11 @@ export default {
         },
       });
     },
-    gonewshippingAddr1(){
+    gonewshippingAddr1() {
       this.$router.push({
         path: "/newshippingAddr",
       });
-    }
+    },
   },
 };
 </script>

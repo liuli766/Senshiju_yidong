@@ -11,18 +11,6 @@
         <span>{{ item.name }}</span>
       </div>
     </div>
-
-    <!-- <nav class="flex_ar">
-      <div
-        class="span"
-        v-for="(item, k) in buiilnavlist"
-        :key="k"
-        @click="chosenav(k)"
-      >
-        <span :class="{ bg_active: navid === k }">{{ item }}</span>
-      </div>
-    </nav> -->
-    <!--  -->
     <div
       v-show="
         navid == 1 ||
@@ -36,35 +24,52 @@
     >
       <div
         v-for="(item, k) in articleList"
+        :key="'info2-' + k"
+        @click="GoVideoDetail(item.id)"
+      >
+        <div v-if="item.video && item.type == 2">
+          <video
+            class="vedio"
+            :src="item.video"
+            controls
+            width="375"
+            height="300"
+            preload="none"
+            :poster="item.cover"
+          ></video>
+          <p>{{ item.title }}</p>
+          <div class="flex_be eeebot">
+            <span>{{ item.add_time.slice(0, 11) }}</span>
+            <span class="flex_cen">
+              <van-icon name="eye-o" style="margin-right: 0.1rem" />
+              {{ item.view }}人已读
+            </span>
+          </div>
+        </div>
+      </div>
+      <div
+        v-for="(item, k) in articleList"
         :key="k + 0"
         @click="gobuildencycDetail(item.id)"
       >
-        <div style="display: flex" v-if="item.type == 1">
-          <img
-            v-for="(img, v) in item.cover"
-            :key="v"
-            :src="img"
-            alt
-            class="buidimg"
-          />
-        </div>
-        <video
-          v-if="item.video && item.type == 2"
-          class="vedio"
-          :src="item.video"
-          controls
-          width="375"
-          height="300"
-          preload="none"
-          :poster="item.cover[0]"
-        ></video>
-        <p>{{ item.title }}</p>
-        <div class="flex_be eeebot">
-          <span>{{ item.add_time.slice(0, 11) }}</span>
-          <span class="flex_cen">
-            <van-icon name="eye-o" style="margin-right:0.1rem" />
-            {{ item.view }}人已读
-          </span>
+        <div v-if="item.type == 1">
+          <div style="display: flex">
+            <img
+              v-for="(img, v) in item.cover"
+              :key="v"
+              :src="img"
+              alt
+              class="buidimg"
+            />
+          </div>
+          <p>{{ item.title }}</p>
+          <div class="flex_be eeebot">
+            <span>{{ item.add_time.slice(0, 11) }}</span>
+            <span class="flex_cen">
+              <van-icon name="eye-o" style="margin-right: 0.1rem" />
+              {{ item.view }}人已读
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -232,6 +237,15 @@ export default {
         },
       });
     },
+    GoVideoDetail(id) {
+      //跳转视频详情
+      this.$router.push({
+        path: "/videoDetail",
+        query: {
+          id,
+        },
+      });
+    },
   },
   mounted() {},
 };
@@ -286,7 +300,7 @@ export default {
     font-weight: 400;
     font-size: 0.26rem;
     line-height: 0.39rem;
-    margin:0.16rem 0 0.2rem 0;
+    margin: 0.16rem 0 0.2rem 0;
   }
   .vp {
     .mt(24);
@@ -306,7 +320,7 @@ export default {
   height: 1.75rem;
   border-radius: 0.08rem;
 }
-.buidimg+.buidimg{
+.buidimg + .buidimg {
   margin-left: 0.04rem;
 }
 .vedio {
@@ -337,7 +351,8 @@ export default {
   justify-content: space-around;
   padding: 0.36rem 0;
   border-radius: 0.08rem;
-  box-shadow: 1px 0 3px #f1f1f1,0 2px 3px #f1f1f1,-2px 0 3px #f1f1f1,0 6px 3px #f1f1f1;
+  box-shadow: 1px 0 3px #f1f1f1, 0 2px 3px #f1f1f1, -2px 0 3px #f1f1f1,
+    0 6px 3px #f1f1f1;
   margin-bottom: 0.38rem;
   > div {
     display: flex;

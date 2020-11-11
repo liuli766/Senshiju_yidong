@@ -1,12 +1,8 @@
 <template>
   <!-- 新建收获地址 -->
   <div class="newshippingAddr">
-    <!-- <div class="flex navigation">
-      <van-icon name="cross" @click="go" />
-      <span>新建收货地址</span>
-    </div>-->
     <!--  -->
-    <div style="background:#fff">
+    <div style="background: #fff">
       <div class="nav_bar flex">
         <van-icon name="arrow-left" @click="go" />
         <span>新建收货地址</span>
@@ -21,7 +17,7 @@
       ></textarea>
     </div>
     <!--  -->
-    <div style="background:#fff">
+    <div style="background: #fff">
       <div class="cotbtn flex">
         <span @click="empty">清空内容</span>
         <span @click="intelligence">智能识别</span>
@@ -30,12 +26,23 @@
 
     <!--  -->
     <div class="cotaddr">
-      <van-field v-model="name" label="收货人" clearable placeholder="请输入收货人姓名" />
+      <van-field
+        v-model="name"
+        label="收货人"
+        clearable
+        placeholder="请输入收货人姓名"
+      />
       <div class="mainland">
         <span>+86</span>
         <span>中国大陆</span>
       </div>
-      <van-field v-model="tel" type="tel" label="手机号码" clearable placeholder="请输入收货人手机号码" />
+      <van-field
+        v-model="tel"
+        type="tel"
+        label="手机号码"
+        clearable
+        placeholder="请输入收货人手机号码"
+      />
       <div class="choseaddr">
         <van-field
           readonly
@@ -47,20 +54,38 @@
           @click="showArea = true"
         />
         <van-popup v-model="showArea" position="bottom">
-          <van-area :area-list="areaList" @confirm="onConfirm" @cancel="showArea = false" />
+          <van-area
+            :area-list="areaList"
+            @confirm="onConfirm"
+            @cancel="showArea = false"
+          />
         </van-popup>
       </div>
-      <van-divider :style="{ color: '#1989fa', borderColor: '#eee', padding: '0' }"></van-divider>
-      <van-field v-model="addr" type="text" label="详细地址" clearable placeholder="请输入街道地址" />
+      <van-divider
+        :style="{ color: '#1989fa', borderColor: '#eee', padding: '0' }"
+      ></van-divider>
+      <van-field
+        v-model="addr"
+        type="text"
+        label="详细地址"
+        clearable
+        placeholder="请输入街道地址"
+      />
       <div class="flex_be swich">
         <span>设为默认地址</span>
-        <van-switch v-model="checked" active-color="#07c160" inactive-color="#EEEEEE" />
+        <van-switch
+          v-model="checked"
+          active-color="#07c160"
+          inactive-color="#EEEEEE"
+        />
       </div>
     </div>
     <div class="eee" ref="eee">
       <button v-if="delbtn" @click="removeAddr">删除</button>
-      
-      <button @click="getxiugai" v-if="this.$route.query.item">保存并使用</button>
+
+      <button @click="getxiugai" v-if="this.$route.query.item">
+        保存并使用
+      </button>
       <button @click="onSave" v-else>保存并使用</button>
     </div>
   </div>
@@ -92,9 +117,12 @@ export default {
     }),
   },
   created() {
-    console.log(this.$route.query.item)
-    if (this.$route.query.item.length!==0&&this.$route.query.item !== undefined) {
-       console.log(this.$route.query.item.length!=0)
+    console.log(this.$route.query.item);
+    if (
+      this.$route.query.item.length !== 0 &&
+      this.$route.query.item !== undefined
+    ) {
+      console.log(this.$route.query.item.length != 0);
       let item = this.$route.query.item;
       this.name = item.name;
       this.tel = item.tel;
@@ -140,7 +168,7 @@ export default {
         .then((res) => {
           console.log(res, "添加收货地址");
           this.$toast("保存成功");
-          this.$router.go(-1)
+          this.$router.go(-1);
         })
         .catch(() => {
           this.$toast("保存失败");
@@ -148,24 +176,24 @@ export default {
         .finally(() => {});
     },
     getxiugai() {
-      let data=this.$route.query.item
+      let data = this.$route.query.item;
       let add = this.value.split("/");
       request
         .getUpdress({
           uid: this.userInfor.member_id,
-          address:this.addr ,
+          address: this.addr,
           name: this.name,
           phone: this.tel,
           province: add[0],
           city: add[1],
           district: add[2],
           is_default: this.checked,
-          id:data.id
+          id: data.id,
         })
         .then((res) => {
-          console.log(res,'修改')
+          console.log(res, "修改");
           this.$toast("修改成功");
-          this.$router.go(-1)
+          this.$router.go(-1);
         })
         .catch(() => {
           this.$toast("修改失败");
@@ -186,7 +214,7 @@ export default {
           this.addr = "";
           this.checked = false;
           this.delbtn = false;
-          this.$router.go(-1)
+          this.$router.go(-1);
         })
         .catch(() => {
           this.$toast("删除失败");
@@ -197,9 +225,8 @@ export default {
       this.content = "";
     },
     intelligence() {
-      
       let smartParse = this.smartParse(this.content);
-      console.log(smartParse)
+      console.log(smartParse);
       if (smartParse.phone == undefined) {
         smartParse.phone = "";
       }
@@ -224,12 +251,12 @@ export default {
       if (smartParse.zipCode == undefined) {
         smartParse.zipCode = "";
       }
-      if(smartParse.province==undefined){
+      if (smartParse.province == undefined) {
         smartParse.province = "";
       }
-      if(smartParse.city==undefined || smartParse.county==undefined){
-          smartParse.city=''
-          smartParse.county=''
+      if (smartParse.city == undefined || smartParse.county == undefined) {
+        smartParse.city = "";
+        smartParse.county = "";
       }
       this.name = smartParse.name;
       this.tel = smartParse.phone;

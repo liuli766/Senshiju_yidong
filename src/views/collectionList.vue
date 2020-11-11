@@ -62,19 +62,19 @@ export default {};
     font-family: Microsoft YaHei;
     font-weight: bold;
   }
-  .colltbtn{
+  .colltbtn {
     .mt(26);
-    span:nth-of-type(1){
-      color: #5E5E5E;
+    span:nth-of-type(1) {
+      color: #5e5e5e;
       .fs(26);
     }
-    span:nth-of-type(2){
+    span:nth-of-type(2) {
       color: #fff;
       .fs(22);
       display: inline-block;
       .w(118);
       .lh(34);
-      background: #FFC92F;
+      background: #ffc92f;
       .b-radius(17);
     }
   }

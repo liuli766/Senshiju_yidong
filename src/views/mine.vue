@@ -7,12 +7,12 @@
         <div class="flex">
           <div class="img flex_cen">
             <img v-if="!token" src="../assets/img/mine/headerimg.png" alt />
-            <img v-else :src="headimg?headimg:userInfor.photo" alt />
+            <img v-else :src="headimg ? headimg : userInfor.photo" alt />
           </div>
           <div class="info flex flex_col">
             <span v-if="!token" @click="gologin">立即登录</span>
             <div class="flex_col" v-else>
-              <span>{{userInfor.nickname}}</span>
+              <span>{{ userInfor.nickname }}</span>
               <span>普通用户</span>
             </div>
           </div>
@@ -29,15 +29,21 @@
       <div class="girdbox flex_be">
         <div
           class="gird flex_col flex_cen"
-          v-for="(gird,k) in gridList"
+          v-for="(gird, k) in gridList"
           :key="k"
           @click="handOrder(k)"
         >
           <img :src="gird.img" alt />
-          <span>{{gird.name}}</span>
-          <div v-if="k==0" :class="[orderlist.length==0?'none':'']" >{{orderlist.length}}</div>
-          <div v-if="k==1" :class="[orderlist1.length==0?'none':'']">{{orderlist1.length}}</div>
-          <div v-if="k==2" :class="[orderlist2.length==0?'none':'']">{{orderlist2.length}}</div>
+          <span>{{ gird.name }}</span>
+          <div v-if="k == 0" :class="[orderlist.length == 0 ? 'none' : '']">
+            {{ orderlist.length }}
+          </div>
+          <div v-if="k == 1" :class="[orderlist1.length == 0 ? 'none' : '']">
+            {{ orderlist1.length }}
+          </div>
+          <div v-if="k == 2" :class="[orderlist2.length == 0 ? 'none' : '']">
+            {{ orderlist2.length }}
+          </div>
           <!-- <div v-if="k==3"></div> -->
         </div>
       </div>
@@ -47,12 +53,12 @@
       <div class="girdbox flex">
         <div
           class="gird flex_col flex_cen"
-          v-for="(gird,k) in toolList"
+          v-for="(gird, k) in toolList"
           :key="k"
           @click="handPage(k)"
         >
           <img :src="gird.img" alt />
-          <span>{{gird.name}}</span>
+          <span>{{ gird.name }}</span>
         </div>
       </div>
     </main>
@@ -181,13 +187,7 @@ export default {
           });
         }
         if (k == 3) {
-          this.$toast('暂未开通')
-          // this.$router.push({
-          //   path: "/afterSale",
-          //   query: {
-          //     navactivechoseid: k,
-          //   },
-          // });
+          this.$toast("暂未开通");
         }
         this.$store.commit("gonav", k);
       }
