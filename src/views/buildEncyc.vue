@@ -98,14 +98,19 @@
     >
       暂无内容收藏
     </div>
+    <scroll :onBottom="onBottom"></scroll>
   </div>
 </template>
 
 <script>
+import scroll from "@/components/onBottom.vue";
 import { mapState } from "vuex";
 import request from "@/request.js";
 // import BScroll from "better-scroll";
 export default {
+  components: {
+    scroll,
+  },
   computed: {
     ...mapState({
       token: (state) => state.token,
@@ -155,10 +160,13 @@ export default {
       now: new Date(), //当前时间
       collectlist: [],
       flag: false,
+      page:1
     };
   },
   created() {
-    this.getdata(this.classid);
+    this.page=1;
+    this.articleList=[]
+    this.getdata();
   },
   methods: {
     // 文章收藏
@@ -181,16 +189,31 @@ export default {
         .catch(() => {})
         .finally(() => {});
     },
-    getdata(str) {
+    onBottom() {
+      this.page++;
+      this.getdata();
+    },
+    getdata() {
       //获取百科文章
       request
         .getArticle({
-          class: str,
-          page: 1,
+          class: this.classid,
+          page: this.page,
         })
         .then((res) => {
           console.log(res, "百科文章");
-          this.articleList = res.data;
+         
+          if (this.page == 1) {
+             this.articleList = res.data;
+          }
+
+          if (this.page > 1) {
+            this.articleList = [...this.articleList, ...res.data];
+          }
+
+          if (res.data.length == 0) {
+            this.$toast("没有更多数据了");
+          }
         })
         .catch(() => {})
         .finally(() => {});
@@ -199,25 +222,39 @@ export default {
       this.navid = k;
       if (k == 1) {
         this.classid = "推荐";
-        this.getdata(this.classid);
+        this.page = 1;
+        this.articleList=[]
+        this.getdata();
       } else if (k == 2) {
         this.classid = "设计百科";
-        this.getdata(this.classid);
+        this.page = 1;
+        this.articleList=[]
+        this.getdata();
       } else if (k == 3) {
         this.classid = "装修百科";
-        this.getdata(this.classid);
+        this.page = 1;
+        this.articleList=[]
+        this.getdata();
       } else if (k == 4) {
         this.classid = "施工百科";
-        this.getdata(this.classid);
+        this.page = 1;
+        this.articleList=[]
+        this.getdata();
       } else if (k == 5) {
         this.classid = "风水百科";
-        this.getdata(this.classid);
+        this.page = 1;
+        this.articleList=[]
+        this.getdata();
       } else if (k == 6) {
         this.classid = "建房日志";
-        this.getdata(this.classid);
+        this.page = 1;
+        this.articleList=[]
+        this.getdata();
       } else if (k == 7) {
         this.classid = "建房百科";
-        this.getdata(this.classid);
+        this.page = 1;
+        this.articleList=[]
+        this.getdata();
       }
       if (k == 0) {
         this.collect();

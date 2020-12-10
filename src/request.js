@@ -302,6 +302,12 @@ function getSpecialInfo(data) {
   }
   return http.fetchPost('/index/Special/info', params)
 }
+function getToLike(data) {
+  let params = {
+    ...data
+  }
+  return http.fetchPost('/index/Special/to_like', params)
+}
 export default {
   getHomeData,//手机端首页
   getTeam, //设计团队
@@ -354,4 +360,5 @@ export default {
   getSpecials,//首页建房专题
   getLists,//专题数据
   getSpecialInfo,//专题信息
+  getToLike,//专题点赞
 }

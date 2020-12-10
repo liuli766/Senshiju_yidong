@@ -13,23 +13,22 @@
       <div class="display_two_box">
         <h5>{{ SpecialInfoList.title }}</h5>
         <p class="comm_one" v-html="SpecialInfoList.intro"></p>
-        <div class="display_up comm_one">
+        <div class="display_up comm_one" @click="Dianz(SpecialInfoList)">
           <span class="upup">{{ SpecialInfoList.like_num }}人点赞</span>
           <img src="../assets/img/up.png" alt="" />
         </div>
       </div>
     </div>
     <!--  -->
-    <div  v-for="(item, k) in Display_List"
-      :key="k">
+    <div v-for="(item, k) in infolist" :key="k">
       <div class="display_three">
-        <div class="display_self_tit">{{item.title}}</div>
+        <div class="display_self_tit">{{ item.title }}</div>
         <div class="display_self_yell">European recommen</div>
       </div>
       <div class="display_self_box">
         <div class="display_self_con" v-for="(c, v) in item.child" :key="v">
           <img :src="c.cover" alt="" />
-          <p> {{ c.title }}</p>
+          <p>{{ c.title }}</p>
         </div>
       </div>
     </div>
@@ -66,7 +65,9 @@
     <div class="as14">
       <img src="../assets/img/14.png" alt="" />
     </div>
-    <img :src="qrcode" alt="" class="serves_img" />
+    <div style="display: flex; justify-content: center">
+      <img :src="qrcode" alt="" class="serves_img" />
+    </div>
     <!--  -->
     <div>
       <div class="display_three">
@@ -76,7 +77,7 @@
       <div class="display_self_box">
         <div class="display_self_con" v-for="(item, v) in hot_list" :key="v">
           <img :src="item.cover" alt="" />
-          <p>{{item.title}}</p>
+          <p>{{ item.title }}</p>
         </div>
       </div>
     </div>
@@ -84,33 +85,64 @@
 </template>
 
 <script>
-import request from '@/request.js'
+import request from "@/request.js";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-       Display_List: [], //专题数据
       SpecialInfoList: [], //专题信息
-      qrcode:'',
-      hot_list:[],//爆款
-    }
+      qrcode: "",
+      hot_list: [], //爆款
+      infolist:[]
+    };
+  },
+    computed: {
+    ...mapState({
+      userInfor: (state) => state.userInfor,
+      token: (state) => state.token,
+    }),
   },
   created() {
-      request.getLists().then((res) => {
-      console.log(res, '专题数据')
-      this.Display_List = res.data
-    })
-    request.getSpecialInfo().then((res) => {
-      console.log(res, '专题信息')
-      this.SpecialInfoList = res.data
-    })
+    this.SpecialInfo()
     request.getHomeData().then((res) => {
-      console.log(res, '手机首页')
-      this.qrcode = res.data.set.qr_code
-    })
+      console.log(res, "手机首页");
+      this.qrcode = res.data.set.qr_code;
+    });
     request.getBao().then((res) => {
-      console.log(res, '爆款')
-      this.hot_list=res.data
-    })
+      console.log(res, "爆款");
+      this.hot_list = res.data;
+    });
+  },
+    methods: {
+    SpecialInfo() {
+      request
+        .getSpecialInfo({
+          id: this.$route.query.id,
+        })
+        .then((res) => {
+          console.log(res, '专题信息')
+          this.SpecialInfoList = res.data.info
+          this.infolist = res.data.list
+        })
+    },
+    Dianz(item) {
+      console.log(1)
+      if (!this.token) {
+        this.$router.push({
+          path: "/login",
+        });
+        return false
+      }
+      request
+        .getToLike({
+          uid: this.userInfor.member_id,
+          id: item.id,
+        })
+        .then((res) => {
+          this.$toast(res.message);
+          this.SpecialInfo()
+        })
+    },
   },
 };
 </script>
@@ -133,6 +165,7 @@ export default {
   padding: 0.5rem;
   box-sizing: border-box;
   display: flex;
+  justify-content: space-between;
 }
 .display_two > img {
   height: 1.56rem;

@@ -58,13 +58,13 @@
       </div>
     </div>
     <!-- 回复组件 -->
-    <div class="silde">
-      <articontent v-show="showReplay" @submit="addmment" @canel="canelmmit" />
-    </div>
+    <van-popup v-model="show_comment" position="bottom" :style="{ height: '20%' }">
+          <articontent  @submit="addmment" @canel="canelmmit" />
+    </van-popup>
     <!-- 底部评论框 -->
-    <footer v-show="showcComent">
+    <footer  @click="showcontent">
       <van-icon name="edit" class="edit" />
-      <input type="text" placeholder="留下一条你的热评" @click="showcontent" />
+      <input type="text" placeholder="留下一条你的热评" disabled />
     </footer>
   </div>
 </template>
@@ -80,12 +80,12 @@ export default {
   },
   data() {
     return {
-      showcComent: true, //底部评论是否显示
-      showReplay: false, //评论组件是否显示
       downNum: 0,
       upNum: 0,
       allCommentList: [], //评论列表
       CommentDetail: [], //评论详情
+      show_comment:false,
+      showcComent:true
     };
   },
   computed: {
@@ -186,19 +186,17 @@ export default {
           this.$toast("发表失败");
         })
         .finally(() => {});
-      this.showReplay = false;
-      this.showcComent = true;
+      this.show_comment = false;
     },
 
     //监听到了取消评论
     canelmmit() {
-      this.showReplay = false;
-      this.showcComent = true;
+     this.show_comment = false;
     },
     //   回复
     showcontent() {
-      this.showcComent = false;
-      this.showReplay = true;
+      this.show_comment=true
+      console.log(this.show_comment)
       $(".silde").css({
         bottom: 0,
       });

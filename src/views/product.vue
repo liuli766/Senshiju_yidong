@@ -78,11 +78,15 @@
     </div>
     <!--  -->
     <tabbar :tabid="1" />
+    <div class="wrap">
+      <scroll :onBottom="onBottom"></scroll>
+    </div>
   </div>
 </template>
 
 <script>
 import productitem from "@/components/productItem.vue";
+import scroll from "@/components/onBottom.vue";
 import tabbar from "@/components/tabBar.vue";
 import { mapState } from "vuex";
 import request from "@/request.js";
@@ -90,6 +94,7 @@ export default {
   components: {
     productitem,
     tabbar,
+    scroll,
   },
   computed: {
     ...mapState({
@@ -132,6 +137,7 @@ export default {
       filterSelData8: "全部", //选中的数据
       filterlist: "全部",
       newtouter: [],
+      page: 1,
     };
   },
   created() {
@@ -194,18 +200,26 @@ export default {
     this.filterSelData6 = this.$route.query.function;
     this.filterSelData7 = this.$route.query.structure;
     this.filterSelData8 = this.$route.query.cost;
+    this.page = 1;
+    this.productItemList = [];
     this.getdata();
   },
   methods: {
+    onBottom() {
+      console.log("bottom");
+      this.page++;
+      this.getdata();
+    },
     // 搜索
     handserch() {
       request
         .getHots({
-          page: 1,
+          page: this.page,
           search: this.searchContent,
         })
         .then((res) => {
           console.log(res);
+          this.productItemList = [];
           this.getdata();
         })
         .catch(() => {})
@@ -214,7 +228,7 @@ export default {
     getdata() {
       request
         .getHots({
-          page: 1,
+          page: this.page,
           style: this.filterSelData1,
           area: this.filterSelData2,
           face_width: this.filterSelData3,
@@ -227,7 +241,17 @@ export default {
         })
         .then((res) => {
           console.log(res, "图纸展示");
-          this.productItemList = res.data;
+          if (this.page == 1) {
+            this.productItemList = res.data;
+          }
+
+          if (this.page > 1) {
+            this.productItemList = [...this.productItemList, ...res.data];
+          }
+
+          if (res.data.length == 0) {
+            this.$toast("没有更多数据了");
+          }
         })
         .catch(() => {})
         .finally(() => {});
@@ -256,6 +280,8 @@ export default {
           cost: this.filterSelData8,
         },
       });
+      this.page = 1;
+      this.productItemList = [];
       this.getdata(this.$route.query.style);
     },
     handchange2(value) {
@@ -281,6 +307,8 @@ export default {
           cost: this.filterSelData8,
         },
       });
+      this.page = 1;
+      this.productItemList = [];
       this.getdata(this.$route.query.area);
     },
     handchange3(value) {
@@ -306,6 +334,8 @@ export default {
           cost: this.filterSelData8,
         },
       });
+      this.page = 1;
+      this.productItemList = [];
       this.getdata(this.$route.query.face_width);
     },
     handchange4(value) {
@@ -330,6 +360,8 @@ export default {
           cost: this.filterSelData8,
         },
       });
+      this.page = 1;
+      this.productItemList = [];
       this.getdata(this.$route.query.depth);
     },
     handchange5(value) {
@@ -355,6 +387,8 @@ export default {
           cost: this.filterSelData8,
         },
       });
+      this.page = 1;
+      this.productItemList = [];
       this.getdata(this.$route.query.plies);
     },
     handchange6(value) {
@@ -380,6 +414,8 @@ export default {
           cost: this.filterSelData8,
         },
       });
+      this.page = 1;
+      this.productItemList = [];
       this.getdata(this.$route.query.function);
     },
     handchange7(value) {
@@ -405,6 +441,8 @@ export default {
           cost: this.filterSelData8,
         },
       });
+      this.page = 1;
+      this.productItemList = [];
       this.getdata(this.$route.query.structure);
     },
     handchange8(value) {
@@ -430,6 +468,8 @@ export default {
           cost: this.filterSelData8,
         },
       });
+      this.page = 1;
+      this.productItemList = [];
       this.getdata(this.$route.query.cost);
     },
   },

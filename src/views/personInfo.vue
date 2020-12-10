@@ -19,7 +19,6 @@
               accept="image/gif, image/jpeg, image/jpg, image/png"
               @change="fileChange"
             />
-            <!-- </form> -->
           </div>
           <van-icon name="arrow" />
         </div>

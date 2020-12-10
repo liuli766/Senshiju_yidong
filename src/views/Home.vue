@@ -1,6 +1,7 @@
 <template>
   <!-- 首页 -->
   <div class="home">
+
     <van-swipe :autoplay="3000">
       <van-swipe-item v-for="(image, index) in images" :key="index">
         <img v-lazy="image.pic_path" style="width: 100%" />
@@ -87,7 +88,7 @@
         {{ item.title }}
       </div>
     </div>
-    <div class="flex flex_col flex_cen">
+    <div class="flex flex_col flex_cen" @click="showMore">
       <img src="../assets/img/more.png" alt="" class="more_img" />
       <span
         style="
@@ -96,8 +97,7 @@
           color: #363636;
           margin-bottom: 0.32rem;
         "
-        @click="showMore"
-        >{{txt}}</span
+        >{{ txt }}</span
       >
     </div>
     <!-- banner -->
@@ -199,6 +199,9 @@
       <productitem :productitem="Blist" />
     </div>
     <tabbar :tabid="0" />
+    <div class="wrap">
+      <scroll :onBottom="onBottom"></scroll>
+    </div>
   </div>
 </template>
 
@@ -207,6 +210,7 @@ import { mapState } from "vuex";
 import request from "@/request.js";
 import tabbar from "@/components/tabBar.vue";
 import productitem from "@/components/productItem.vue";
+import scroll from "@/components/onBottom.vue";
 export default {
   name: "Home",
   data() {
@@ -223,7 +227,8 @@ export default {
       specialsList: [], //建房专题
       num: 6,
       isShow: true,
-       txt: '查看更多',
+      txt: "查看更多",
+      page: 1,
     };
   },
   computed: {
@@ -235,8 +240,20 @@ export default {
   components: {
     tabbar,
     productitem,
+    scroll,
   },
   created() {
+    const obj = {name: 'yd', age: 18};
+
+Object.keys(obj); // ['name', 'age'];
+
+Object.values(obj); // ['yd', 18];
+
+const l = Object.entries(obj); // [['name', 'yd'], ['age': 18]];
+
+const m = new Map(l);
+console.log(l)
+console.log(m)
     this.getdata();
     request
       .getHotspot()
@@ -257,21 +274,42 @@ export default {
       .catch(() => {})
       .finally(() => {});
 
-    request
-      .getBao({
-        page: 1,
-      })
-      .then((res) => {
-        console.log(res, "爆款");
-        this.Blist = res.data;
-      });
     // 首页建房专题
     request.getSpecials().then((res) => {
       console.log(res, "首页建房专题");
       this.specialsList = res.data;
     });
+    this.page = 1;
+    this.Blist = [];
+    this.HandBao();
   },
   methods: {
+    onBottom() {
+      console.log("bottom");
+      this.page++;
+      this.HandBao();
+    },
+    HandBao() {
+      request
+        .getBao({
+          page: this.page,
+        })
+        .then((res) => {
+          console.log(res, "爆款");
+
+          if (this.page == 1) {
+            this.Blist = res.data;
+          }
+
+          if (this.page > 1) {
+            this.Blist = [...this.Blist, ...res.data];
+          }
+
+          if (res.data.length == 0) {
+            this.$toast("没有更多数据了");
+          }
+        });
+    },
     getdata() {
       this.flag = true;
       request
@@ -311,9 +349,12 @@ export default {
         this.vdeoimg = true;
       }
     },
-    GoDisplay() {
+    GoDisplay(item) {
       this.$router.push({
         path: "/Display",
+        query:{
+          id:item.id
+        }
       });
     },
     showMore() {
@@ -330,7 +371,7 @@ export default {
 .home {
   background-color: #fff;
   height: 100%;
-  position: fixed;
+  // position: fixed;
   width: 100%;
   overflow: auto;
 }

@@ -17,12 +17,14 @@
     <orderlist :orderli="orderlist" v-if="navactivechoseid==0||navid==0" :navid="0" />
     <orderlist :orderli="orderlist1" v-if="navactivechoseid==1|| navid==1" :navid="1" />
     <orderlist :orderli="orderlist2" v-if="navactivechoseid==2 ||navid==2" :navid="2" />
+    <scroll :onBottom="onBottom"></scroll>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import orderlist from "@/components/orderlist.vue";
+import scroll from "@/components/onBottom.vue";
 import request from "@/request.js";
 export default {
   computed: {
@@ -33,6 +35,7 @@ export default {
   },
   components: {
     orderlist,
+    scroll,
   },
   data() {
     return {
@@ -43,6 +46,7 @@ export default {
       orderlist: [],
       orderlist1: [],
       orderlist2: [],
+      page:1
     };
   },
   watch: {
@@ -58,17 +62,17 @@ export default {
     this.navactivechoseid = this.$route.query.navactivechoseid;
   },
   mounted() {
-    if (this.navid == 0) {
-      this.myorder(1);
-    } else if (this.navid == 1) {
-      this.myorder(2);
-    } else if (this.navid == 2) {
-      this.myorder(3);
-    } else if (this.navid == 3) {
-      this.myorder(4);
-    }
+    this.page=1
+    this.orderlist=[]
+    this.orderlist1=[]
+    this.orderlist2=[]
+    this.myorder()
   },
   methods: {
+    onBottom() {
+      this.page++;
+      this.myorder()
+    },
     handserch() {
       request.getOrderList({
         uid: this.userInfor.member_id,
@@ -84,22 +88,36 @@ export default {
         });
     },
     // 我的订单
-    myorder(num) {
+    myorder() {
       request
         .getOrderList({
           uid: this.userInfor.member_id,
-          status: num,
-          page: 1,
+          status:this.navid+1,
+          page: this.page,
         })
         .then((res) => {
           this.vertical = true;
-          this.orderlist = res.data;
-          this.orderlist1 = res.data;
-          this.orderlist2 = res.data;
+          
+          
+          if (this.page == 1) {
+            this.orderlist = res.data;
+            this.orderlist1 = res.data;
+            this.orderlist2 = res.data;
+          }
+
+          if (this.page > 1) {
+            this.orderlist = [...this.orderlist, ...res.data];
+            this.orderlist1 = [...this.orderlist, ...res.data];
+            this.orderlist2 = [...this.orderlist, ...res.data];
+          }
           this.orderlist = this.orderlist.filter((item) => item.status == 1); //待付款
           this.orderlist1 = this.orderlist1.filter((item) => item.status == 2); //待发货
           console.log(this.orderlist1, "我的订单");
           this.orderlist2 = this.orderlist2.filter((item) => item.status == 3); //待付款
+          if (res.data.length == 0) {
+            this.$toast("没有更多数据了");
+          }
+
         })
         .catch(() => {
           this.vertical = false;
@@ -112,15 +130,11 @@ export default {
       this.navid = k;
       this.navactivechoseid = k;
       this.$store.commit("gonav", this.navactivechoseid);
-      if (k == 0) {
-        this.myorder(1);
-      } else if (k == 1) {
-        this.myorder(2);
-      } else if (k == 2) {
-        this.myorder(3);
-      } else if (k == 3) {
-        this.myorder(4);
-      }
+      this.page=1;
+      this.orderlist=[]
+      this.orderlist1=[]
+      this.orderlist2=[]
+      this.myorder()
     },
 
     go() {

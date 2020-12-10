@@ -13,7 +13,7 @@
     <div class="price flex_be">
       <div>
         <span style="font-size: 0.28rem; letter-spacing: 3px; color: #707070"
-          >全款预售
+          >{{ProDetail.status==1?'':'全款预售'}}
         </span>
         <span style="font-size: 0.48rem; letter-spacing: 2px; color: #fe5303"
           >¥{{ ProDetail.price }}</span
@@ -26,7 +26,7 @@
             line-height: 0;
           "
         >
-          付款后10天内发货
+         {{ProDetail.status==1?'':`付款后${ProDetail.deliver}天发货`}}
         </div>
       </div>
       <span
@@ -220,7 +220,7 @@
           <div class="cartbox">
             <div class="cartlist flex">
               <img :src="ProDetail.cover" alt />
-              <div class="red">￥{{ ProDetail.price }}</div>
+              <div class="red">￥{{PriceNum}}</div>
             </div>
             <div class="flex_be stepper">
               <span class="num">数量</span>
@@ -273,6 +273,20 @@ export default {
       token: (state) => state.token,
       userInfor: (state) => state.userInfor,
     }),
+    PriceNum(){
+        let PriceNum=0
+        if(this.cunt==1){
+          PriceNum=this.ProDetail.price
+        }
+        if(this.cunt==2){
+          PriceNum=this.ProDetail.two_price
+        }
+        if(this.cunt==3){
+          PriceNum=this.ProDetail.three_price
+
+        }
+         return PriceNum
+    }
   },
   created() {
     this.handdetail();
@@ -514,19 +528,25 @@ export default {
     },
     addcart(item) {
       console.log(item);
-      this.cunt++;
-      request
-        .getEditCart({
-          id: item.id,
-          num: this.cunt,
-        })
-        .then((res) => {
-          console.log(res, "购物车数量减");
-        })
-        .catch(() => {
-          Toast.fail("添加失败");
-        })
-        .finally(() => {});
+      if (this.cunt < 3) {
+        this.cunt++;
+        request
+          .getEditCart({
+            id: item.id,
+            num: this.cunt,
+          })
+          .then((res) => {
+            console.log(res, "购物车数量减");
+          })
+          .catch(() => {
+            Toast.fail("添加失败");
+          })
+          .finally(() => {});
+          
+      }else{
+           this.$toast("不可以加了噢");
+      }
+      
     },
     KeFu() {
       this.$toast("暂未开通");

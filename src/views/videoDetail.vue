@@ -2,26 +2,32 @@
   <!-- 视屏详情页 -->
   <div class="videodetail">
     <div class="video_box">
-      <video class="vedio" width="375" controls preload="none"
-      :src="picDetail.video" :poster="picDetail.cover"></video>
+      <video
+        class="vedio"
+        width="375"
+        controls
+        preload="none"
+        :src="picDetail.video"
+        :poster="picDetail.cover"
+      ></video>
     </div>
     <!-- 底部评论 -->
     <div class="video_bot">
       <div class="userinfo">
         <img :src="headimg" v-if="token" alt="" />
         <div class="userinfo_r">
-          <span v-if="token">{{userInfor.nickname}}</span>
-          <span>{{picDetail.view}}</span>
+          <span v-if="token">{{ userInfor.nickname }}</span>
+          <span>浏览量&nbsp;&nbsp;{{ picDetail.view }}</span>
         </div>
       </div>
       <div class="video_title">
-        {{picDetail.title}}
+        {{ picDetail.title }}
       </div>
     </div>
 
     <footer>
       <div class="flex_cen">
-        <div class="writeraate" @click="showcontent">
+        <div class="writeraate" @click.stop="showcontent">
           <van-icon name="edit" style="font-size: 0.38rem" /><span
             >写评论...</span
           >
@@ -33,12 +39,21 @@
               :badge="allCommentList.length"
               color="#fff"
               style="margin-top: 0.25rem"
-              @click="handbotPop"
+              @click.stop="handbotPop"
             />
           </div>
 
-          <img src="../assets/img/wjx.png" alt class="information"  @click="Collect(picDetail.id)"  v-if="picDetail.is_collect == false" />
-          <img src="../assets/img/ysc.png" @click="qxcollect(picDetail.id)" v-if="picDetail.is_collect == true"
+          <img
+            src="../assets/img/wjx.png"
+            alt
+            class="information"
+            @click.stop="Collect(picDetail.id)"
+            v-if="picDetail.is_collect == false"
+          />
+          <img class="information"
+            src="../assets/img/ysc.png"
+            @click.stop="qxcollect(picDetail.id)"
+            v-if="picDetail.is_collect == true"
           />
         </div>
       </div>
@@ -48,15 +63,15 @@
         <div class="flex_be">
           <div class="userinfo flex_cen">
             <img :src="item.photo" alt />
-            <span>{{ item.nickname }}</span>
+            <span style="color: #333">{{ item.nickname }}</span>
           </div>
           <div>
-            <span class="up" @click="handUp(item)">
-              <img src="../assets/img/up.png" alt />
+            <span class="up" @click.stop="handUp(item)">
+              <img src="../assets/img/up.png" alt class="is_up_img" />
               {{ item.is_up }}
             </span>
-            <span class="up" @click="handDown(item)">
-              <img src="../assets/img/down.png" alt />
+            <span class="up" @click.stop="handDown(item)">
+              <img src="../assets/img/down.png" alt class="is_up_img" />
               {{ item.is_down }}
             </span>
           </div>
@@ -68,14 +83,14 @@
             <span>{{ item.comment_time }}</span>
             <div
               class="reply text_cen"
-              @click="handreply(item.comment_id)"
+              @click.stop="handreply(item.comment_id)"
               v-if="item.child.length !== 0"
             >
               {{ item.child.length }}回复
             </div>
             <div
               class="reply text_cen"
-              @click="handreply(item.comment_id)"
+              @click.stop="handreply(item.comment_id)"
               v-else
             >
               回复
@@ -96,8 +111,7 @@
 
             <span
               class="allreply"
-              @click="showPopup(item.comment_id)"
-              @showpop="jh"
+              @click.stop="showPopup(item.comment_id)"
               style="display: flex; align-items: center"
             >
               全部{{ item.child.length }}条评论
@@ -108,9 +122,14 @@
         </div>
       </div>
     </van-popup>
-    <van-popup v-model="show_comment" position="bottom" :style="{ height: '20%' }">
-          <articontent  @submit="addmment" @canel="canelmmit" />
+    <van-popup
+      v-model="show_comment"
+      position="bottom"
+      :style="{ height: '20%' }"
+    >
+      <articontent @submit.stop="addmment" @canel.stop="canelmmit" />
     </van-popup>
+    <scroll :onBottom="onBottom"></scroll>
   </div>
 </template>
 
@@ -119,9 +138,11 @@ import articontent from "@/components/articContent.vue";
 import $ from "jquery";
 import { mapState } from "vuex";
 import request from "@/request.js";
+import scroll from "@/components/onBottom.vue";
 export default {
   components: {
     articontent,
+    scroll
   },
   data() {
     return {
@@ -129,10 +150,11 @@ export default {
       show: false, //底部弹出层
       CommentDetail: [], //全部评论详情
       commentText: "", //评论内容
-      picDetail:[],//视频文章内容
+      picDetail: [], //视频文章内容
       type: 1,
       pulicid: "",
-      show_comment:false
+      show_comment: false,
+      page:1
     };
   },
   computed: {
@@ -145,25 +167,25 @@ export default {
   created() {
     this.handdetail();
     this.commentList();
-    console.log(this.userInfor)
+    console.log(this.userInfor);
   },
   methods: {
-
     showcontent() {
-       if (!this.token) {
+      if (!this.token) {
         this.$router.push({
           path: "/login",
         });
         return false;
       }
       //底部评论样式
-      this.show_comment=true
+      this.show_comment = true;
       $(".silde").css({
         bottom: 0,
       });
+      this.show = true;
       this.type = 1;
     },
-     //监听到了取消评论
+    //监听到了取消评论
     canelmmit() {
       this.show_comment = false;
     },
@@ -191,20 +213,23 @@ export default {
         })
         .then((res) => {
           console.log(res, "评论内容", data);
-          this.$toast("发表成功");
           if (this.type == 1) {
             this.commentList();
+            this.$toast("发表成功");
+            this.show_comment = false;
           } else if (this.type == 2) {
-            this.getcommentcontent();
+             this.commentList();
+            this.$toast("发表成功");
+            this.show_comment = false;
           }
         })
         .catch(() => {
           this.$toast("发表失败");
         })
         .finally(() => {});
-        this.show_comment=false
+      this.show_comment = false;
     },
-     // 评论列表
+    // 评论列表
     commentList() {
       if (!this.token) {
         this.$router.push({
@@ -216,17 +241,32 @@ export default {
           .getComment({
             uid: this.userInfor.member_id,
             aid: this.$route.query.id,
-            page: 1,
+            page: this.page,
           })
           .then((res) => {
             console.log(res, "文章评论列表");
-            this.allCommentList = res.data;
+            
+            if (this.page == 1) {
+             this.allCommentList = res.data;
+          }
+
+          if (this.page > 1) {
+            this.allCommentList = [...this.allCommentList, ...res.data];
+          }
+
+          if (res.data.length == 0) {
+            this.$toast("没有更多数据了");
+          }
           })
           .catch(() => {})
           .finally(() => {});
       }
     },
-     // 文章评论分页数据
+    onBottom() {
+      this.page++;
+      this.commentList();
+    },
+    // 文章评论分页数据
     getcommentcontent() {
       if (!this.token) {
         this.$router.push({
@@ -247,7 +287,23 @@ export default {
         .catch(() => {})
         .finally(() => {});
     },
-      // 收藏
+    handreply(id) {
+      if (!this.token) {
+        this.$router.push({
+          path: "/login",
+        });
+        return false;
+      }
+      //底部评论样式
+      this.show_comment = true;
+      $(".silde").css({
+        bottom: 0,
+      });
+      this.type = 2;
+      console.log(this.type, id);
+      this.pulicid = id;
+    },
+    // 收藏
     Collect(num) {
       if (!this.token) {
         console.log(1);
@@ -274,7 +330,7 @@ export default {
           .finally(() => {});
       }
     },
-      //取消收藏
+    //取消收藏
     qxcollect(idx) {
       request
         .getCancelcollect({
@@ -304,11 +360,11 @@ export default {
           if (res.code == 0) {
             item.is_down++;
             console.log(res, "点赞");
-            // this.$toast("点赞成功");
+            this.$toast("点踩成功");
           }
         })
         .catch(() => {
-          // this.$toast("点赞失败");
+          this.$toast("点踩失败");
         })
         .finally(() => {});
     },
@@ -328,11 +384,11 @@ export default {
           }
         })
         .catch(() => {
-          // this.$toast("点赞失败");
+          this.$toast("点赞失败");
         })
         .finally(() => {});
     },
-     //评论详情页
+    //评论详情页
     showPopup(id) {
       console.log(this.pulicid);
       this.$router.push({
@@ -342,10 +398,12 @@ export default {
         },
       });
     },
-    handbotPop() {//全部评论弹出层
+    handbotPop() {
+      //全部评论弹出层
       this.show = true;
     },
-    handdetail() { //视频详情
+    handdetail() {
+      //视频详情
       if (!this.token) {
         request
           .getInfo({
@@ -371,6 +429,11 @@ export default {
           .finally(() => {});
       }
     },
+    Gobuildencyc(){
+      this.$router.push({
+        path:'/buildEncyc'
+      })
+    }
   },
 };
 </script>
@@ -500,8 +563,7 @@ footer {
 }
 // 全部评论
 .rate {
-  .pt(10);
-  .mb(20);
+  padding: 0.3rem;
   .userinfo {
     img {
       .w(62);
@@ -564,6 +626,10 @@ footer {
       .lh(47);
     }
   }
+}
+.is_up_img {
+  width: 0.31rem;
+  height: 0.31rem;
 }
 </style>
 <style >

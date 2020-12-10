@@ -57,7 +57,6 @@
           <span
             class="allreply"
             @click="showPopup(item.comment_id)"
-            @showpop="jh"
             style="display: flex; align-items: center"
           >
             全部{{ item.child.length }}条评论
@@ -109,10 +108,12 @@
     <van-popup v-model="show_comment" position="bottom" :style="{ height: '20%' }">
           <articontent  @submit="addmment" @canel="canelmmit" />
     </van-popup>
+    <scroll :onBottom="onBottom"></scroll>
   </div>
 </template>
 
 <script>
+import scroll from "@/components/onBottom.vue";
 import articontent from "@/components/articContent.vue";
 import wx from "weixin-jsapi";
 import $ from "jquery";
@@ -122,6 +123,7 @@ import Clipboard from "clipboard";
 export default {
   components: {
     articontent,
+    scroll
   },
   computed: {
     ...mapState({
@@ -140,7 +142,8 @@ export default {
       copylink: "",
       type: 1,
       pulicid: "",
-      show_comment:false
+      show_comment:false,
+      page:1,
     };
   },
   created() {
@@ -151,6 +154,7 @@ export default {
     this.commentList();
   },
   methods: {
+    
     getDK() {
       this.$toast("请点击“...”分享");
       request
@@ -313,15 +317,30 @@ export default {
           .getComment({
             uid: this.userInfor.member_id,
             aid: this.$route.query.id,
-            page: 1,
+            page: this.page,
           })
           .then((res) => {
             console.log(res, "文章评论列表");
-            this.allCommentList = res.data;
+            
+            if (this.page == 1) {
+             this.allCommentList = res.data;
+          }
+
+          if (this.page > 1) {
+            this.allCommentList = [...this.allCommentList, ...res.data];
+          }
+
+          if (res.data.length == 0) {
+            this.$toast("没有更多数据了");
+          }
           })
           .catch(() => {})
           .finally(() => {});
       }
+    },
+    onBottom() {
+      this.page++;
+      this.commentList()
     },
     // 文章评论分页数据
     getcommentcontent() {
@@ -335,7 +354,7 @@ export default {
         .getComment({
           uid: this.userInfor.member_id,
           aid: this.$route.query.id,
-          page: 1,
+          page: this.page,
         })
         .then((res) => {
           console.log(res, "评论分页数据");
@@ -368,11 +387,12 @@ export default {
         })
         .then((res) => {
           console.log(res, "评论内容", data);
-          this.$toast("发表成功");
           if (this.type == 1) {
             this.commentList();
+            this.$toast("发表成功");
           } else if (this.type == 2) {
-            this.getcommentcontent();
+            this.commentList();
+            this.$toast("发表成功");
           }
         })
         .catch(() => {

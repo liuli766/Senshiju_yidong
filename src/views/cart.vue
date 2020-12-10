@@ -44,11 +44,22 @@
         <div>
           <p>{{ item.title }}</p>
           <div class="price flex_be">
-            <span>￥{{ item.price * item.num }}</span>
+            <!-- <span>￥{{ item.price * item.num }}</span> -->
+            <span
+              >￥{{
+                item.num == 1
+                  ? item.price
+                  : item.num == 2
+                  ? item.two_price
+                  : item.three_price
+              }}</span
+            >
             <div class="nun flex_ar">
               <span @click="reducecart(item, k)">-</span>
               <span>{{ cartData[k].num }}</span>
-              <span @click="addcart(item, k)">+</span>
+              <span @click="addcart(item, k)" :class="[num >= 3 ? 'eee' : '']"
+                >+</span
+              >
             </div>
           </div>
         </div>
@@ -100,7 +111,9 @@ export default {
       let totalPrice = 0;
       for (let i = 0; i < this.cartData.length; i++) {
         if (this.cartData[i].cheakG) {
-          totalPrice += Number(this.cartData[i].price * this.cartData[i].num);
+        let price=this.cartData[i].num==1?this.cartData[i].price:(this.cartData[i].num==2?this.cartData[i].two_price:this.cartData[i].three_price)
+          totalPrice += Number(price);
+         
         }
       }
       return totalPrice.toFixed(2);
@@ -126,6 +139,7 @@ export default {
       showfoot2: true,
       selallgoods: [],
       cartlistnum: [],
+      pricenum: "",
     };
   },
   created() {
@@ -206,25 +220,29 @@ export default {
 
     addcart(item, k) {
       //购物车数量加
-      this.cartData[k].num++;
+      if (this.cartData[k].num < 3) {
+        this.cartData[k].num++;
 
-      for (let i in this.cartData) {
-        if (this.cartData[i].num) {
-          this.cartlistnum.push(this.cartData[i]);
+        for (let i in this.cartData) {
+          if (this.cartData[i].num) {
+            this.cartlistnum.push(this.cartData[i]);
+          }
         }
+        [...this.cartlistnum] = new Set(this.cartlistnum); //去重
+        localStorage.setItem("arr", JSON.stringify(this.cartlistnum));
+        request
+          .getEditCart({
+            id: item.id,
+            num: this.cartData[k].num,
+          })
+          .then((res) => {
+            console.log(res, "购物车数量");
+          })
+          .catch(() => {})
+          .finally(() => {});
+      } else {
+        this.$toast("不可以加了噢");
       }
-      [...this.cartlistnum] = new Set(this.cartlistnum); //去重
-      localStorage.setItem("arr", JSON.stringify(this.cartlistnum));
-      request
-        .getEditCart({
-          id: item.id,
-          num: this.cartData[k].num,
-        })
-        .then((res) => {
-          console.log(res, "购物车数量");
-        })
-        .catch(() => {})
-        .finally(() => {});
     },
     reducecart(item, k) {
       //购物车数量减
@@ -584,6 +602,9 @@ footer {
 }
 .cart_box {
   margin-bottom: 1rem;
+}
+.eee {
+  color: #aeaeae !important;
 }
 </style>
 <style lang="css">

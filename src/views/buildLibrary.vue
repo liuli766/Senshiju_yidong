@@ -33,7 +33,7 @@
               <img
                 :src="child"
                 alt
-                v-for="(child, idx) in item.works"
+                v-for="(child, idx) in item.works.slice(0,3)"
                 :key="idx"
               />
             </div>
@@ -41,31 +41,55 @@
         </div>
       </div>
     </main>
+    <scroll :onBottom="onBottom"></scroll>
   </div>
 </template>
 
 <script>
 import request from "@/request.js";
+import scroll from "@/components/onBottom.vue";
 export default {
   name: "buildLibrary",
+  components: {
+    scroll,
+  },
   data() {
     return {
       teamList: [],
+      page:1
     };
   },
   created() {
-    request
+   this.getdatd();
+  },
+  methods: {
+    onBottom() {
+      this.page++;
+      this.getdata();
+    },
+    getdatd(){
+       request
       .getTeam({
-        page: 1,
+        page: this.page,
       })
       .then((res) => {
         console.log(res, "设计团队");
-        this.teamList = res.data;
+       
+        if (this.page == 1) {
+              this.teamList = res.data;
+          }
+
+          if (this.page > 1) {
+            this.teamList = [...this.teamList, ...res.data];
+          }
+
+          if (res.data.length == 0) {
+            this.$toast("没有更多数据了");
+          }
       })
       .catch(() => {})
       .finally(() => {});
-  },
-  methods: {
+    },
     //设计师详情
     handdetai(num) {
       this.$router.push({

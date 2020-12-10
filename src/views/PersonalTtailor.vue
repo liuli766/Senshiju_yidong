@@ -43,12 +43,12 @@
       <p>私人定制能带来更贴心的享受</p>
       <div>
         <div class="xpic flex_be">
-          <img :src="item.cover" alt v-for="(item, k) in moreList" :key="k" />
+          <img :src="item.cover" alt v-for="(item, k) in picList" :key="k" />
         </div>
       </div>
 
-      <div v-if="picList.length <= moreList.length">没有更多了</div>
-      <div class="more" @click="more" v-else>查看更多</div>
+      <!-- <div v-if="picList.length <= moreList.length">{{loadtext}}</div> -->
+      <div class="more" @click="more" >{{loadtext}}</div>
     </div>
     <!-- 口碑您来决定 -->
     <div class="mouth text_cen">
@@ -81,6 +81,8 @@ export default {
       picList: [],
       moreList: [],
       idx: 3,
+      page:1,
+      loadtext:''
     };
   },
   created() {
@@ -94,32 +96,41 @@ export default {
       })
       .catch(() => {})
       .finally(() => {});
+    
+    this.page=1;
+     this.picList=[]
+    this.getTail();
     this.getdata();
-    // this.getTail();
+    this.more()
   },
   methods: {
     more() {
-      this.idx++;
-      let list = [...this.moreList];
-      this.moreList = [
-        ...list,
-        ...this.picList.slice(this.idx++, this.idx + 1),
-      ];
+      this.page++;
+      this.getTail();
     },
     getTail() {
       // 定制图纸
       request
         .teamDrawings({
-          page: 1,
+          page: this.page,
         })
         .then((res) => {
           console.log(res, "定制图纸");
-          this.picList = res.data;
-          if (this.picList < 4) {
-            this.moreList = this.picList;
-          } else {
-            this.moreList = this.picList.slice(0, 4);
+         
+          if (this.page == 1) {
+            this.picList = res.data;
           }
+
+          if (this.page > 1) {
+            this.picList = [...this.picList, ...res.data];
+          }
+
+          if (res.data.length == 0) {
+             this.loadtext='没有更多了'
+          }else{
+            this.loadtext='查看更多'
+          }
+         
         })
         .catch(() => {})
         .finally(() => {});
@@ -139,12 +150,24 @@ export default {
           console.log(res, "营业执照");
           this.licenselist = res.data.license;
           this.dzlist = res.data.praise.slice(0.6).reverse();
-          this.picList = res.data.case;
-          if (this.picList < 4) {
-            this.moreList = this.picList;
-          } else {
-            this.moreList = this.picList.slice(0, 4);
+          if (this.page == 1) {
+            this.picList = res.data.case;
           }
+
+          if (this.page > 1) {
+            this.picList = [...this.picList, ...res.data.case];
+          }
+
+          if (res.data.case.length == 0) {
+             this.loadtext='没有更多了'
+          }else{
+            this.loadtext='查看更多'
+          }
+          // if (this.picList < 4) {
+          //   this.moreList = this.picList;
+          // } else {
+          //   this.moreList = this.picList.slice(0, 4);
+          // }
         })
         .catch(() => {})
         .finally(() => {});

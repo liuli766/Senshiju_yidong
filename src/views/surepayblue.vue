@@ -36,12 +36,15 @@
         <div>
           <p>{{ orderdetail.title }}</p>
           <div class="price flex_be" style="width: 4.6rem">
-            <span>¥{{ orderdetail.price }}</span>
+            <span>¥{{ PriceNum }}</span>
             <van-stepper
               v-model="orderdetail.num"
               theme="round"
               button-size="22"
-              disabled
+              @plus="handPlus"
+              @minus="handMinus"
+              min="1"
+              max="3"
             />
           </div>
         </div>
@@ -60,7 +63,7 @@
       <div class="money">
         <div class="flex_be">
           <span>商品金额</span>
-          <span>¥{{ total }}</span>
+          <span>¥{{ PriceNum }}</span>
         </div>
         <div class="flex_be">
           <span>运费</span>
@@ -71,7 +74,7 @@
     <div class="btn flex_be">
       <div>
         合计：
-        <span style="color；#F93420">{{ total }}</span>
+        <span style="color；#F93420">{{ PriceNum }}</span>
       </div>
       <div @click="gopay" class="onsubmit">立即付款</div>
     </div>
@@ -92,6 +95,20 @@ export default {
       navactivechoseid: (state) => state.navactivechoseid,
       orderTime: (state) => state.orderTime,
     }),
+    PriceNum(){
+        let PriceNum=0
+        if(this.orderdetail.num==1){
+          PriceNum=this.orderdetail.price
+        }
+        if(this.orderdetail.num==2){
+          PriceNum=this.orderdetail.two_price
+        }
+        if(this.orderdetail.num==3){
+          PriceNum=this.orderdetail.three_price
+
+        }
+         return PriceNum
+    }
   },
   data() {
     return {
@@ -131,16 +148,22 @@ export default {
       .finally(() => {});
   },
   methods: {
+    handPlus() {
+      console.log(1);
+    },
+    handMinus() {
+      console.log(2);
+    },
     wxrequest() {
       request
         .getwxrequest({
           out_trade_no: this.orderid,
         })
         .then((data) => {
-          alert(data.code == 1);
-          alert(JSON.stringify(data.code == 0));
+          // alert(data.code == 1);
+          // alert(JSON.stringify(data.code == 0));
           if (data.code == 0) {
-            alert(JSON.stringify(data));
+            // alert(JSON.stringify(data));
             this.$router.push({
               path: "/success",
               query: {
